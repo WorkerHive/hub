@@ -1,6 +1,6 @@
 import { Button, Typography } from '@material-ui/core';
 import { CRUDList } from '@workerhive/react-ui';
-import { useHub } from '@workerhive/client/dist/react'
+import { useHub } from '@workerhive/client'
 import React from 'react';
 
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { AccordionList } from "@workerhive/react-ui"
 import { SettingsMap } from './settings-map'
 import './index.css';
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 
 export interface SettingsProps{
     history: any;

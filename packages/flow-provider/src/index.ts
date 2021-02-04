@@ -14,7 +14,7 @@ import MergedAdapter from './adapters';
 import FlowPath from './flow-path';
 import { hydrate } from './flow-path/hydration';
 
-import QueenDB from 'queendb';
+import QueenDB from '@workerhive/queendb';
 
 export class FlowConnector extends BaseConnector{
 

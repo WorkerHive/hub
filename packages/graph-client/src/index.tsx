@@ -12,6 +12,8 @@ import {WorkhubFS} from '@workerhive/ipfs'
 import {RealtimeSync } from './yjs';
 import jwt_decode from 'jwt-decode'
 
+import { WorkhubProvider, useHub } from './react'
+
 const ENVIRONMENT = (typeof process !== 'undefined') && (process.release && process.release.name === 'node') ? 'NODE' : 'BROWSER'
 let Apollo, gql : any;
 let BoostClient : any;
@@ -43,7 +45,9 @@ if(ENVIRONMENT == "NODE"){
 
 
 
-export { 
+export {
+    WorkhubProvider,
+    useHub, 
     RealtimeSync
 }
 

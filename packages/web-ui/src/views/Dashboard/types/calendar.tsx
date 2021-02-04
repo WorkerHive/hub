@@ -1,6 +1,5 @@
 import { Paper } from "@material-ui/core";
-import { WorkhubClient } from "@workerhive/client";
-import { useHub } from "@workerhive/client/dist/react";
+import { WorkhubClient, useHub } from "@workerhive/client";
 import { Calendar, Header, MutableDialog } from "@workerhive/react-ui";
 import React from "react";
 

@@ -6,7 +6,7 @@ import '@workerhive/hive-flow/dist/index.css'
 import './index.css';
 import { MenuView } from '../../components/menu-view';
 
-import { useHub } from '@workerhive/client/dist/react'
+import { useHub } from '@workerhive/client'
 
 export interface WorkflowsProps{
 

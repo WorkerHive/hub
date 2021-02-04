@@ -1,4 +1,4 @@
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 import React from 'react';
 import { LayoutEditor } from '../../components/layout-editor';
 import * as Components from '@workerhive/react-ui'

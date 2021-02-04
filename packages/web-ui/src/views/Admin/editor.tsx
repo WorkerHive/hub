@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@material-ui/core"
-import { useHub } from "@workerhive/client/dist/react";
+import { useHub } from "@workerhive/client";
 import { Editor, NodePanel, useEditor } from "@workerhive/hive-flow"
 import React from "react"
 

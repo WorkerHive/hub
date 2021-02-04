@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 import React from 'react';
 
 const WorkUIProps = require('@workerhive/react-ui/dist/prop-spec.js')

@@ -1,9 +1,8 @@
 import React, { Suspense, lazy, useRef } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout'
-import { WorkhubClient } from '@workerhive/client'
+import { WorkhubClient, useHub } from '@workerhive/client'
 import useResizeAware from 'react-resize-aware';
 import 'react-grid-layout/css/styles.css';
-import { useHub } from '@workerhive/client/dist/react';
 import { isEqual } from 'lodash';
 const ReactGridLayout = WidthProvider(RGL);
 

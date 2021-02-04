@@ -3,7 +3,7 @@ import React, { Component, useEffect } from 'react';
 import { Editor, HiveProvider, NodePanel, useEditor, withEditor } from "@workerhive/hive-flow"
 import '@workerhive/hive-flow/dist/index.css'
 import './index.css';
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 
 import * as ExtStore from './nodes/ext-store';
 import * as ExtAdapter from './nodes/ext-adapter';

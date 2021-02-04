@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { Autocomplete } from '@material-ui/lab'
 import { NodeWrapper, useEditor, withEditor } from '@workerhive/hive-flow';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Typography, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 
 export const type = 'extAdapter'
 
