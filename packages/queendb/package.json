@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/queendb",
-  "version": "2.0.3-alpha.0",
+  "version": "2.1.0-alpha.0",
   "description": "Command and connect all your databases",
   "keywords": [
     "db",
@@ -15,15 +15,12 @@
   "license": "ISC",
   "main": "dist/queendb.js",
   "files": [
-    "dist/**/*"
+    "lib"
   ],
   "directories": {
     "lib": "lib",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/WorkerHive/hub.git"

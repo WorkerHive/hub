@@ -1,6 +1,6 @@
 {
   "name": "workhub-server",
-  "version": "2.0.3-alpha.0",
+  "version": "2.1.0-alpha.0",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -8,8 +8,8 @@
     "start": "ts-node -r tsconfig-paths/register src/index.ts"
   },
   "dependencies": {
-    "@workerhive/flow-provider": "^2.0.3-alpha.0",
-    "@workerhive/graph": "^2.0.3-alpha.0",
+    "@workerhive/flow-provider": "^2.1.0-alpha.0",
+    "@workerhive/graph": "^2.1.0-alpha.0",
     "@workerhive/ipfs": "^2.0.3-alpha.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
