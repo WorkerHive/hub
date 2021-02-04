@@ -16,7 +16,7 @@ jobs:
           node-version: 14
       - run: yarn install
       - run: yarn build:fs
-      - run: npx lerna install
+      - run: yarn install
       - run: yarn build:web-deps
       - run: yarn install
       - run: npx lerna bootstrap
