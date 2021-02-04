@@ -5167,7 +5167,7 @@
   version "2.1.1-alpha.0"
   dependencies:
     "@apollo/client" "^3.3.6"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-@workerhive-client-2.1.1-alpha.0-7f2d961d-1867-4cc0-bf49-dcc944f45b81-1612418163015/node_modules/@workerhive/fs-layer"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-@workerhive-client-2.1.1-alpha.0-50043882-b239-493b-96bb-b013244b5abb-1612419152508/node_modules/@workerhive/fs-layer"
     apollo-boost "^0.4.9"
     apollo-link-context "^1.0.20"
     apollo-link-http "^1.5.17"
@@ -11586,7 +11586,7 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
   integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
 
-graphql-compose@^7.24.1:
+graphql-compose@^7.24.4:
   version "7.24.4"
   resolved "https://registry.yarnpkg.com/graphql-compose/-/graphql-compose-7.24.4.tgz#78e7bef8749cc59df1539dfab4fae0dab156188b"
   integrity sha512-FcJwzn3nOtgC3UZR8OLn1LsQBA4xkV4utFVYDh6OIIUHWO5aINHUoarznc2/82aqlyF50MZzFa4hx9tZx2u0Yg==
@@ -11615,7 +11615,7 @@ graphql-upload@^11.0.0:
     isobject "^4.0.0"
     object-path "^0.11.4"
 
-graphql@*, graphql@^15.3.0, graphql@^15.4.0:
+graphql@*, graphql@^15.3.0, graphql@^15.4.0, graphql@^15.5.0:
   version "15.5.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.5.0.tgz#39d19494dbe69d1ea719915b578bf920344a69d5"
   integrity sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==
@@ -20551,8 +20551,8 @@ react-window@^1.8.5:
     "@types/react" "^16.10"
     "@types/react-dom" "^17.0.0"
     "@workerhive/hive-flow" "^1.1.5"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-be370e9d-7117-4fa2-909d-2dbb4e7c2f4c-1612418163373/node_modules/fs-layer"
-    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-be370e9d-7117-4fa2-909d-2dbb4e7c2f4c-1612418163373/node_modules/react-components"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-f3dc8702-9193-4cfc-a24e-4d91886ecc20-1612419152849/node_modules/fs-layer"
+    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-f3dc8702-9193-4cfc-a24e-4d91886ecc20-1612419152849/node_modules/react-components"
     is-electron "^2.2.0"
     lodash "^4.17.20"
     moment "^2.29.1"
@@ -24869,9 +24869,9 @@ worker-rpc@^0.1.0:
 "workhub-server@file:packages/server":
   version "2.1.1-alpha.0"
   dependencies:
-    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-f0c06050-6be6-498f-b8e8-a5408319be20-1612418163393/node_modules/flow-provider"
-    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-f0c06050-6be6-498f-b8e8-a5408319be20-1612418163393/node_modules/graph-server"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-f0c06050-6be6-498f-b8e8-a5408319be20-1612418163393/node_modules/fs-layer"
+    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-d4fa4d4c-0f6b-42a7-8dd1-abce73b73631-1612419152874/node_modules/flow-provider"
+    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-d4fa4d4c-0f6b-42a7-8dd1-abce73b73631-1612419152874/node_modules/graph-server"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-d4fa4d4c-0f6b-42a7-8dd1-abce73b73631-1612419152874/node_modules/fs-layer"
     body-parser "^1.19.0"
     cors "^2.8.5"
     express "^4.17.1"
