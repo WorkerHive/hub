@@ -5167,7 +5167,6 @@
   version "2.1.1-alpha.0"
   dependencies:
     "@apollo/client" "^3.3.6"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-@workerhive-client-2.1.1-alpha.0-bb7d8ae4-ffee-42ba-ab72-a6e999767baa-1612419292876/node_modules/@workerhive/fs-layer"
     apollo-boost "^0.4.9"
     apollo-link-context "^1.0.20"
     apollo-link-http "^1.5.17"
@@ -20550,8 +20549,8 @@ react-window@^1.8.5:
     "@types/react" "^16.10"
     "@types/react-dom" "^17.0.0"
     "@workerhive/hive-flow" "^1.1.5"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-9793a167-a3a0-44e6-ac9d-18755f6a85c5-1612419293196/node_modules/fs-layer"
-    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-9793a167-a3a0-44e6-ac9d-18755f6a85c5-1612419293196/node_modules/react-components"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-e0445c9f-e823-4fdd-a92a-345d2bb64555-1612423081505/node_modules/fs-layer"
+    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-e0445c9f-e823-4fdd-a92a-345d2bb64555-1612423081505/node_modules/react-components"
     is-electron "^2.2.0"
     lodash "^4.17.20"
     moment "^2.29.1"
@@ -24867,9 +24866,9 @@ worker-rpc@^0.1.0:
 "workhub-server@file:packages/server":
   version "2.1.1-alpha.0"
   dependencies:
-    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-eb451c6d-b735-4507-9bb8-0960641460f3-1612419293217/node_modules/flow-provider"
-    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-eb451c6d-b735-4507-9bb8-0960641460f3-1612419293217/node_modules/graph-server"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-eb451c6d-b735-4507-9bb8-0960641460f3-1612419293217/node_modules/fs-layer"
+    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-8a83c3d4-cabf-4f66-b2ea-2f9edb021fd5-1612423081526/node_modules/flow-provider"
+    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-8a83c3d4-cabf-4f66-b2ea-2f9edb021fd5-1612423081526/node_modules/graph-server"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-8a83c3d4-cabf-4f66-b2ea-2f9edb021fd5-1612423081526/node_modules/fs-layer"
     body-parser "^1.19.0"
     cors "^2.8.5"
     express "^4.17.1"
