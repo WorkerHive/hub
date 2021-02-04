@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/queendb",
-  "version": "2.1.1-alpha.0", 
+  "version": "2.1.1-alpha.0",
   "private": false,
   "description": "Command and connect all your databases",
   "keywords": [
@@ -33,11 +33,6 @@
   "dependencies": {
     "async": "^3.2.0",
     "pg": "^8.5.1"
-  },
-  "devDependencies": {
-    "@types/async": "^3.2.5",
-    "@types/pg": "^7.14.9",
-    "ts-node": "^9.1.1"
   },
   "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e"
 }
