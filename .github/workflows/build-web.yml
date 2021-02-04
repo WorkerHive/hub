@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 14
       - run: yarn install
-      - run: yarn bootstrap
+      - run: yarn boot
       - run: echo "NODE_ENV=production" >> $GITHUB_ENV
       - run: echo $NODE_ENV
       - run: NODE_OPTIONS="--max_old_space_size=4096" yarn build:web
