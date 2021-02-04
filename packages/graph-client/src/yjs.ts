@@ -7,7 +7,7 @@ import { cleanObject } from './utils';
 export class RealtimeSync {
     public doc = new Y.Doc();
 
-    private websocketProvider;
+    private websocketProvider : WebsocketProvider;
 
     public status: string = '';
 

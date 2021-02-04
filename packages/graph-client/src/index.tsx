@@ -3,9 +3,7 @@ import { createHttpLink } from 'apollo-link-http'
 import fetch from 'cross-fetch'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
-import { camelCase } from 'camel-case';
-import { createContext, FC } from "react";
-import { clientReducer } from './store';
+
 import CRUD from './crud';
 import UPLOAD from './upload';
 import {WorkhubFS} from '@workerhive/ipfs'
