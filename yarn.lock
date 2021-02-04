@@ -4596,13 +4596,6 @@
     "@types/react" "*"
     "@types/reactcss" "*"
 
-"@types/react-dom@^16.9.7":
-  version "16.9.10"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.10.tgz#4485b0bec3d41f856181b717f45fd7831101156f"
-  integrity sha512-ItatOrnXDMAYpv6G8UCk2VhbYVTjZT9aorLtA/OzDN9XJ2GKcfam68jutoAcILdRjsRUO8qb7AmyObF77Q8QFw==
-  dependencies:
-    "@types/react" "^16"
-
 "@types/react-dom@^17.0.0":
   version "17.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.0.tgz#b3b691eb956c4b3401777ee67b900cb28415d95a"
@@ -4674,7 +4667,7 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
-"@types/react@>=16.9.11":
+"@types/react@>=16.9.11", "@types/react@^17.0.1":
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.1.tgz#eb1f1407dea8da3bc741879c1192aa703ab9975b"
   integrity sha512-w8t9f53B2ei4jeOqf/gxtc2Sswnc3LBK5s0DyJcg5xd10tMHXts2N31cKjWfH9IC/JvEPa/YF1U4YeP1t4R6HQ==
@@ -4682,7 +4675,7 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
-"@types/react@^16", "@types/react@^16.10", "@types/react@^16.9.27":
+"@types/react@^16.10":
   version "16.14.3"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.3.tgz#f5210f5deecf35d8794845549c93c2c3ad63aa9c"
   integrity sha512-zPrXn03hmPYqh9DznqSFQsoRtrQ4aHgnZDO+hMGvsE/PORvDTdJCHQ6XvJV31ic+0LzF73huPFXUb++W6Kri0Q==
@@ -20549,8 +20542,8 @@ react-window@^1.8.5:
     "@types/react" "^16.10"
     "@types/react-dom" "^17.0.0"
     "@workerhive/hive-flow" "^1.1.5"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-d05b78c1-d2bf-4024-8d76-0c79b7204447-1612426359789/node_modules/fs-layer"
-    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-d05b78c1-d2bf-4024-8d76-0c79b7204447-1612426359789/node_modules/react-components"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-9ef1374c-5cac-4f3e-b084-09751131f397-1612477900615/node_modules/fs-layer"
+    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-9ef1374c-5cac-4f3e-b084-09751131f397-1612477900615/node_modules/react-components"
     is-electron "^2.2.0"
     lodash "^4.17.20"
     moment "^2.29.1"
@@ -24866,9 +24859,9 @@ worker-rpc@^0.1.0:
 "workhub-server@file:packages/server":
   version "2.1.1-alpha.0"
   dependencies:
-    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-03a7f19f-0cbb-462e-99fd-cf9c97a9134d-1612426359810/node_modules/flow-provider"
-    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-03a7f19f-0cbb-462e-99fd-cf9c97a9134d-1612426359810/node_modules/graph-server"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-03a7f19f-0cbb-462e-99fd-cf9c97a9134d-1612426359810/node_modules/fs-layer"
+    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-b28dd7fb-ded4-4894-a03b-e296c4a8c051-1612477900635/node_modules/flow-provider"
+    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-b28dd7fb-ded4-4894-a03b-e296c4a8c051-1612477900635/node_modules/graph-server"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-b28dd7fb-ded4-4894-a03b-e296c4a8c051-1612477900635/node_modules/fs-layer"
     body-parser "^1.19.0"
     cors "^2.8.5"
     express "^4.17.1"
