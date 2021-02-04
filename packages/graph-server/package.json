@@ -51,5 +51,5 @@
   "peerDependencies": {
     "graphql-compose": "^7.24.1"
   },
-  "gitHead": "84c4c5196f933314a4b2db71198dcb7a3128e02b"
+  "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e"
 }
