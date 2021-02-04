@@ -15,12 +15,8 @@
   "license": "ISC",
   "main": "dist/queendb.js",
   "files": [
-    "lib"
+    "dist/**/*"
   ],
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/WorkerHive/hub.git"
@@ -41,5 +37,6 @@
     "@types/async": "^3.2.5",
     "@types/pg": "^7.14.9",
     "ts-node": "^9.1.1"
-  }
+  },
+  "gitHead": "84c4c5196f933314a4b2db71198dcb7a3128e02b"
 }

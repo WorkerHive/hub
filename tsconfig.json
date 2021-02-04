@@ -12,7 +12,7 @@
             "@workerhive/flow-provider": ["flow-provider/src"],
             "@workerhive/react-ui": ["react-components/src"],
             "@workerhive/client": ["graph-client/src"],
-            "@workerhive/queendb": ["queendb/src"],
+            "@workerhive/queendb": ["queendb/lib"],
             "@workerhive/*": ["*/src"],
         }
     }

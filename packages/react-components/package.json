@@ -11,7 +11,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build": "npx rollup -c rollup.config.js",
     "build:doc": "node src/make-doc.js",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "predeploy": "cd example && yarn install && yarn run build",
@@ -90,5 +90,6 @@
     "react-spinkit": "^3.0.0",
     "rich-markdown-editor": "^11.1.0",
     "styled-components": "^5.2.1"
-  }
+  },
+  "gitHead": "84c4c5196f933314a4b2db71198dcb7a3128e02b"
 }

@@ -2,7 +2,7 @@
 import { schemaComposer, SchemaComposer }  from 'graphql-compose'
 import { GraphContext } from '@workerhive/graph'
 import { FlowConnector } from '..';
-import QueenDb from 'queendb/lib/queendb';
+import QueenDb from '@workerhive/queendb';
 let typeMap;
 
 

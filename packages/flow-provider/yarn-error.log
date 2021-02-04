@@ -1,0 +1,84 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn install
+
+PATH: 
+  /home/workhub/.local/bin:/home/workhub/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.0.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@workerhive%2fqueendb: Not found
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66988:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140662:22)
+      at Request.emit (events.js:315:20)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141634:10)
+      at Request.emit (events.js:315:20)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141556:12)
+      at Object.onceWrapper (events.js:421:28)
+      at IncomingMessage.emit (events.js:327:22)
+      at endReadableNT (_stream_readable.js:1218:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+npm manifest: 
+  {
+    "name": "@workerhive/flow-provider",
+    "version": "2.1.0-alpha.0",
+    "main": "dist/index.js",
+    "repository": "git@github.com:WorkerHive/flow-provider.git",
+    "author": "Ross Leitch <professional.balbatross@gmail.com>",
+    "license": "MIT",
+    "files": [
+      "dist/**/*"
+    ],
+    "scripts": {
+      "start:dev": "npm run build:dev",
+      "build": "tsc",
+      "build:dev": "nodemon 'index.js' --exec 'ts-node' index.js -e ts,graphql",
+      "prepublish": "yarn build"
+    },
+    "dependencies": {
+      "@graphql-tools/merge": "^6.2.6",
+      "@graphql-tools/schema": "^7.1.2",
+      "@types/mongodb": "^3.6.3",
+      "camel-case": "^4.1.2",
+      "file-extension": "^4.0.5",
+      "graphql-type-json": "^0.3.2",
+      "@workerhive/queendb": "^2.1.0-alpha.0",
+      "lodash": "^4.17.20"
+    },
+    "resolutions": {
+      "graphql": "15.3.0"
+    },
+    "peerDependencies": {
+      "@workerhive/graph": "^1.0.38",
+      "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0"
+    },
+    "devDependencies": {
+      "@types/graphql": "^14.5.0",
+      "@vercel/ncc": "^0.26.1",
+      "@workerhive/graph": "^2.1.0-alpha.0",
+      "mongodb": "^3.6.3",
+      "mssql": "^6.3.0",
+      "nodemon": "^2.0.6",
+      "ts-loader": "^8.0.13",
+      "ts-node": "^9.1.1",
+      "typedoc": "^0.20.12",
+      "typescript": "^4.1.3",
+      "webpack": "^5.11.1",
+      "webpack-cli": "^4.3.1"
+    },
+    "gitHead": "84c4c5196f933314a4b2db71198dcb7a3128e02b"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

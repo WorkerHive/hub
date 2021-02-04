@@ -31,6 +31,7 @@
     "@material-ui/pickers": "^3.2.10",
     "@workerhive/client": "file:packages/graph-client",
     "@workerhive/queendb": "file:packages/queendb",
+    "@workerhive/graph": "file:packages/graph-server",
     "chonky": "^2.1.0",
     "chonky-icon-fontawesome": "^2.1.0",
     "graphql": "^15.5.0",
