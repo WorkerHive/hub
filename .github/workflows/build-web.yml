@@ -15,6 +15,9 @@ jobs:
         with:
           node-version: 14
       - run: yarn install
+      - run: yarn build:fs
+      - run: npx lerna bootstrap
+      - run: yarn build:web-deps
       - run: npx lerna bootstrap
       - run: echo "NODE_ENV=production" >> $GITHUB_ENV
       - run: echo $NODE_ENV
