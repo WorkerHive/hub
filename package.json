@@ -74,7 +74,7 @@
     "bootstrap": "lerna bootstrap --ignore-prepublish",
     "boot": "lerna exec yarn && lerna link",
     "changed": "lerna changed",
-    "build:react-components": "cd packages/react-components && yarn build",
+    "build:react-components": "cd packages/react-components && yarn prepublish",
     "build:web-client": "cd packages/graph-client && yarn build",
     "build:web-ui": "cd packages/web-ui && yarn build",
     "build:fs": "cd packages/fs-layer && yarn build",
