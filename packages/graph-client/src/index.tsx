@@ -261,6 +261,16 @@ export class WorkhubClient {
             ]
         })
 
+        this.models!.push({
+            name: 'IntegrationMap', 
+            directives: [],
+            def: [
+                {name: 'id', type: 'ID'},
+                {name: 'nodes', type: 'JSON'},
+                {name: 'links', type: 'JSON'},
+            ]
+        })
+
 
         this.actions['updateType'] = async (name : string, fields : any) => {
             let result = await this.mutation(`
@@ -280,6 +290,39 @@ export class WorkhubClient {
                 this.models![model_ix] = result.data.updateMutableType;
             }
             return result.data.updateMutableType
+        }
+
+        this.actions['getIntegrationMap'] = async (id : string) => {
+            let result = await this.query(`
+                query GetIntegrationMap($id: String){
+                    integrationMap(id: $id){
+                        id
+                        nodes
+                        links
+                    }
+                }
+            `, {
+                id: id
+            }) 
+            dispatch({type: 'GET_IntegrationMap', id: id, data: result.data.integrationMap})
+            return result.data.integrationMap
+        }
+
+        this.actions['updateIntegrationMap'] = async (id: string, update: {nodes: any, links: any}) => {
+            let result = await this.mutation(`
+                mutation UpdateIntegrationMap($id: String, $update: IntegrationMapInput){
+                    updateIntegrationMap(id: $id, integrationMap: $update){
+                        id
+                        nodes
+                        links
+                    }
+                }
+            `, {
+                id,
+                update
+            })
+            dispatch({type: 'UPDATE_IntegrationMap', id: id, data: result.data.updateIntegrationMap})
+            return result.data.updateIntegrationMap;
         }
 
         this.actions['getStoreTypes'] = async () => {

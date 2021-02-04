@@ -73,15 +73,15 @@ let hiveGraph = new Graph(`
     ${typeDefs}
 `, workhubResolvers, connector, true)
 
-connector.stores.initializeAppStore({
+/*connector.stores.initializeAppStore({
     url: (process.env.WORKHUB_DOMAIN ? 'mongodb://mongo' : 'mongodb://localhost'),
     dbName: (process.env.WORKHUB_DOMAIN ? 'workhub' : 'workhub')
-})
+})*/
 
 const a = (async () => {
     let stores = await connector.readAll('IntegrationStore')
     console.log("Read stores", stores)
-    connector.stores.setupDefaultStores(stores)
+  //  connector.stores.setupDefaultStores(stores)
 })
 setTimeout(() => {
     a();

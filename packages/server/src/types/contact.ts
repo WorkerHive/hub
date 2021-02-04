@@ -3,7 +3,7 @@ export const typeDef = `
     type Contact @crud @configurable{
         id: ID
         name: String @input
-        phoneNumber: String @input
+        phone_number: String @input
         email: String @input
         history: [ContactOrganisation] @input
     }

@@ -84,7 +84,7 @@ export const PROJECT_VIEW = {
                         const [open, modalOpen] = React.useState<boolean>(false);
                         const [ selected, setSelected] = React.useState<any>();
                         return (
-                            <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+                            <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
                                     title={data.label} 
                                     data={selected}
@@ -119,7 +119,7 @@ export const PROJECT_VIEW = {
                                        
                                        </div> 
                                     )}
-                                    data={data.projects || []} />
+                                    data={data.projects.filter((a : any) => a.name && a.name.length > 0) || []} />
                                 <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
                                 </Fab>

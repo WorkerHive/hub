@@ -80,6 +80,11 @@ export const StyledSearchTable = styled(SearchTable)`
   display: flex;
   flex-direction: column;
 
+  .grid-list{
+      overflow-y: auto;
+      flex: 1;
+  }
+
   .options-bar{
     padding: 8px;
     display: flex;

@@ -6,7 +6,7 @@ import MSSQLAdapter from '../adapters/mssql'
 const { objectValues } = require('../transforms/utils');
 const { objectFlip } = require('../utils/flow-query');
 import BaseAdapter from './base-adapter'
-const { merge, isEqual, unionWith } = require('lodash')
+const { pick, merge, isEqual, unionWith } = require('lodash')
 
 export default class MergedAdapter extends BaseAdapter {
     constructor(type: ObjectTypeComposer<any>, storeList, paths) {
@@ -73,7 +73,7 @@ export default class MergedAdapter extends BaseAdapter {
         let supporting = [];
 
         this.iteratePaths(primaryActions, (store, path, action) => {
-            console.log("Action", action)
+       
             let adapter = this.storeList.get(store).getAdapter();
 
             let func = get_func(adapter, path, action[store][path])
@@ -106,7 +106,7 @@ export default class MergedAdapter extends BaseAdapter {
             return adapter.getProvider({ name: bucket }, this.type, provides)
         })
 
-        console.log(actions.length, supporting.length)
+  
         return (query) => {
 
             return Promise.all(actions.map((x) => x(query))).then((results) => {
@@ -161,25 +161,20 @@ export default class MergedAdapter extends BaseAdapter {
                     }
 
                     //Refs needs to be looked at and adjusted for real use cases, at current it just checks ref keys not foreign keys
-                        let union = unionWith(...r, ...r2, (arrVal, othVal) => {
-                            for (var k in refs) {
-                                console.log("Checking ref", k, arrVal, othVal)
-                                if (isEqual(`${arrVal[k]}`, `${othVal[k]}`)) {
-                                    console.log("Checked", arrVal[k], othVal[k], arrVal[k] == othVal[k])
-                                    return merge(othVal, arrVal)
-                                }
-                            }
-                            return othVal;
-                            /*
-                            if(`${arrVal.id}` == `${othVal.id}`){
-                                console.log("UNION", arrVal, othVal)
+                    let union = r[0].map((x) => {
+                        let query = {};
+                        let keys = [];
+                        for(var k in refs){
+                            keys.push(k)
+                            query[k] = x[k];
+                        }
+               
+                        let pair = r2.find((a) => isEqual(pick(a, keys), query)) || {};
+                        return merge(x, pair)
 
-                                return merge(othVal, arrVal);
-                            }else{
-                                return false;
-                            }*/
-                        })
-                        console.log(union);
+                    })
+
+              
 
                         return union;
                     
@@ -197,18 +192,20 @@ export default class MergedAdapter extends BaseAdapter {
             return adapter.updateProvider({ name: bucket }, this.type, provides);
         })
 
-        return (id, update) => {
+        return (query, update) => {
 
-            console.log("Update", this.type, id, update);
+            console.log(actions, supporting)
+
+            console.log("Update", this.type, query, update);
             return Promise.all(actions.map((action) => {
-                return action(id, update)
+                return action(query, update)
             })).then((result) => {
                 let output = {};
                 result.forEach((item) => {
                     output = Object.assign({}, output, item)
                 })
                 return Promise.all(supporting.map((sAction) => {
-                    return sAction(id, update)
+                    return sAction(query, update)
                 })).then((res) => {
                     let output2 = {};
                     res.forEach((item) => {
@@ -287,7 +284,7 @@ export default class MergedAdapter extends BaseAdapter {
                         }
                     })
 
-                    console.log("FINAL RESULT", finalResult)
+              
                     return finalResult
                 })
 
@@ -313,7 +310,7 @@ export default class MergedAdapter extends BaseAdapter {
                     removedCount += item.result.n;
                 })
 
-                console.log(result);
+             
                 return Promise.all(supporting.map((sAction) => {
                     return sAction(query)
                 })).then((otherResult) => {
@@ -322,7 +319,7 @@ export default class MergedAdapter extends BaseAdapter {
                     })
                 })
             }).then((r) => {
-                console.log(r)
+              
 
                 return removedCount > 0; //TODO actually plumb this in
             })

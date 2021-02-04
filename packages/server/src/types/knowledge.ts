@@ -1,7 +1,4 @@
 
-
-
-
 export const typeDef = `
   type Knowledge @crud @configurable {
     "A series of work"

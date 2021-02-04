@@ -27,12 +27,16 @@ export default class StoreManager {
 
     }
 
+    get isReady(){
+        return this.stores.app != null;
+    }
+
     async rehydrateStores(storeType : ObjectTypeComposer<any, any>){
         if(this.stores.app){
             clearTimeout(this.timer)
             let fp = new FlowPath(storeType, {})
             let b = fp.getBatched()
-            console.log(b)
+       
            let result = await this.stores.app.getAdapter().getAllProvider({name: storeType.getTypeName()}, storeType.getType(), b['app'][storeType.getTypeName()])();
             this.setupDefaultStores(result)
         }else{
@@ -47,6 +51,7 @@ export default class StoreManager {
     setupDefaultStores(stores){
         console.log('=> Setting up persisted stores count: ', stores.length)
         stores.forEach(store => {
+
             let Store = Stores.filter((a) => a.type == store.type.id);
             if(Store.length > 0){
                 this.registerStore(store.name, new Store[0]({

@@ -6,7 +6,7 @@ import { camelCase } from "camel-case"
 export default class MSSQLAdapter extends BaseAdapter{
 
     getType(type){
-        console.log("Type", type)
+       
         switch(type){
             case 'String':
                 return sql.NVarChar;
@@ -28,7 +28,7 @@ export default class MSSQLAdapter extends BaseAdapter{
             request.input(k, inputs[k].type, inputs[k].value)
         }
         let result = await request.query(query);
-        console.log("Request result", result);
+      
         return result.recordset;
     }
 
@@ -55,11 +55,11 @@ export default class MSSQLAdapter extends BaseAdapter{
             let valueKeys = [];
     
             fields.forEach((value, index) => {
-                console.log(value, flippedProvider, typeDef.astNode.fields)
+            
                 let vKey = camelCase(value)
                 let qKey = typeDef.astNode.fields.filter((a) => a.name.value == flippedProvider[value])[0]
                 
-                console.log(qKey.type.name.value, query[value])
+           
                 request.input(vKey, this.getType(qKey.type.name.value), query[value])
                 insertKeys.push(value)
                 valueKeys.push(vKey)
@@ -67,7 +67,7 @@ export default class MSSQLAdapter extends BaseAdapter{
     
             let sqlQuery = `INSERT INTO ${bucket.name} (${insertKeys.join(', ')}) VALUES (${valueKeys.map((x) => "@"+x).join(', ')})`
             
-            console.log(sqlQuery)
+            
             //request.query(sql)
         }
     }
@@ -108,19 +108,19 @@ export default class MSSQLAdapter extends BaseAdapter{
                 whereClause += `${k}=@${k}`
             }
             let sqlQuery = `SELECT ${fields.join(', ')} FROM ${bucket.name} WHERE ${whereClause}`;
-            console.log("GET", sqlQuery);
+        
             let result = await request.query(sqlQuery)
-            console.log(result)
+        
         }
     }
 
     getAllProvider(bucket, typeDef, provides){
-        console.log("All provides", provides);
+  
         let { fields, empty } = getFields(objectFlip(provides))
 
         let query = `SELECT ${fields.join(', ')} FROM ${bucket.name}`
 
-        console.log("MSSQL Get ALl", query)
+     
         return async () => {
             let result = await this.request({}, query);
 

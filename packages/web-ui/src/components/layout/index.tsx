@@ -40,6 +40,7 @@ const defaultProps = {
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
+
     const [resizeListener, sizes] = useResizeAware();
 
     const [client, store, isReady, err] = useHub();
@@ -102,10 +103,11 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                 } else {
                                     if(pollLength && pollLength > 0){
                                         console.log("Registering poll length", pollLength, model.name)
-                                        setInterval(async () => {
+                                        if(!(window as any).layout_polls) (window as any).layout_polls = [];
+                                        (window as any).layout_polls.push(setInterval(async () => {
                                             console.log("Fetch", model.name)
                                             await client!.actions[`get${model.name}s`](false);
-                                        }, pollLength)
+                                        }, pollLength))
                                     }
                                     let result = await client!.actions[`get${model.name}s`]()
 
@@ -123,14 +125,14 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                     }
                                     return matches;
                                 }) : []
-
+                                console.log("Not array run", currentValue)
                                 if (currentValue.length > 0) {
                                     currentValue = currentValue[0]
                                     console.log("CUrrent Valye", currentValue)
                                 } else {
                                     let result = await client!.actions[`get${model.name}`](query.id)
                                     currentValue = result
-                                    console.log("had to fetch fresh data")
+                                    console.log("had to fetch fresh data", currentValue)
                                 }
                             }
 
@@ -145,6 +147,13 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                 })()
                 setTypes(_types)
                 setSchema(props.schema)
+            }
+        }
+        return () => {
+            if((window as any).layout_polls){
+                (window as any).layout_polls.forEach((timer : any) => {
+                    clearInterval(timer);
+                })
             }
         }
     }, [props.schema, schema, client, props.match.params, data, store, types])
@@ -177,15 +186,16 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                         }
                     }
                     return match;
-                })[0] : (store[name] && store[name].filter((a: any) => {
+                })[0] : (store[name] ? store[name].filter((a: any) => {
                     let match = true;
                     for(var queryK in query){
+                        console.log("query", queryK, query, a);
                         if(a[queryK] != query[queryK]){
                             match = false;
                         }
                     }
                     return match;
-                })[0] || {}))
+                })[0] : {}))
         }
 
         return obj

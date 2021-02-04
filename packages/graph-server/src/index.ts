@@ -65,7 +65,6 @@ export default class HiveGraph extends BaseGraph{
         let typeSchema = this.typeRegistry.schema
 
         directives.forEach(directive => {
-            console.log(directive)
             outputSchema.addDirective(directive)
         })
 

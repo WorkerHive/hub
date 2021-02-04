@@ -2,6 +2,7 @@ import { WorkhubClient } from "@workerhive/client";
 import { FileBrowser, Header } from "@workerhive/react-ui";
 import React from "react";
 
+
 export const FILE_VIEW = {
         path: '/dashboard/files',
         label: "Files",

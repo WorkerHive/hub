@@ -35,7 +35,7 @@ export const TEAM_VIEW = {
                         const [open, modalOpen] = React.useState<boolean>(false);
                         const [ selected, setSelected] = React.useState<any>();
                         return (
-                            <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+                            <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
                                     title={data.label} 
                                     data={selected}

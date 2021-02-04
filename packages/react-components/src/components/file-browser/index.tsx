@@ -16,6 +16,11 @@ import { Typography } from '@material-ui/core'
 
 import { ConvertFiles } from './convert-action';
 
+import { setChonkyDefaults } from 'chonky';
+import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+
+setChonkyDefaults({ iconComponent: ChonkyIconFA });
+
 export interface FileBrowserProps {
   className?: string;
   loading?: boolean;

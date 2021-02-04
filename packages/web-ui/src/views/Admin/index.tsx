@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 
 import { Editor, HiveProvider, NodePanel, useEditor, withEditor } from "@workerhive/hive-flow"
 import '@workerhive/hive-flow/dist/index.css'
@@ -14,17 +14,33 @@ import { AdminEditor } from './editor';
 
 export interface AdminViewProps{
     stores: any;
+    map: any;
 }
 
 export const AdminView: React.FC<AdminViewProps> = (props) => {
+
+    console.log(props.map)
     const [ client, store, isReady, err ] = useHub()
 
     const editor = useEditor();
-    const [ nodes, setNodes ] = React.useState<any>([])
-    const [ links, setLinks ] = React.useState<any>([])
+    const [ nodes, setNodes ] = React.useState<any>(props.map && props.map.nodes ? props.map.nodes : [])
+    const [ links, setLinks ] = React.useState<any>(props.map && props.map.links ? props.map.links : [])
+
+    useEffect(() => {
+        if(props.map && props.map.nodes){
+            setNodes(props.map.nodes)
+        }
+
+        if(props.map && props.map.links){
+            setLinks(props.map.links)
+        }
+    }, [props.map])
+
+    console.log(client!.models!)
+    
 
     const displayNodes = client!.models! ? client!.models!.filter((a) => a.directives.indexOf('configurable') > -1).map((x: any, ix :number) => ({
-                    id: `type-${ix}`,
+                    id: `type-${x.name}`,
                     type: 'typeDef',
                     position: {
                         x: ix * 200,
@@ -36,7 +52,7 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
                         typedef: x.def,
                     }
                 })).concat((props.stores || []).map((x: any, ix : number) => ({
-                    id: `store-${ix}`,
+                    id: `store-${x.name}`,
                     type: 'extStore',
                     position: {
                         x: ix * 200,
@@ -47,6 +63,7 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
                         label: x.name
                     }
                 }))).concat(nodes) : []
+
     const types = [TypeDefNode, ExtStore, ExtAdapter]
 
     const [ modalOpen, openModal ] = React.useState<boolean>(false);
@@ -75,9 +92,14 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
                     setNode(node)
                 },
                 onNodeAdd: (node: any) => {
+                    client!.actions.updateIntegrationMap('root-map', {nodes: nodes.concat(node), links: links})
                     setNodes(nodes.concat([node]))
                 },
+                onNodeUpdate: (id: string, updated: any) => {
+                    client!.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links})
+                },  
                 onLinkAdd: (link : any) => {
+                    client!.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links.concat([link])})
                     console.log("Addd link", link)
                    setLinks(links.concat([link])) 
                 },

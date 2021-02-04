@@ -16,7 +16,7 @@ export const transform = (composer: SchemaComposer<any>) => {
     schemaComposer.merge(composer);
     
     schemaComposer.add(GraphQLUpload)
-    console.log('=> Added Upload Scalar')
+    console.info('=> Added Upload Scalar')
 
     let types = getTypesWithDirective(composer, directiveName)
 

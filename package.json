@@ -1,11 +1,13 @@
 {
   "name": "root",
   "devDependencies": {
+    "@types/uuid": "^8.3.0",
     "lerna": "^3.22.1",
+    "ts-node": "^9.1.1",
     "typescript": "4.0.5"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --ignore-prepublish",
     "changed": "lerna changed",
     "build:react-components": "cd packages/react-components && yarn build",
     "build:web-client": "cd packages/graph-client && yarn build",
@@ -30,6 +32,7 @@
     "chonky-icon-fontawesome": "^2.1.0",
     "graphql": "^15.5.0",
     "graphql-compose": "^7.24.3",
+    "graphql-tag": "^2.11.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },

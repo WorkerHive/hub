@@ -2,16 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment';
-
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  
+})
 
 ReactDOM.render(
   <React.StrictMode>
+    <MuiThemeProvider theme={theme}>
     <MuiPickersUtilsProvider utils={MomentUtils}>
       <App />
     </ MuiPickersUtilsProvider>
+    </MuiThemeProvider>
 
   </React.StrictMode>,
   document.getElementById('root')

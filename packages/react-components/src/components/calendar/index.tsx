@@ -60,7 +60,11 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
         }}
         onSelectEvent={onSelectEvent}
         onDoubleClickEvent={onDoubleClickEvent}
-        onSelectSlot={onSelectSlot}
+        onSelectSlot={(slotInfo: {start: stringOrDate, end:stringOrDate, slots: Array<Date | string>, action: "select" | "click" | "doubleClick"}) => {
+          slotInfo.start = moment(slotInfo.start).add(12, 'hours').toDate()
+          slotInfo.end = moment(slotInfo.end).add(1, 'day').toDate();
+          if(onSelectSlot) onSelectSlot(slotInfo)
+        }}
         selectable={true}
         defaultDate={viewDate}
         defaultView={defaultView}

@@ -1,5 +1,5 @@
 import { GraphQLSchema } from 'graphql'
-import { SchemaComposer, schemaComposer } from 'graphql-compose';
+import { ObjectTypeComposer, SchemaComposer, schemaComposer } from 'graphql-compose';
 
 import StoreManager from './stores';
 
@@ -12,10 +12,14 @@ import {merge} from 'lodash';
 import resolvers from './resolver-base'
 import MergedAdapter from './adapters';
 import FlowPath from './flow-path';
+import { hydrate } from './flow-path/hydration';
+
+import QueenDB from 'queendb';
 
 export class FlowConnector extends BaseConnector{
 
-    public stores : StoreManager;
+    public db: QueenDB;
+
     public connector: FlowConnector;
 
     public server: any;
@@ -29,17 +33,60 @@ export class FlowConnector extends BaseConnector{
     public schema: GraphQLSchema;
     public schemaOpts: any;
 
+    private timer: any;
+
     constructor(flowDefs, userResolvers){
         super();
-        this.stores = new StoreManager();
+        
+        this.db = new QueenDB({
+            host: 'localhost',
+            port: 5432,
+            database: 'postgres',
+            user: 'postgres',
+            password: 'test'
+        })
+
+ //       this.db.rehydrate();
+
         this.flowDefs = flowDefs;
         this.userResolvers = userResolvers;
         this.flowResolvers = merge(resolvers, userResolvers)
+
+      //  this.config = setupConfig(this.schemaFactory)
+       // this.rehydrateFlow();
+    }
+
+    async rehydrateFlow(){
+
+        let configurable = [];
+        this.schemaFactory.types.forEach((val, key, map) => {
+            if(typeof(key) === 'string' && val instanceof ObjectTypeComposer && val.getDirectiveNames().indexOf('configurable') > -1){
+                configurable.push(val.toSDL())
+            }
+        })
+
+        await this.db.setupTypeStore(configurable)
+        const flowMap = await this.db.readCell('IntegrationMap', {id: 'root-map'})
+        await this.db.rehydrate(flowMap);
+        console.log("Flow Map", flowMap)
+        /*
+        if(this.stores.isReady){
+            let flowMap : any = await this.read('IntegrationMap', {id: 'root-map'})
+            this.flowDefs = hydrate(flowMap.nodes, flowMap.links);
+            console.log("Rehydrated", Object.keys(this.flowDefs).length);
+        }else{
+            clearTimeout(this.timer)
+            this.timer = setTimeout(async () => {
+                //Retry rehydrateStores every 2 seconds until we can try it with the app store
+                await this.rehydrateFlow()
+            }, 2 * 1000)
+        }
+        */
     }
 
     getConfig(){
         //Get typedefs and resolvers for integration
-        return setupConfig(this.schemaFactory)
+        return setupConfig(this.schemaFactory, this.db)
     }
 
     setParent(parent : any){
@@ -51,65 +98,39 @@ export class FlowConnector extends BaseConnector{
          this.schemaFactory = schemaComposer.clone();
          this.schemaFactory.addTypeDefs(parent.typeRegistry.sdl);
         })
+
+//        console.log("Key type registry", this.schemaFactory.typeMapper)
+
+
+
+        
+        this.rehydrateFlow()
     }
 
     async create(type, object){
-        if(!object.id) object.id = v4();
-        let flowDef = this.flowDefs[type] || {};   
-        let objectType = this.schemaFactory.getOTC(type)
-        let path = new FlowPath(objectType, flowDef)
-        let batches = path.getBatched();
-        let adapter = new MergedAdapter(objectType, this.stores, batches)
-        let result =  await adapter.addProvider()(object)                            
-        return result;
+        return await this.db.addCellRow(type, object)
     }
 
     async update(type, query, update){
-        let flowDef = this.flowDefs[type] || {};
-        let objectType = this.schemaFactory.getOTC(type)
-        let path = new FlowPath(objectType, flowDef)
-        let batches = path.getBatched();
-        let adapter = new MergedAdapter(objectType, this.stores, batches)
-        let result = await adapter.updateProvider()(query, update)
-
-        console.log("PUT RESULT", result);
-        return result;
+      
+        return await this.db.updateCell(type, query, update)
 
     }
 
     async delete(type : string, query: object) : Promise<boolean> {
         let flowDef = this.flowDefs[type] || {};
         let objectType = this.schemaFactory.getOTC(type)
-
-        let path = new FlowPath(objectType, flowDef)
-        let batches = path.getBatched();
-        let adapter = new MergedAdapter(objectType, this.stores, batches)
-        let result = await adapter.deleteProvider()(query)
-        return result;
+        return true;
     }
 
     async read(type, query){
-        let flowDef = this.flowDefs[type] || {};
-        let objectType = this.schemaFactory.getOTC(type)
+        return await this.db.readCell(type, query)
 
-        let path = new FlowPath(objectType, flowDef)
-        let batches = path.getBatched();
-        console.log("Get with", type, query)
-        let adapter = new MergedAdapter(objectType, this.stores, batches)
-        let fn = adapter.getProvider()
-        return await fn(query)
     }
 
-    async readAll(type, query: object = {}){
-        let flowDef = this.flowDefs[type] || {};
-        let objectType = this.schemaFactory.getOTC(type)
 
-        const path = new FlowPath(objectType, flowDef)
-        let batches = path.getBatched();
-        let adapter = new MergedAdapter(objectType, this.stores, batches)
-        let result = await adapter.getAllProvider()(query)
-        console.log("Get all result")
-        return result;
+    async readAll(type, query: object = {}){
+           return this.db.readAllCell(type, query);
     }
 
 }

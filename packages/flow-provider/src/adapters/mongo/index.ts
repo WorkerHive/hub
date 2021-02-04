@@ -12,7 +12,7 @@ export default class MongoAdapter extends BaseAdapter{
 
     getProvider(bucket : any, typeDef : GraphQLObjectType, provides : any){
         return async (search) => {
-            console.log(provides);
+        
 
             let query = mapQuery(objectFlip(provides), search)
             let result = await this.client.collection(`${bucket.name}`).findOne(query)
@@ -32,7 +32,8 @@ export default class MongoAdapter extends BaseAdapter{
         return async(query, obj) => {
              let q = mapQuery(objectFlip(Object.assign({}, provides)), query)
             let inputObject = mapBack(provides, obj)
-            console.log("UPDATE INPUT OBJ", provides, inputObject, obj)
+           
+         
             for(var key in inputObject){
                 if(!inputObject[key]){
                     delete inputObject[key]
@@ -40,7 +41,6 @@ export default class MongoAdapter extends BaseAdapter{
             }
             if(Object.keys(inputObject).length > 0) {
                 let result = await this.client.collection(`${bucket.name}`).findOneAndUpdate(q, {$set: inputObject}, {upsert: true, new: true, returnOriginal: false})
-                console.log(result)
                 if(result.value){
                     return mapForward(typeDef, provides, result.value);
                 }
@@ -55,7 +55,7 @@ export default class MongoAdapter extends BaseAdapter{
         return async(query) => {
    
             let q = mapQuery(objectFlip(Object.assign({}, provides)), query)
-            console.log(q)
+            
             return await this.client.collection(`${bucket.name}`).deleteOne(q)
         }
     }
@@ -63,7 +63,7 @@ export default class MongoAdapter extends BaseAdapter{
     addProvider(bucket, typeDef : GraphQLObjectType, provides){
         return async(newObject) => {
             let  obj = mapBack(provides, newObject)
-            console.log("New object add provider", obj, provides, newObject)
+           
             let newObj = await this.client.collection(`${bucket.name}`).insertOne(obj)
             return mapForward(typeDef, provides, newObj.ops[0])
         }
