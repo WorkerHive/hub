@@ -9,6 +9,7 @@
     "esModuleInterop": true,      
     "sourceRoot": "lib/",
     "sourceMap": true,
+    "skipLibCheck": true,
     "outDir": "dist/",
     "declaration": true,       
     "downlevelIteration": true,     /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */

@@ -39,11 +39,11 @@ export class FlowConnector extends BaseConnector{
         super();
         
         this.db = new QueenDB({
-            host: 'localhost',
+            host: process.env.QUEENDB_HOST || 'queendb',
             port: 5432,
             database: 'postgres',
             user: 'postgres',
-            password: 'test'
+            password: process.env.QUEENDB_PASS || 'defaultpassword'
         })
 
  //       this.db.rehydrate();
