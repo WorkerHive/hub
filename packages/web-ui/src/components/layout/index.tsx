@@ -9,7 +9,6 @@ const ReactGridLayout = WidthProvider(RGL);
 const Header = lazy(() => import('@workerhive/react-ui').then((r) => ({ default: r.Header })))
 const SearchTable = lazy(() => import('@workerhive/react-ui').then((r) => ({ default: r.SearchTable })))
 
-
 export interface LayoutItem {
     x: number;
     y: number;
@@ -102,13 +101,13 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                 } else {
                                     if(pollLength && pollLength > 0){
                                         console.log("Registering poll length", pollLength, model.name)
-                                        if(!(window as any).layout_polls) (window as any).layout_polls = [];
-                                        (window as any).layout_polls.push(setInterval(async () => {
+                                        if(!window.layout_polls) window.layout_polls = [];
+                                        window.layout_polls.push(setInterval(async () => {
                                             console.log("Fetch", model.name)
-                                            await client!.actions[`get${model.name}s`](false);
+                                            await client.actions[`get${model.name}s`](false);
                                         }, pollLength))
                                     }
-                                    let result = await client!.actions[`get${model.name}s`]()
+                                    let result = await client.actions[`get${model.name}s`]()
 
                                     currentValue = result //store[model.name]
 
@@ -129,7 +128,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                     currentValue = currentValue[0]
                                     console.log("CUrrent Valye", currentValue)
                                 } else {
-                                    let result = await client!.actions[`get${model.name}`](query.id)
+                                    let result = await client.actions[`get${model.name}`](query.id)
                                     currentValue = result
                                     console.log("had to fetch fresh data", currentValue)
                                 }
@@ -149,8 +148,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             }
         }
         return () => {
-            if((window as any).layout_polls){
-                (window as any).layout_polls.forEach((timer : any) => {
+            if(window.layout_polls){
+                window.layout_polls.forEach((timer : any) => {
                     clearInterval(timer);
                 })
             }
@@ -169,15 +168,15 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             let arr = (name.match(/\[(.*?)\]/) != null)
             if(arr) name = name.match(/\[(.*?)\]/)[1]
 
-            let model = client!.models?.concat(client!.uploadModels).filter((a : any) => a.name === name)[0]
+            let model = client?.models?.concat(client?.uploadModels).filter((a : any) => a.name === name)[0]
 
             let query = typeof(props.schema.data[k].query) === 'function' ? props.schema.data[k].query(props.match.params) : {}
             
-            if(liveData) console.log("LIVE", client!.realtimeSync!.getArray('calendar', model).toArray())
+            if(liveData) console.log("LIVE", client?.realtimeSync?.getArray('calendar', model).toArray())
 
             obj[k] = arr ? 
-                (liveData ? client!.realtimeSync?.getArray(name, model).toArray() : (store[name] || []) )
-                : (liveData ? client!.realtimeSync?.getArray(name, model).toArray().filter((a : any) => {
+                (liveData ? client?.realtimeSync?.getArray(name, model).toArray() : (store[name] || []) )
+                : (liveData ? client?.realtimeSync?.getArray(name, model).toArray().filter((a : any) => {
                     let match = true;
                     for(var queryK in query){
                         if(a[queryK] != query[queryK]){
@@ -208,7 +207,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                 {...defaultProps}
                 isDraggable={false}
                 isResizable={false}
-                layout={props.schema.layout(sizes, 64) as RGL.Layout[]}
+                layout={props.schema.layout(sizes, 64)}
                 onLayoutChange={(layout) => { }}
                 isBounded={true}>
                 {props.schema.layout(sizes, 64).map((x) => (

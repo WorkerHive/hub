@@ -16,11 +16,11 @@ export default function Settings (props: SettingsProps){
   const [ client, store, isReady ] = useHub();
 
   React.useEffect(() => {
-    client!.actions.getStoreTypes().then((data : any) => {
+    client?.actions.getStoreTypes().then((data : any) => {
       setStoreTypes(data)
     })
 
-    client!.actions.getIntegrationStores().then((data : any) => {
+    client?.actions.getIntegrationStores().then((data : any) => {
       setStores(data)
     })
 

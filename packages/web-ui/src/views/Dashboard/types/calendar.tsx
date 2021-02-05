@@ -55,7 +55,7 @@ export const CALENDAR_VIEW =  {
                                 if(item.id){
                                     const id = item.id;
                                     if(item.project) item.project = {id: item.project.id};
-                                    client!.actions.updateSchedule(id, item).then(() => {
+                                    client?.actions.updateSchedule(id, item).then(() => {
                                         openModal(false)
                                     })
                                 }else{
@@ -66,7 +66,7 @@ export const CALENDAR_VIEW =  {
                                     openModal(false)
 
                                     
-                                    client!.actions.addSchedule(item).then(() => {
+                                    client?.actions.addSchedule(item).then(() => {
                                         openModal(false)
                                     })
                                 }

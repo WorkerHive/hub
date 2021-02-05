@@ -100,7 +100,7 @@ const Modal = (props: any) => {
 
         let store = getStore();
         console.log("Fetch layout", store.data.label)
-        client!.actions.getStoreLayout(store.data.label).then((data: any) => {
+        client?.actions.getStoreLayout(store.data.label).then((data: any) => {
             console.log(data);
             setStoreTables(data)
         })
@@ -124,7 +124,7 @@ const Modal = (props: any) => {
                     <FormControl>
                         <InputLabel>Model</InputLabel>
                         <Select value={getModel().id} onChange={(e) => {
-                            updateModelLink(e.target.value as string)
+                            updateModelLink(`${e.target.value}`)
                         }}>
                             {editor.nodes.filter((a: any) => a.type == 'typeDef').map((x: any) => (
                                 <MenuItem value={x.id}>{x.data.label}</MenuItem>
@@ -145,7 +145,7 @@ const Modal = (props: any) => {
                                     return node;
                                 })*/
 
-                                client!.actions.getBucketLayout(getStore().data.label, newValue.name).then((data: any) => {
+                                client?.actions.getBucketLayout(getStore().data.label, newValue.name).then((data: any) => {
                                     /*                        editor.updateNode(props.node.id, (node : any) => {
                                                                 node.data.fields = data;
                                                                 return node;

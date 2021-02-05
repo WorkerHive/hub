@@ -23,9 +23,10 @@ function App() {
           <div className="App">
             <Route path="/login" component={Login} />
             <Route path="/dashboard" render={(props) => {
-              if(localStorage.getItem('token') && localStorage.getItem('token')!.length > 0){
+              const token = localStorage.getItem('token')
+              if(token && token.length > 0){
                 return (
-                      <WorkhubProvider token={localStorage.getItem('token')!} url={hubUrl || ''}>
+                      <WorkhubProvider token={token} url={hubUrl || ''}>
                         <Dashboard {...props} />
                       </WorkhubProvider>
                 )

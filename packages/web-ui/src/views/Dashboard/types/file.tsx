@@ -28,7 +28,7 @@ export const FILE_VIEW = {
                 h: (sizes.height / rowHeight) -2,
                 component: (data: any, params: any, types: any, client: any) => (
                     <FileBrowser files={data.files} onFileUpload={({files}: any) => {
-                        client!.actions.addFile(files[0])
+                        client.actions.addFile(files[0])
                     }} />
                 )
             }

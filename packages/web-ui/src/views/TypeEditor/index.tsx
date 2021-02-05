@@ -21,7 +21,7 @@ export const TypeEditor : React.FC<TypeEditorProps> = (props) => {
 
     React.useEffect(() => {
         if(isReady && client){
-            let type = client.models!.filter((a) => a.name === props.match.params.type)[0]
+            let type = client?.models?.filter((a) => a.name === props.match.params.type)[0]
             setType({def: type.def, name: type.name})
         }
     }, [])
@@ -36,7 +36,7 @@ export const TypeEditor : React.FC<TypeEditorProps> = (props) => {
                     </div>*/}
                     
                     <Paper className="type-editor__types">
-                        <CRUDKV types={client!.models || []} value={type.def} onChange={({value} : any) => {
+                        <CRUDKV types={client?.models || []} value={type.def} onChange={({value} : any) => {
 
                           let fields = value.filter((a : {type: string, name: string}) => a.type.length > 0)
                           let newFields = fields.filter((a: any) => {
@@ -44,7 +44,7 @@ export const TypeEditor : React.FC<TypeEditorProps> = (props) => {
                           })
 
                           if(newFields.length > 0){
-                              client!.actions.updateType(type.name, newFields)
+                              client?.actions.updateType(type.name, newFields)
                             /*client!.actions.updateType(type.name, value.filter((a : any) => {
                                 return a.name && a.name.length > 0 && a.type && a.type.length > 0
                             }).filter((a: any) => {

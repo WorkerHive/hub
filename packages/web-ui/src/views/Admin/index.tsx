@@ -36,10 +36,10 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
         }
     }, [props.map])
 
-    console.log(client!.models!)
+    console.log(client?.models)
     
 
-    const displayNodes = client!.models! ? client!.models!.filter((a) => a.directives.indexOf('configurable') > -1).map((x: any, ix :number) => ({
+    const displayNodes = client?.models ? client?.models.filter((a) => a.directives.indexOf('configurable') > -1).map((x: any, ix :number) => ({
                     id: `type-${x.name}`,
                     type: 'typeDef',
                     position: {
@@ -92,14 +92,14 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
                     setNode(node)
                 },
                 onNodeAdd: (node: any) => {
-                    client!.actions.updateIntegrationMap('root-map', {nodes: nodes.concat(node), links: links})
+                    client?.actions.updateIntegrationMap('root-map', {nodes: nodes.concat(node), links: links})
                     setNodes(nodes.concat([node]))
                 },
                 onNodeUpdate: (id: string, updated: any) => {
-                    client!.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links})
+                    client?.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links})
                 },  
                 onLinkAdd: (link : any) => {
-                    client!.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links.concat([link])})
+                    client?.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links.concat([link])})
                     console.log("Addd link", link)
                    setLinks(links.concat([link])) 
                 },

@@ -11,11 +11,11 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
   const [ roles, setRoles ] = React.useState<any>([])
 
   React.useEffect(() => {
-    client!.getModels().then(models => {
+    client?.getModels().then(models => {
       setModels(models.crud)
     });
 
-    client!.actions.getRoles().then((roles: any) => {
+    client?.actions.getRoles().then((roles: any) => {
       setRoles(roles)
     })
   }, [])
@@ -32,20 +32,20 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
           title={"Connections"} 
           onDelete={({item}: any) => {
             if(item && item.id){
-              client!.actions.deleteStore(item.id)
+              client?.actions.deleteStore(item.id)
             }
             
           }}
           onSave={({item} : any) => {
             let obj = Object.assign({}, item)
             if(!obj.id){
-              client!.actions.addStore(obj)
+              client?.actions.addStore(obj)
             }else{
               const id = obj.id;
               delete obj.id;
               console.log("UPDATE STORE", id, obj)
 
-              client!.actions.updateStore(id, obj)
+              client?.actions.updateStore(id, obj)
             }
           }}
           type={{name: 'String', type: {type: 'Select', items: storeTypes, key: 'id'}, host: 'String', user: 'String', pass: 'Password', dbName: 'String'}} 
@@ -58,16 +58,16 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
         <CRUDList 
           title={"Roles"} 
           onDelete={({item}: any) => {
-            client!.actions.deleteRole(item.id)
+            client?.actions.deleteRole(item.id)
           }}
           onSave={({item}: any) => {
             let obj = Object.assign({}, item);
             if(!obj.id){
-              client!.actions.addRole(obj)
+              client?.actions.addRole(obj)
             }else{
               const id = obj.id;
               delete obj.id;
-              client!.actions.updateRole(id,obj)
+              client?.actions.updateRole(id,obj)
             }
           }}
           type={{

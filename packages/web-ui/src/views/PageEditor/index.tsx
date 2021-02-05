@@ -20,7 +20,7 @@ export const PageEditor : React.FC<PageEditorProps> = (props) => {
     const [ layout, setLayout ] = React.useState<any>([])
 
     React.useEffect(() => {
-        hub!.actions.getPageLayout(pageName).then((result : any) => {
+        hub?.actions.getPageLayout(pageName).then((result : any) => {
             console.log(result)
             if(result.items && result.items.length > 0){
                 let items = result.items;
@@ -43,7 +43,7 @@ export const PageEditor : React.FC<PageEditorProps> = (props) => {
             setLayout(layout)
             console.log("Sending update", layout)
             if(loaded){
-                hub!.actions.updatePageLayout(pageName, {items: layout.map((x : any) => {
+                hub?.actions.updatePageLayout(pageName, {items: layout.map((x : any) => {
                 let ret = { ...x, component: x.componentName }
                 delete ret.componentName
                 return ret;

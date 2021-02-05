@@ -6,7 +6,7 @@ const WorkUIProps = require('@workerhive/react-ui/dist/prop-spec.js')
 
 export interface DataModalProps {
     open: boolean;
-    onClose?(event?: any): any;
+    onClose: (event?: any) => any | undefined;
     component?: {componentName: string}
 }
 
@@ -26,7 +26,7 @@ export const DataModalInput : React.FC<DataModalInputProps> = (props) => {
                 <FormControl fullWidth>
                     <InputLabel>{props.label}</InputLabel>
                     <Select fullWidth>
-                        {client && client.models!.map((x : any) => (
+                        {client && client.models && client.models.map((x : any) => (
                             <MenuItem>{x.name}</MenuItem>
                         ))}
                     </Select>

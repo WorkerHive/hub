@@ -29,7 +29,7 @@ const Fallback = (props : any) => {
 
 export const Dashboard: React.FC<DashboardProps> = (props) => {
     const [ hub, store, isReady, err ] = useHub()
-    console.log(hub && Object.keys(hub!.actions).length)
+    console.log(hub && Object.keys(hub.actions).length)
     return (
         <div className="dashboard-view">
             <Sidebar />
