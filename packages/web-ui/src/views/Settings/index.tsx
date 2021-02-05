@@ -3,7 +3,7 @@ import React from 'react';
 import { AccordionList } from "@workerhive/react-ui"
 import { SettingsMap } from './settings-map'
 import './index.css';
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 
 export interface SettingsProps{
     history: any;
@@ -16,11 +16,11 @@ export default function Settings (props: SettingsProps){
   const [ client, store, isReady ] = useHub();
 
   React.useEffect(() => {
-    client!.actions.getStoreTypes().then((data : any) => {
+    client?.actions.getStoreTypes().then((data : any) => {
       setStoreTypes(data)
     })
 
-    client!.actions.getIntegrationStores().then((data : any) => {
+    client?.actions.getIntegrationStores().then((data : any) => {
       setStores(data)
     })
 

@@ -150,7 +150,7 @@ export default class TypeRegistry extends EventEmitter<any>{
     }
 
     registerInputType(name: string, def: any){
-        console.log("Register input type", name, def)
+       
         let inputType = this.composer.createInputTC({
             name: name,
             fields: {
@@ -200,8 +200,8 @@ export default class TypeRegistry extends EventEmitter<any>{
                     ...def,
                 },
                 resolve: (parent, args, context) => {
-                    console.log(context)
-                    console.log(queryName, JSON.stringify(args))
+              
+                
                 }
             }
         })
@@ -237,7 +237,7 @@ export default class TypeRegistry extends EventEmitter<any>{
         let outputSchema = this.composer.clone();
 
         if(this._sdl){
-            console.log(this._sdl)
+       
             outputSchema.addTypeDefs(this._sdl)
         } 
         if(this._resolvers) outputSchema.addResolveMethods(this._resolvers)

@@ -1,15 +1,13 @@
 import React, { Suspense, lazy, useRef } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout'
-import { WorkhubClient } from '@workerhive/client'
+import { WorkhubClient, useHub } from '@workerhive/client'
 import useResizeAware from 'react-resize-aware';
 import 'react-grid-layout/css/styles.css';
-import { useHub } from '@workerhive/client/dist/react';
 import { isEqual } from 'lodash';
 const ReactGridLayout = WidthProvider(RGL);
 
 const Header = lazy(() => import('@workerhive/react-ui').then((r) => ({ default: r.Header })))
 const SearchTable = lazy(() => import('@workerhive/react-ui').then((r) => ({ default: r.SearchTable })))
-
 
 export interface LayoutItem {
     x: number;
@@ -40,6 +38,7 @@ const defaultProps = {
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
+
     const [resizeListener, sizes] = useResizeAware();
 
     const [client, store, isReady, err] = useHub();
@@ -102,12 +101,13 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                 } else {
                                     if(pollLength && pollLength > 0){
                                         console.log("Registering poll length", pollLength, model.name)
-                                        setInterval(async () => {
+                                        if(!window.layout_polls) window.layout_polls = [];
+                                        window.layout_polls.push(setInterval(async () => {
                                             console.log("Fetch", model.name)
-                                            await client!.actions[`get${model.name}s`](false);
-                                        }, pollLength)
+                                            await client.actions[`get${model.name}s`](false);
+                                        }, pollLength))
                                     }
-                                    let result = await client!.actions[`get${model.name}s`]()
+                                    let result = await client.actions[`get${model.name}s`]()
 
                                     currentValue = result //store[model.name]
 
@@ -123,14 +123,14 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                     }
                                     return matches;
                                 }) : []
-
+                                console.log("Not array run", currentValue)
                                 if (currentValue.length > 0) {
                                     currentValue = currentValue[0]
                                     console.log("CUrrent Valye", currentValue)
                                 } else {
-                                    let result = await client!.actions[`get${model.name}`](query.id)
+                                    let result = await client.actions[`get${model.name}`](query.id)
                                     currentValue = result
-                                    console.log("had to fetch fresh data")
+                                    console.log("had to fetch fresh data", currentValue)
                                 }
                             }
 
@@ -147,6 +147,13 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                 setSchema(props.schema)
             }
         }
+        return () => {
+            if(window.layout_polls){
+                window.layout_polls.forEach((timer : any) => {
+                    clearInterval(timer);
+                })
+            }
+        }
     }, [props.schema, schema, client, props.match.params, data, store, types])
 
     function getData() : object{
@@ -161,15 +168,15 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             let arr = (name.match(/\[(.*?)\]/) != null)
             if(arr) name = name.match(/\[(.*?)\]/)[1]
 
-            let model = client!.models?.concat(client!.uploadModels).filter((a : any) => a.name === name)[0]
+            let model = client?.models?.concat(client?.uploadModels).filter((a : any) => a.name === name)[0]
 
             let query = typeof(props.schema.data[k].query) === 'function' ? props.schema.data[k].query(props.match.params) : {}
             
-            if(liveData) console.log("LIVE", client!.realtimeSync!.getArray('calendar', model).toArray())
+            if(liveData) console.log("LIVE", client?.realtimeSync?.getArray('calendar', model).toArray())
 
             obj[k] = arr ? 
-                (liveData ? client!.realtimeSync?.getArray(name, model).toArray() : (store[name] || []) )
-                : (liveData ? client!.realtimeSync?.getArray(name, model).toArray().filter((a : any) => {
+                (liveData ? client?.realtimeSync?.getArray(name, model).toArray() : (store[name] || []) )
+                : (liveData ? client?.realtimeSync?.getArray(name, model).toArray().filter((a : any) => {
                     let match = true;
                     for(var queryK in query){
                         if(a[queryK] != query[queryK]){
@@ -177,15 +184,16 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                         }
                     }
                     return match;
-                })[0] : (store[name] && store[name].filter((a: any) => {
+                })[0] : (store[name] ? store[name].filter((a: any) => {
                     let match = true;
                     for(var queryK in query){
+                        console.log("query", queryK, query, a);
                         if(a[queryK] != query[queryK]){
                             match = false;
                         }
                     }
                     return match;
-                })[0] || {}))
+                })[0] : {}))
         }
 
         return obj
@@ -199,7 +207,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                 {...defaultProps}
                 isDraggable={false}
                 isResizable={false}
-                layout={props.schema.layout(sizes, 64) as RGL.Layout[]}
+                layout={props.schema.layout(sizes, 64)}
                 onLayoutChange={(layout) => { }}
                 isBounded={true}>
                 {props.schema.layout(sizes, 64).map((x) => (

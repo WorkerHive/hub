@@ -1,6 +1,6 @@
 import { GraphQLBoolean, GraphQLFloat, GraphQLString } from "graphql";
 import { GraphQLID } from "graphql";
-import { SchemaComposer } from "graphql-compose";
+import { ObjectTypeComposer, SchemaComposer } from "graphql-compose";
 import { Type } from "../registry/type";
 
 export function objectValues<T>(obj: { [name: string]: T }): T[] {
@@ -10,7 +10,7 @@ export function objectValues<T>(obj: { [name: string]: T }): T[] {
 export function getTypesWithDirective(composer: SchemaComposer<any>, name: string): Array<Type> {
     let types: Array<Type> = [];
     composer.types.forEach((val, key) => {
-        if (typeof (key) == 'string' && val.getExtensions().directives?.map((x) => x.name).indexOf(name) > -1) {
+        if (typeof (key) === 'string' && val instanceof ObjectTypeComposer && val.getDirectives().map((x) => x.name).indexOf(name) > -1) {
             types.push(new Type(composer.getOTC(key)))
         }
     })

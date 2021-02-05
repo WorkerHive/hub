@@ -21,7 +21,6 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
         const refs = item.def.filter((a) => a.directives.filter((x) => x.name == 'input' && x.args.ref).length > 0)
 
         refs.forEach((foreignKey) => {
-            console.log("Add foreign resolver for ", item.name, foreignKey)
             otc.addFields({
                 [foreignKey.name]: {
                     type: foreignKey.type.toString(),
@@ -40,7 +39,6 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                             query = null;
                         }
 
-                        console.log(query)
 
                         return await (arr) ? (query != null) ? context.connector.readAll(name, query) : [] : (query != null) ? context.connector.read(name, query) : {}
                     }
@@ -82,7 +80,7 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         ...args,
                     },
                     resolve: async (parent, args, context : GraphContext) => {
-                        console.log("Update", item.name, args)
+                      
                         return await context.connector.update(item.name, {id: args['id']}, args[item.camelName])
                     }
                 },
@@ -114,7 +112,7 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                     },
                     resolve: async (parent, args, context : GraphContext) => {
                        // const refs = item.def.filter((a) => a.directives.filter((x) => x.name == 'input' && x.args.ref).length > 0)
-                       //console.log("Foreign fields", refs)
+              
                         let result = await context.connector.readAll(item.name)
 
                         return result;

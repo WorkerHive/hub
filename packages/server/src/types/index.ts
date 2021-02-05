@@ -19,7 +19,6 @@ import {
 
 import {
   typeDef as Calendar,
-  resolvers as calendarResolvers
 } from './calendar';
 
 import {
@@ -48,5 +47,5 @@ import {
 const { merge } = lodash;
 
 
-export const resolvers = merge(projectResolvers, fileResolvers, userResolvers, integrationResolvers, calendarResolvers)
+export const resolvers = merge(projectResolvers, fileResolvers, userResolvers, integrationResolvers)
 export const typeDefs = [Layout, Contacts, Knowledge, Project, Team, Equipment, File, User, Integrations, Calendar].join('\n')

@@ -6,7 +6,7 @@ import '@workerhive/hive-flow/dist/index.css'
 import './index.css';
 import { MenuView } from '../../components/menu-view';
 
-import { useHub } from '@workerhive/client/dist/react'
+import { useHub } from '@workerhive/client'
 
 export interface WorkflowsProps{
 
@@ -22,8 +22,8 @@ export default function Workflows(props: React.FC<WorkflowsProps>){
     const [ workflows, setWorkflows ] = React.useState<Array<any>>([]);
 
     React.useEffect(() => {
-        console.log(client!.actions)
-        client!.actions.getWorkflows().then((workflows : any) => {
+        console.log(client?.actions)
+        client?.actions.getWorkflows().then((workflows : any) => {
             setWorkflows(workflows)
         })
    
@@ -39,13 +39,13 @@ export default function Workflows(props: React.FC<WorkflowsProps>){
 
     const updateLinks = (links : any) => {
         setLinks(links)
-        if(workflow.id) client!.actions.updateWorkflow(workflow.id, {links: links})
+        if(workflow.id) client?.actions.updateWorkflow(workflow.id, {links: links})
     }
 
     const updateNodes = (nodes : any) => {
         setNodes(nodes)
         console.log(workflow)
-        if(workflow.id) client!.actions.updateWorkflow(workflow.id, {nodes: nodes})
+        if(workflow.id) client?.actions.updateWorkflow(workflow.id, {nodes: nodes})
     }
 
     return (
@@ -55,7 +55,7 @@ export default function Workflows(props: React.FC<WorkflowsProps>){
                 title={"Workflows"}
                 structure={{name: 'String'}}
                 onClick={({item }: any) => {
-                    client!.actions.getWorkflow(item.id).then((workflow : any) => {
+                    client?.actions.getWorkflow(item.id).then((workflow : any) => {
                         console.log(workflow)
                         setWorkflow(workflow)
                         setNodes(workflow.nodes || [])
@@ -63,7 +63,7 @@ export default function Workflows(props: React.FC<WorkflowsProps>){
                     })
                 }}
                 onSave={({item}:any) => {
-                    client!.actions.addWorkflow(item).then((r : any) => {
+                    client?.actions.addWorkflow(item).then((r : any) => {
                       
                         alert("Saved")
                     })

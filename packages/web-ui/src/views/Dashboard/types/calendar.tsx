@@ -1,6 +1,5 @@
 import { Paper } from "@material-ui/core";
-import { WorkhubClient } from "@workerhive/client";
-import { useHub } from "@workerhive/client/dist/react";
+import { WorkhubClient, useHub } from "@workerhive/client";
 import { Calendar, Header, MutableDialog } from "@workerhive/react-ui";
 import React from "react";
 
@@ -55,17 +54,19 @@ export const CALENDAR_VIEW =  {
                             onSave={({item} : any) => {
                                 if(item.id){
                                     const id = item.id;
-                                    client!.actions.updateSchedule(id, item).then(() => {
+                                    if(item.project) item.project = {id: item.project.id};
+                                    client?.actions.updateSchedule(id, item).then(() => {
                                         openModal(false)
                                     })
                                 }else{
 
+                                    console.log("New schedule", item)
                                  //  client!.realtimeSync?.getArray('Schedule', type['Schedule']).push([item])
                    
                                     openModal(false)
 
                                     
-                                    client!.actions.addSchedule(item).then(() => {
+                                    client?.actions.addSchedule(item).then(() => {
                                         openModal(false)
                                     })
                                 }

@@ -13,8 +13,8 @@ export const typeDef = `
     id: ID
     name: String @input
     description: String @input
-    startDate: Int @input
-    endDate: Int @input
+    start_date: Date @input
+    end_date: Date @input
     status: String @input
   }
   `

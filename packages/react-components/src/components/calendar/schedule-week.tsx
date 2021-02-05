@@ -6,11 +6,22 @@ export const ScheduleEvent = (props : any) => {
   console.log("Event", props.event)
   return (
     <div style={{paddingTop: 4, display: 'flex', flexDirection: 'column'}}>
-      {props.event.project && props.event.project.name}
+      <div style={{
+          display: 'flex',
+          textAlign: 'center', 
+          flexDirection: 'column', 
+          fontSize: 18,
+          fontWeight: 'bold',
+          marginBottom: 4
+      }}>
+         {props.event.project.id.length < 8 ? `${props.event.project.id} - ` : ''}
+         {props.event.project && props.event.project.name}
+      </div>
       <div style={{display: 'flex', textAlign: 'center', flexDirection: 'column'}}>
         {Array.isArray(props.event.people) && props.event.people.map((x: any) => (
           <div>{x.name}</div>
          ))}
+         <hr />
         {Array.isArray(props.event.resources) && props.event.resources.map((x: any) => (
           <div>{x.name}</div>
         ))}

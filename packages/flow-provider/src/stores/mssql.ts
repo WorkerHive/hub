@@ -23,7 +23,7 @@ export default class MSSQLStore extends BaseStore {
     }
 
     async setup(){
-        console.log(this.config)
+   
         let dbConfig = {
             user: this.config.user,
             password: this.config.pass,
@@ -37,13 +37,10 @@ export default class MSSQLStore extends BaseStore {
         this.adapter = new SQLAdapter()
 
         let layout = await this.layout();
-        console.log(layout);
     }
     
     async getBucketGroups(){
         let result = await this.adapter.request({}, 'SELECT name FROM master.dbo.sysdatabases');
-        
-        console.log("Bucket Groups", result);
     }
 
     async layout(){
@@ -56,7 +53,6 @@ export default class MSSQLStore extends BaseStore {
                 let request = new sql.Request();
                 request.query('SELECT * FROM sys.Views', cb)
             }], (err, data) => {
-                console.log(err, data);
                 if(err) return reject(err);
                 return resolve(data.map((x: any) => x.recordset).reduce((a, b) => a.concat(b)))
             })

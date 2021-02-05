@@ -7,6 +7,12 @@ export const ADMIN_VIEW = {
     data: {
         stores: {
             type: '[IntegrationStore]'
+        },
+        map: {
+            type: 'IntegrationMap',
+            query: (params: any) => ({
+                id: 'root-map'
+            })
         }
     },
     layout: (sizes : any, rowHeight: number) => [
@@ -17,7 +23,8 @@ export const ADMIN_VIEW = {
             w: 12, 
             h: sizes.height / rowHeight,
             component: (data: any) => {
-                return <AdminView stores={data.stores}/>
+                console.log("Admin data", data)
+                return <AdminView stores={data.stores} map={data.map} />
             }
         }
     ]

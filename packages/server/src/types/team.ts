@@ -9,7 +9,7 @@ export const typeDef = `
     admin: Boolean @input
     name: String @input
     email: String @input
-    phoneNumber: String @input
+    phone_number: String @input
   }
 
 `

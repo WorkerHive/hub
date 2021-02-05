@@ -9,6 +9,22 @@ jobs:
   make-release: 
     runs-on: ubuntu-latest
     steps: 
+      
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: yarn install
+      - run: yarn build:fs
+      - run: yarn install --force
+      - run: yarn build:web-deps
+      - run: yarn install --force
+      - run: npx lerna bootstrap
+      - run: echo "NODE_ENV=production" >> $GITHUB_ENV
+      - run: echo $NODE_ENV
+      - run: NODE_OPTIONS="--max_old_space_size=4096" yarn build:web
+        env: 
+          CI: false
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -23,19 +39,6 @@ jobs:
             - Second Change
           prerelease: true
 
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - run: yarn install
-      - run: yarn bootstrap
-      - run: echo "NODE_ENV=production" >> $GITHUB_ENV
-      - run: echo $NODE_ENV
-      - run: yarn build:web-deps
-      - run: yarn bootstrap
-      - run: NODE_OPTIONS="--max_old_space_size=4096" yarn build:web
-        env: 
-          CI: false
       - run: zip build.zip -r packages/web-ui/build
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2

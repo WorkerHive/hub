@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/client",
-  "version": "2.0.3-alpha.0",
+  "version": "2.1.1-alpha.0",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -8,7 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.3.6",
-    "@workerhive/ipfs": "^2.0.3-alpha.0",
     "apollo-boost": "^0.4.9",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
@@ -27,16 +26,8 @@
     "prepublish": "yarn build",
     "build": "tsc"
   },
-  "devDependencies": {
-    "@types/apollo-upload-client": "^14.1.0",
-    "@types/node": "^14.14.20",
-    "@types/node-fetch": "^2.5.8",
-    "@types/react": "^17.0.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.1.3",
-    "wrtc": "^0.4.7"
-  },
   "peerDependencies": {
     "react": "^17.0.1"
-  }
+  },
+  "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e"
 }

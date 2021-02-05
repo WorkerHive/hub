@@ -1,4 +1,4 @@
-import { useHub } from '@workerhive/client/dist/react';
+import { useHub } from '@workerhive/client';
 import { MuiPickersUtilsProvider} from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment';
 
@@ -9,12 +9,11 @@ import Sidebar from '../../components/sidebar'
 import { AdminView } from '../Admin';
 import { PageEditor } from '../PageEditor';
 import { TypeEditor } from '../TypeEditor';
-import { setChonkyDefaults } from 'chonky';
-import { ChonkyIconFA } from 'chonky-icon-fontawesome';
+
+
 
 import './index.css';
 
-setChonkyDefaults({ iconComponent: ChonkyIconFA });
 
 const TypeMap = lazy(() => import('./type-map'))
 const Settings = lazy(() => import('../Settings')) 
@@ -30,7 +29,7 @@ const Fallback = (props : any) => {
 
 export const Dashboard: React.FC<DashboardProps> = (props) => {
     const [ hub, store, isReady, err ] = useHub()
-    console.log(hub && Object.keys(hub!.actions).length)
+    console.log(hub && Object.keys(hub.actions).length)
     return (
         <div className="dashboard-view">
             <Sidebar />

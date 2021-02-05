@@ -5,7 +5,6 @@ import mongodb from 'mongodb';
 export const typeDef = `
 
   extend type Query {
-    users: [User]
     getSignupLink(user: ID): SignupToken
   }
 
@@ -34,15 +33,6 @@ export const typeDef = `
     phoneNumber: String
   }
 
-  type User {
-    "A user in the workhub"
-    id: ID
-    username: String @input
-    password: String @input
-    name: String @input
-    email: String @input
-    phoneNumber: String @input
-  }
 
 `
 

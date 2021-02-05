@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/react-ui",
-  "version": "2.0.3-alpha.0",
+  "version": "2.1.1-alpha.0",
   "description": "React UI Component library for Workhub",
   "author": "The Tech Company",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build": "npx rollup -c rollup.config.js",
     "build:doc": "node src/make-doc.js",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "predeploy": "cd example && yarn install && yarn run build",
@@ -22,53 +22,6 @@
   },
   "peerDependencies": {
     "react": "^16.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@material-ui/core": "^4.11.2",
-    "@storybook/addon-actions": "^6.1.11",
-    "@storybook/addon-essentials": "^6.1.11",
-    "@storybook/addon-links": "^6.1.11",
-    "@storybook/react": "^6.1.11",
-    "@types/jest": "^25.1.4",
-    "@types/node": "^14.14.20",
-    "@types/react": "^16.9.27",
-    "@types/react-big-calendar": "^0.24.8",
-    "@types/react-dom": "^16.9.7",
-    "@types/react-pdf": "^5.0.0",
-    "@types/styled-components": "^5.1.7",
-    "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
-    "autoprefixer": "^10.2.1",
-    "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.2.2",
-    "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-config-standard-react": "^9.2.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.17.0",
-    "eslint-plugin-standard": "^4.0.1",
-    "gh-pages": "^2.2.0",
-    "microbundle-crl": "^0.13.10",
-    "npm-run-all": "^4.1.5",
-    "postcss": "^8.2.3",
-    "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-is": "^17.0.1",
-    "react-scripts": "^3.4.1",
-    "rollup": "^2.36.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-postcss": "4.0",
-    "rollup-plugin-typescript2": "^0.29.0",
-    "silly-ts-json-schema-generator": "^0.84.0",
-    "typescript": "^3.7.5"
   },
   "files": [
     "dist"
@@ -90,5 +43,6 @@
     "react-spinkit": "^3.0.0",
     "rich-markdown-editor": "^11.1.0",
     "styled-components": "^5.2.1"
-  }
+  },
+  "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e"
 }

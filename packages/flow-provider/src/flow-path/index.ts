@@ -12,6 +12,7 @@ export default class FlowPath{
     private flipped: any;
 
     constructor(typeDef : ObjectTypeComposer<any>, provides : any){
+       
         this.typeDef = typeDef;
         this.provides = provides;
         this.flow = {};
@@ -41,7 +42,7 @@ export default class FlowPath{
                    // type = JSON.parse(JSON.stringify(field.type.type)).name.value;
                 }
 
-                console.log("TYPE", type)
+            
                 if(type == "ID") {
                     this.flow[key] = `app:${this.typeDef.getTypeName()}:id`;
                 }else{
@@ -53,7 +54,7 @@ export default class FlowPath{
     }
 
     getBatched(){
-        console.log(this.flow, this.provides)
+      
         let paths = objectValues(this.flow).map((x) => x.split(':'))
 
         let accumulator = {};
@@ -66,7 +67,7 @@ export default class FlowPath{
         })
 
         accumulator['refs'] = this.provides['refs']
-        console.log(accumulator)
+     
         return accumulator;
     }
 

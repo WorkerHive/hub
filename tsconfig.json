@@ -4,6 +4,7 @@
         "paths": {
             "react": ["../node_modules/react"],
             "react-dom": ["../node_modules/react-dom"],
+            "typescript": ["../node_modules/typescript"],
             "@material-ui/*": ["../node_modules/@material-ui/*"],
             "graphql": ["../node_modules/graphql"],
             "graphql-compose": ["../node_modules/graphql-compose"],
@@ -11,7 +12,8 @@
             "@workerhive/graph": ["graph-server/src"],
             "@workerhive/flow-provider": ["flow-provider/src"],
             "@workerhive/react-ui": ["react-components/src"],
-            "@workerhive/client": ["graph-client/dist"],
+            "@workerhive/client": ["graph-client/src"],
+            "@workerhive/queendb": ["queendb/lib"],
             "@workerhive/*": ["*/src"],
         }
     }

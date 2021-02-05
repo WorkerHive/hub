@@ -47,7 +47,7 @@ export default class BaseConnector implements GraphConnector{
     setParent(parent: BaseGraph): void {
         this.parent = parent;
         this.parent.on('schema_update', (schema) => {
-            console.log("Schema update")
+            console.info("=> Schema update")
             this.schemaFactory.merge(schema);
         })
         //this.schemaFactory.merge(this.parent.schema)

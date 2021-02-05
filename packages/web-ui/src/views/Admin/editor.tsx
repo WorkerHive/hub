@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@material-ui/core"
-import { useHub } from "@workerhive/client/dist/react";
+import { useHub } from "@workerhive/client";
 import { Editor, NodePanel, useEditor } from "@workerhive/hive-flow"
 import React from "react"
 
@@ -20,14 +20,7 @@ export const AdminEditor: React.FC<EditorProps> = (props) => {
     return (
         <>
          <Dialog fullWidth open={props.selected != null} onClose={props.onClose}>
-                <DialogTitle>Update Node</DialogTitle>
-                <DialogContent style={{display: 'flex', flexDirection: 'column', flex: 1}}>
-                    {Modal != null && <Modal node={props.selected} editor={editor} client={client} />}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={props.onClose}>Cancel</Button>
-                    <Button color="primary" variant="contained">Save</Button>
-                </DialogActions>
+                {Modal != null && <Modal node={editor.nodes.find((a: any) => a.id === props.selected.id)} editor={editor} client={client} onClose={props.onClose} />}
             </Dialog>
                 <Editor />
                 <NodePanel />

@@ -28,7 +28,7 @@ export function transform(composer: SchemaComposer<any>, typeRegistry: TypeRegis
     
     schemaComposer.merge(composer)
 
-    console.log('Setup Input types')
+ 
 
     const types = getTypesWithFieldDirective(schemaComposer, directiveName)
 
@@ -58,7 +58,7 @@ export function transform(composer: SchemaComposer<any>, typeRegistry: TypeRegis
             })
             const inputDirective = directives.filter((a: any) => a.name == 'input')[0]
             inputFieldObj[f.name] = convertInput(f.type, inputDirective.args);
-            console.log(f.name, inputFieldObj[f.name])
+          
         })
 
         return composer.createInputTC({
@@ -69,7 +69,7 @@ export function transform(composer: SchemaComposer<any>, typeRegistry: TypeRegis
         })
 //        typeRegistry.registerInputType(`${inputType.name}Input`, {id: 'ID'})
     })
-    console.log(outputTypes.length)
+   
 
     //schemaComposer.buildSchema()
     return schemaComposer.buildSchema();

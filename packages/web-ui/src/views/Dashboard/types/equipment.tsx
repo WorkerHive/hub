@@ -37,7 +37,7 @@ export const EQUIPMENT_VIEW = {
                         const [ selected, setSelected] = React.useState<any>();
 
                         return (
-                            <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
+                            <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
                                     title={data.label} 
                                     structure={t} 
@@ -61,6 +61,7 @@ export const EQUIPMENT_VIEW = {
                                         modalOpen(false)}}
                                      open={open} />
                                 <SearchTable 
+                                    filter={({item, filterText} : any) => item.name.indexOf(filterText) > -1}
                                     renderItem={({item}: {item: any}) => (
                                         <>
                                             <Typography style={{flex: 1}}>{item.name}</Typography>
