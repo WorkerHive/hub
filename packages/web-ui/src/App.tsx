@@ -21,6 +21,7 @@ function App() {
   return (
         <Router>
           <div className="App">
+            <Route path="/" exact component={Login} />
             <Route path="/login" component={Login} />
             <Route path="/dashboard" render={(props) => {
               const token = localStorage.getItem('token')

@@ -1,5 +1,9 @@
+import isElectron from "is-electron";
+
 export const authenticate = (username : string, password : string) => {
-    return fetch('http://localhost:4002/login', {
+    const hubUrl = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'http://localhost:4002' : window.location.origin))
+
+    return fetch(`${hubUrl}/login`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
