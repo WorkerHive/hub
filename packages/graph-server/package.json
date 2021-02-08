@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/graph",
-  "version": "2.1.1-alpha.0",
+  "version": "2.1.1",
   "description": "",
   "main": "dist/index.js",
   "files": [
