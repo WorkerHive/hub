@@ -70,6 +70,7 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
         defaultView={defaultView}
         localizer={localizer}
         events={events}
+        allDayAccessor={(event: any) => event.all_day !== false}
         startAccessor={(event: any) => event.start}
         endAccessor={(event : any) => event.end}
          />

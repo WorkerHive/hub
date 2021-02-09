@@ -47,7 +47,7 @@ export const CALENDAR_VIEW =  {
                         const [ modalOpen, openModal ] = React.useState<boolean>(false);
 
                         const [ userData, setData ] = React.useState<object>({});
-
+                        
                           return <>
                         <MutableDialog 
                             open={modalOpen} 
