@@ -37,6 +37,7 @@
     "chonky-icon-fontawesome": "^2.1.0",
     "file-saver": "^2.0.5",
     "moment": "^2.29.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-big-calendar": "^0.30.0",
     "react-dropzone": "^11.2.4",
     "react-pdf": "^5.1.0",
@@ -44,5 +45,8 @@
     "rich-markdown-editor": "^11.1.0",
     "styled-components": "^5.2.1"
   },
-  "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e"
+  "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e",
+  "devDependencies": {
+    "@types/react-beautiful-dnd": "^13.0.0"
+  }
 }

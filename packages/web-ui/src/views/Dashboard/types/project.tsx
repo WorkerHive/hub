@@ -32,18 +32,30 @@ export const PROJECT_DRILLDOWN = {
             w: 12, 
             h: sizes.height / rowHeight - 1,
             component: (data: any, params: any) => {
-                return (
-                    <Paper style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
-                        <GraphKanban 
-                            template={[
-                                {id: 0, title: 'Backlog', status: 'to-do'},
-                                {id: 1, title: 'In Progress', status: 'in-progress'},
-                                {id: 2, title: 'Review', status: 'review'},
-                                {id: 3, title: 'Done', status: 'done'}
-                            ]}
-                            graph={{nodes: [], links: []}} />
-                    </Paper>
-                )
+               
+
+                return ((props) => {
+                     const [ cols, setCols ] = React.useState<Array<any>>([
+                                {id: 0, title: 'Backlog', status: 'to-do', rows:[]},
+                                {id: 1, title: 'In Progress', status: 'in-progress', rows:[]},
+                                {id: 2, title: 'Review', status: 'review', rows:[]},
+                                {id: 3, title: 'Done', status: 'done', rows:[]}
+                            ])
+
+                    return (
+                        <Paper style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+                            <GraphKanban 
+                                onChange={({value}) => {
+                                    
+                                    setCols(value)
+                                }}
+                                columns={cols}
+                                graph={{nodes: [], links: []}} />
+                        </Paper>
+                    )
+                }
+                    
+                )({})
             }
         }
     ]
