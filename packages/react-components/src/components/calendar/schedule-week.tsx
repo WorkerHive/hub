@@ -70,6 +70,7 @@ class ScheduleWeek extends React.Component<ScheduleWeekProps, {}> {
   }
 
   render(){
+    console.log("Events: ", this.props.events);
     let range = this.range(this.props.date);
     return (
        <TimeGrid {...this.props} components={{
