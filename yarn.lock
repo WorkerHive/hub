@@ -4580,6 +4580,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-beautiful-dnd@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-beautiful-dnd/-/react-beautiful-dnd-13.0.0.tgz#e60d3d965312fcf1516894af92dc3e9249587db4"
+  integrity sha512-by80tJ8aTTDXT256Gl+RfLRtFjYbUWOnZuEigJgNsJrSEGxvFe5eY6k3g4VIvf0M/6+xoLgfYWoWonlOo6Wqdg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-big-calendar@^0.24.8":
   version "0.24.8"
   resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-0.24.8.tgz#8a23000efc74117ef9891c38c7bcd6a6c495ea69"
@@ -4671,14 +4678,6 @@
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.1.tgz#eb1f1407dea8da3bc741879c1192aa703ab9975b"
   integrity sha512-w8t9f53B2ei4jeOqf/gxtc2Sswnc3LBK5s0DyJcg5xd10tMHXts2N31cKjWfH9IC/JvEPa/YF1U4YeP1t4R6HQ==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^3.0.2"
-
-"@types/react@^16.10":
-  version "16.14.3"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.3.tgz#f5210f5deecf35d8794845549c93c2c3ad63aa9c"
-  integrity sha512-zPrXn03hmPYqh9DznqSFQsoRtrQ4aHgnZDO+hMGvsE/PORvDTdJCHQ6XvJV31ic+0LzF73huPFXUb++W6Kri0Q==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -5157,7 +5156,7 @@
   integrity sha512-k2p2VrONcYVX1wRRrf0f3X2VGltLWcv+JzXRBDmvCxGlCeESx4OXw91TsWeKOkp784uNoVQo313vxJFHXPPwfw==
 
 "@workerhive/client@file:packages/graph-client":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
     "@apollo/client" "^3.3.6"
     apollo-boost "^0.4.9"
@@ -5174,7 +5173,7 @@
     yjs "^13.4.12"
 
 "@workerhive/flow-provider@file:packages/flow-provider":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
     "@graphql-tools/merge" "^6.2.6"
     "@graphql-tools/schema" "^7.1.2"
@@ -5185,7 +5184,7 @@
     lodash "^4.17.20"
 
 "@workerhive/graph@file:packages/graph-server":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
     "@graphql-tools/schema" "^7.1.2"
     "@workerhive/mq" "^1.0.0"
@@ -5221,7 +5220,7 @@
     with-context "^0.0.3"
 
 "@workerhive/ipfs@file:packages/fs-layer":
-  version "2.0.3-alpha.0"
+  version "2.1.1"
   dependencies:
     ipfs "^0.52.3"
     uint8-to-base64 "^0.2.0"
@@ -5242,13 +5241,13 @@
     dockerode "^3.2.1"
 
 "@workerhive/queendb@file:packages/queendb":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
     async "^3.2.0"
     pg "^8.5.1"
 
 "@workerhive/react-ui@file:packages/react-components":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
     "@date-io/moment" "1.x"
     "@lourenci/react-kanban" "^2.1.0"
@@ -5260,6 +5259,7 @@
     chonky-icon-fontawesome "^2.1.0"
     file-saver "^2.0.5"
     moment "^2.29.1"
+    react-beautiful-dnd "^13.0.0"
     react-big-calendar "^0.30.0"
     react-dropzone "^11.2.4"
     react-pdf "^5.1.0"
@@ -20531,7 +20531,7 @@ react-window@^1.8.5:
     memoize-one ">=3.1.1 <6"
 
 "react-workerhub@file:packages/web-ui":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
     "@date-io/moment" "1.x"
     "@testing-library/jest-dom" "^5.11.4"
@@ -20539,11 +20539,7 @@ react-window@^1.8.5:
     "@testing-library/user-event" "^12.1.10"
     "@types/jest" "^26.0.15"
     "@types/node" "^12.0.0"
-    "@types/react" "^16.10"
-    "@types/react-dom" "^17.0.0"
     "@workerhive/hive-flow" "^1.1.5"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-9ef1374c-5cac-4f3e-b084-09751131f397-1612477900615/node_modules/fs-layer"
-    "@workerhive/react-ui" "file:../../.cache/yarn/v6/npm-react-workerhub-2.1.1-alpha.0-9ef1374c-5cac-4f3e-b084-09751131f397-1612477900615/node_modules/react-components"
     is-electron "^2.2.0"
     lodash "^4.17.20"
     moment "^2.29.1"
@@ -20552,7 +20548,6 @@ react-window@^1.8.5:
     react-resize-aware "^3.1.0"
     react-router-dom "^5.2.0"
     ts-transformer-keys "^0.4.3"
-    typescript "^4.0.3"
     web-vitals "^0.2.4"
 
 react@^17.0.1:
@@ -23677,7 +23672,7 @@ typescript@^3.8.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
   integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
-typescript@^4.0.3, typescript@^4.1.3, typescript@~4.1.3:
+typescript@^4.1.3, typescript@~4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.3.tgz#519d582bd94cba0cf8934c7d8e8467e473f53bb7"
   integrity sha512-B3ZIOf1IKeH2ixgHhj6la6xdwR9QrLC5d1VKeCSY4tvkqhF2eqd9O7txNlS0PO3GrBAFIdr3L1ndNwteUbZLYg==
@@ -24857,11 +24852,11 @@ worker-rpc@^0.1.0:
     microevent.ts "~0.1.1"
 
 "workhub-server@file:packages/server":
-  version "2.1.1-alpha.0"
+  version "2.1.1"
   dependencies:
-    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-b28dd7fb-ded4-4894-a03b-e296c4a8c051-1612477900635/node_modules/flow-provider"
-    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-b28dd7fb-ded4-4894-a03b-e296c4a8c051-1612477900635/node_modules/graph-server"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-alpha.0-b28dd7fb-ded4-4894-a03b-e296c4a8c051-1612477900635/node_modules/fs-layer"
+    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-9e7d12d6-7ff1-4c46-9364-a41462f0a39a-1612831485573/node_modules/flow-provider"
+    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-9e7d12d6-7ff1-4c46-9364-a41462f0a39a-1612831485573/node_modules/graph-server"
+    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-9e7d12d6-7ff1-4c46-9364-a41462f0a39a-1612831485573/node_modules/fs-layer"
     body-parser "^1.19.0"
     cors "^2.8.5"
     express "^4.17.1"
