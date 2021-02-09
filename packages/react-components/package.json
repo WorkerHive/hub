@@ -36,6 +36,7 @@
     "chonky": "^2.1.0",
     "chonky-icon-fontawesome": "^2.1.0",
     "file-saver": "^2.0.5",
+    "invert-color": "^2.0.0",
     "moment": "^2.29.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-big-calendar": "^0.30.0",

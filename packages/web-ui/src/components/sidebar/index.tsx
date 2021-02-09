@@ -42,32 +42,32 @@ export function Sidebar(props : SidebarProps){
           path: ""
         },
         {
-          icon: <CalendarToday />,
+          icon: <img src="/assets/calendar1.svg" />, 
           label: "Calendar",
           path: "/calendar"
         },
         {
-          icon: <AccountTree />,
+          icon: <img src="/assets/project1.svg" />,
           label: "Projects",
           path: "/projects"
         },
         {
-          icon: <SupervisorAccount />,
+          icon: <img src="/assets/team.svg" />,
           label: "Team",
           path: "/team"
         },
         {
-          icon: <BusinessCenter /> ,
+          icon: <img src="/assets/resources1.svg" />,
           label: "Equipment",
           path: "/equipment"
         },
         {
-          icon: <Description />,
+          icon: <img src="/assets/files1.svg" />, 
           label: "Files",
           path: "/files"
         },
         {
-          icon: <LocalLibrary />,
+          icon: <img src="/assets/document1.svg" />, 
           label: "Documentation",
           path: '/kb'
         },
@@ -102,7 +102,9 @@ export function Sidebar(props : SidebarProps){
             className={menu.map((x) => x.path).indexOf(window.location.pathname.split(props.match.url)[1]) == ix ? 'selected menu-item': 'menu-item'}
             onClick={() => props.history.push(`${props.match.url}${x.path}`)}
             button >
-              {x.icon} 
+              <div className="menu-item__icon">
+                {x.icon} 
+              </div>
               {!minimized && x.label}
             </ListItem>
         ))}

@@ -31,6 +31,24 @@
     transition: width 200ms ease-in;
 
 }
+
+.sidebar .menu-item.selected{
+    background: rgba(232, 232, 232, 0.2);
+}
+
+.sidebar .menu-item__icon{
+    height: 33px;
+    width: 33px !important;
+    margin-right: 12px;
+    flex: 0 0 auto;
+}
+
+.sidebar .menu-item__icon img{
+    filter: invert(1);
+    width: 100%;
+    height: 100%;
+}
+
 .menu-item svg{
     margin-right: 12px;
 }

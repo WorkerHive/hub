@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {
+    MoreHoriz,
     MoreVert
 } from '@material-ui/icons'
 
@@ -20,6 +21,8 @@ export interface MoreMenuItem {
 
 export interface MoreMenuProps {
   menu: Array<MoreMenuItem>;
+  horizontal?: boolean;
+  size?: "small" | "medium" | undefined;
 }
 
 export const MoreMenu : React.FC<MoreMenuProps> = (props) => {
@@ -33,8 +36,8 @@ export const MoreMenu : React.FC<MoreMenuProps> = (props) => {
 
     return (
       <>
-        <IconButton className="more-menu" onClick={toggleMenu}>
-            <MoreVert />
+        <IconButton size={props.size} className="more-menu" onClick={toggleMenu}>
+            {props.horizontal ? <MoreHoriz /> : <MoreVert />}
         </IconButton>
         <Menu open={props.menu.length > 0 && menuOpen != null} onClose={() => openMenu(null)} anchorEl={menuOpen}>
             {props.menu.map((x) => {

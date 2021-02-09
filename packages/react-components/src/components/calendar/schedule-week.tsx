@@ -1,27 +1,70 @@
 import React from 'react';
 import moment from 'moment';
 import TimeGrid from './TimeGrid';
+import { Delete, Edit, MoreHoriz } from '@material-ui/icons';
+import { IconButton } from '@material-ui/core';
+import { MoreMenu } from '../more-menu';
+
+const invert = require('invert-color');
 
 export const ScheduleEvent = (props : any) => {
-  console.log("Event", props.event)
+  
+  function hashCode(str: string) { // java String#hashCode
+      var hash = 0;
+      for (var i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return hash;
+  } 
+
+  function intToRGB(i: number){
+      var c = (i & 0x00FFFFFF)
+          .toString(16)
+          .toUpperCase();
+
+      return "00000".substring(0, 6 - c.length) + c;
+  }
+
+  const fullName = props.event.project && `${props.event.project.id}-${props.event.project.name}`;
+  const color = intToRGB(hashCode(fullName))
+
+  console.log("Event card props", props);
+
   return (
-    <div style={{paddingTop: 4, display: 'flex', flexDirection: 'column'}}>
+    <div style={{borderRadius: 3, overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
       <div style={{
           display: 'flex',
           textAlign: 'center', 
-          flexDirection: 'column', 
+          justifyContent: 'center',
+          flexDirection: 'row', 
           fontSize: 18,
+          backgroundColor: `#${color}`,
+          color: invert(`#${color}`),
           fontWeight: 'bold',
-          marginBottom: 4
+          paddingTop: 4,
+          paddingBottom: 4,
+          marginBottom: 4,
+          position: 'relative'
       }}>
-         {props.event.project.id.length < 8 ? `${props.event.project.id} - ` : ''}
+        <div>
+          {props.event.project.id.length < 8 ? `${props.event.project.id} - ` : ''}
          {props.event.project && props.event.project.name}
+
+        </div>
+
+        <div style={{position: 'absolute', right: 0, top: 0 }}>
+          <MoreMenu size="small" horizontal menu={[
+            {icon: <Edit />, label: "Edit"},
+            {icon: <Delete />, label: "Delete", color: 'red'},
+          ]} />
+        </div>
+
       </div>
-      <div style={{display: 'flex', textAlign: 'center', flexDirection: 'column'}}>
+      <div style={{background: '#dfdfdf', paddingBottom: 4, color: 'black', display: 'flex', textAlign: 'center', flexDirection: 'column'}}>
         {Array.isArray(props.event.people) && props.event.people.map((x: any) => (
           <div>{x.name}</div>
          ))}
-         <hr />
+        <div style={{fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 4}}>Equipment</div>
         {Array.isArray(props.event.resources) && props.event.resources.map((x: any) => (
           <div>{x.name}</div>
         ))}

@@ -84,6 +84,15 @@ export const StyledCalendar = styled(WorkhubCalendar)`
   padding: 4px;
   flex-direction: column;
   position: relative;
+  height: 100%;
+
+  .rbc-calendar, .rbc-time-header{
+    height: 100%;
+  }
+
+  .rbc-allday-cell{
+    overflow-y: auto;
+  }
 
   .rbc-time-schedule .rbc-time-header{
     flex: 1;
@@ -91,6 +100,7 @@ export const StyledCalendar = styled(WorkhubCalendar)`
 
   .rbc-time-schedule .rbc-event {
     margin-top: 4px;
+    padding: 0;
   }
 
 `
