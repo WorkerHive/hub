@@ -1,12 +1,10 @@
 import React from 'react';
 
-import moment from 'moment';
-import { TeamCircles } from '../..';
 import styled from 'styled-components'
-import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult, ResponderProvided } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
 import { AddCard } from './add-card';
 import { v4 } from 'uuid';
-import { TextField, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 export interface GraphKanbanProps {
     className?: string;
@@ -22,16 +20,9 @@ export interface GraphKanbanProps {
 }
 
 export const GraphKanban: React.FC<GraphKanbanProps> = ({
-    graph = { nodes: [], links: [] },
     columns = [],
     className,
-    selfish = false,
-    allowAddColumn = false,
-    allowAddCard = true,
-    onClick,
-    onStatusChange,
-    onChange,
-    user = {}
+    onChange
 }) => {
     const reorder = (list: Array<any>, startIndex: number, endIndex: number) => {
         const result = Array.from(list);
@@ -64,7 +55,7 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
             ...dragStyle
         }
     }
-
+/*
     const getColumns = () => {
         const cols = columns.map((col: any) => {
             let cards: Array<any> = [];
@@ -101,9 +92,9 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
         })
         console.log(cols);
         return cols;
-    }
+    }*/
 
-    const onDragEnd = (result: DropResult, provided: ResponderProvided) => {
+    const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
         if (!destination) {
             return;
@@ -198,7 +189,7 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
                 {columns.map((column, colIndex) => {
                     return (
                         <Droppable key={colIndex} droppableId={`${colIndex}`}>
-                            {(provided, snapshot) => (
+                            {(provided) => (
                                 <div
                                     className="kanban-column"
                                     ref={provided.innerRef}
