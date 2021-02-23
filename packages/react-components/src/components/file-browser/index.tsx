@@ -208,4 +208,11 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  .ipfs-loader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `

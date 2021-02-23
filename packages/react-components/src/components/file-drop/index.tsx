@@ -23,7 +23,9 @@ export const FileDrop : React.FC<FileDropProps> = (props) => {
     return (
         <div className={props.className} {...getRootProps()}>
             <input {...getInputProps()} />
-            {props.children && props.children(isDragActive)}
+            <div className="file-drop__inner">
+                {props.children && props.children(isDragActive)}
+            </div>
         </div>
     )
 }
@@ -32,4 +34,17 @@ export const StyledFileDrop = styled(FileDrop)`
     border-radius: 6px;
     border: ${props => props.border ? '1px dashed gray' : 'none'};
     min-height: 100px;
+    flex: 1;
+    position: relative;
+
+    .file-drop__inner{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 `

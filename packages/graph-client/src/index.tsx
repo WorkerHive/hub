@@ -7,7 +7,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import CRUD from './crud';
 import UPLOAD from './upload';
 import {WorkhubFS} from '@workerhive/ipfs'
-import {RealtimeSync } from './yjs';
+import {useRealtime, RealtimeSync } from './yjs';
 import jwt_decode from 'jwt-decode'
 
 import { WorkhubProvider, useHub } from './react'
@@ -46,7 +46,8 @@ if(ENVIRONMENT == "NODE"){
 export {
     WorkhubProvider,
     useHub, 
-    RealtimeSync
+    RealtimeSync,
+    useRealtime
 }
 
 

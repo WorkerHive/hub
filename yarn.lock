@@ -5258,6 +5258,7 @@
     chonky "^2.1.0"
     chonky-icon-fontawesome "^2.1.0"
     file-saver "^2.0.5"
+    invert-color "^2.0.0"
     moment "^2.29.1"
     react-beautiful-dnd "^13.0.0"
     react-big-calendar "^0.30.0"
@@ -12603,6 +12604,11 @@ invariant@^2.2.3, invariant@^2.2.4:
   dependencies:
     loose-envify "^1.0.0"
 
+invert-color@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/invert-color/-/invert-color-2.0.0.tgz#894ab1f7494a6e45f5e74c2f99ec042cd67dd23e"
+  integrity sha512-9s6IATlhOAr0/0MPUpLdMpk81ixIu8IqwPwORssXBauFT/4ff/iyEOcojd0UYuPwkDbJvL1+blIZGhqVIaAm5Q==
+
 ip-address@^6.1.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/ip-address/-/ip-address-6.4.0.tgz#8f7d43e76002a1c3c230792c748f5d8c143f908a"
@@ -13847,6 +13853,11 @@ isomorphic.js@^0.1.3:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/isomorphic.js/-/isomorphic.js-0.1.5.tgz#f210e58ba4c96978a991c443cf67283366e9b70f"
   integrity sha512-MkX5lLQApx/8IAIU31PKvpAZosnu2Jqcj1rM8TzxyA4CR96tv3SgMKQNTCxL58G7696Q57zd7ubHV/hTg+5fNA==
+
+isomorphic.js@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/isomorphic.js/-/isomorphic.js-0.2.2.tgz#4c76fb70d3e207123dead08675ba97eb75f5615a"
+  integrity sha512-tWhdHK5vam77zCkNKjpI8vWSrcVmlBeJIlxXgTiGaapgifQr0CfLHuPqMiZhjrI/K71X/aXaJZqUbkHZzg06Hg==
 
 isstream@~0.1.2:
   version "0.1.2"
@@ -15262,6 +15273,13 @@ lib0@^0.2.31, lib0@^0.2.35:
   integrity sha512-drVD3EscB3TIxiFzceuZg7oF5Z6I8a0KX+7FowNcAXOEsTej/hlHB+ElJ8Pa/Ge73Gy3fklSJtPxpNd2PajdWg==
   dependencies:
     isomorphic.js "^0.1.3"
+
+lib0@^0.2.38:
+  version "0.2.40"
+  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.40.tgz#7c89c2a7a89f9caaa0a04eaecb944d8e90a731b3"
+  integrity sha512-bKJxwll8MdwTTL3Siut6L+FjyF5sewXRE7noDTsRquEYy3Xi1UjtdEMZu46iuTvw9nQ/9p+gKkh1GxL2Kdaphw==
+  dependencies:
+    isomorphic.js "^0.2.2"
 
 libp2p-bootstrap@^0.12.1:
   version "0.12.1"
@@ -24854,9 +24872,9 @@ worker-rpc@^0.1.0:
 "workhub-server@file:packages/server":
   version "2.1.1"
   dependencies:
-    "@workerhive/flow-provider" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-9e7d12d6-7ff1-4c46-9364-a41462f0a39a-1612831485573/node_modules/flow-provider"
-    "@workerhive/graph" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-9e7d12d6-7ff1-4c46-9364-a41462f0a39a-1612831485573/node_modules/graph-server"
-    "@workerhive/ipfs" "file:../../.cache/yarn/v6/npm-workhub-server-2.1.1-9e7d12d6-7ff1-4c46-9364-a41462f0a39a-1612831485573/node_modules/fs-layer"
+    "@workerhive/flow-provider" "file:../../../Library/Caches/Yarn/v6/npm-workhub-server-2.1.1-8ca68da7-bf6c-456c-98ff-22b02970fbfe-1614038373225/node_modules/flow-provider"
+    "@workerhive/graph" "file:../../../Library/Caches/Yarn/v6/npm-workhub-server-2.1.1-8ca68da7-bf6c-456c-98ff-22b02970fbfe-1614038373225/node_modules/graph-server"
+    "@workerhive/ipfs" "file:../../../Library/Caches/Yarn/v6/npm-workhub-server-2.1.1-8ca68da7-bf6c-456c-98ff-22b02970fbfe-1614038373225/node_modules/fs-layer"
     body-parser "^1.19.0"
     cors "^2.8.5"
     express "^4.17.1"
@@ -25188,6 +25206,13 @@ yjs@^13.4.12, yjs@^13.4.7:
   integrity sha512-fIhIjFP3t9m69ciAAdFyPkDj+JlE11UQ7fvPQyaHN6xSlpO5mwB/kFiJA01kYUn98nqrifK11IhOVQIw44zOWw==
   dependencies:
     lib0 "^0.2.35"
+
+yjs@^13.5.1:
+  version "13.5.1"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.5.1.tgz#addf14fb4120ee007497fcad327eae983b6ec220"
+  integrity sha512-U4BKBlcgvcYS/MkYYhW6zcE34dyYBvoZLl+9J9oFkYs6dHCXvX6WzZSgxlNnqjZn40jAN12Z0bSugqXuLVf2/g==
+  dependencies:
+    lib0 "^0.2.38"
 
 yn@3.1.1:
   version "3.1.1"

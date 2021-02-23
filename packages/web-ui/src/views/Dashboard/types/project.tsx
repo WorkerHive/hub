@@ -1,7 +1,11 @@
 import { Fab, Paper, Typography } from "@material-ui/core";
 import { Add, Delete, Edit } from "@material-ui/icons";
+import { useRealtime, WorkhubClient } from "@workerhive/client";
+import * as Y from 'yjs';
 import { GraphKanban, Header, MoreMenu, MutableDialog, SearchTable } from "@workerhive/react-ui";
 import React from "react";
+import { isEqual } from "lodash";
+
 
 export const PROJECT_DRILLDOWN = {
     path: '/dashboard/projects/:id',
@@ -31,25 +35,118 @@ export const PROJECT_DRILLDOWN = {
             y: 1,
             w: 12, 
             h: sizes.height / rowHeight - 1,
-            component: (data: any, params: any) => {
+            component: (data: any, params: any, types: any, client: any) => {
                
-
                 return ((props) => {
+
+                    console.log("Component rendered")
                      const [ cols, setCols ] = React.useState<Array<any>>([
-                                {id: 0, title: 'Backlog', status: 'to-do', rows:[]},
-                                {id: 1, title: 'In Progress', status: 'in-progress', rows:[]},
-                                {id: 2, title: 'Review', status: 'review', rows:[]},
-                                {id: 3, title: 'Done', status: 'done', rows:[]}
+                                {id: 'backlog', title: 'Backlog', status: 'to-do', rows:[]},
+                                {id: 'in-progress', title: 'In Progress', status: 'in-progress', rows:[]},
+                                {id: 'review', title: 'Review', status: 'review', rows:[]},
+                                {id: 'done', title: 'Done', status: 'done', rows:[]}
                             ])
+                    
+            
+                    const project : Y.Map<Y.Array<Y.Map<any>>> = client.realtimeSync?.doc.getMap(`project-${data.project.id}-plan`)
+                    
+                    const mgmt = useRealtime(project, (state, action) => {
+                        //  let p = project.toJSON();
+                          console.log(project.toJSON(), state, action)
+                          
+                          switch(action.type){
+                              case 'ADD_CARD':
+                                  let column = project.get(action.column);
+                                  if(column === undefined){
+                                      column = new Y.Array();
+                                      project.set(action.column, column)
+                                  } 
+                                  
+                                  let card = new Y.Map();
+                                  column.push([card]);
+                                  
+                                  Object.keys(action.card).map((x) => {
+                                      card.set(x, action.card[x])
+                                  })
+
+                                  return project.toJSON()
+                                case 'UPDATE_CARD':
+                                    console.log("Update card", action)
+                                    Object.keys(action.data).map((x) => {
+                                        project.get(action.column)?.get(action.card).set(x, action.data[x]);
+                                    })
+                        
+                                  return project.toJSON()
+                                case 'MOVE_CARD':
+                                    let mc = project.get(action.startColumn)?.get(action.source.index)
+
+                                    let dc = project.get(action.destColumn)
+                                    if(!dc){
+                                        dc = new Y.Array();
+                                        project.set(action.destColumn, dc);
+                                    }
+                                    if(mc){
+                                        let _card = new Y.Map();
+                                        mc.forEach((value, key) => {
+                                            _card.set(key, value instanceof Y.AbstractType ? value.clone() : value);
+                                        })
+
+                                        project.get(action.startColumn)?.delete(action.source.index, 1);
+
+                                        dc.insert(action.destination.index, [_card])
+
+                                    }
+                                    return project.toJSON();
+                                case 'REORDER_COLUMN':
+                                    let c : Y.Map<any> | undefined = project.get(action.column)?.get(action.startIx);
+
+                                    if(c){
+                                        let _card = new Y.Map();
+                                        c.forEach((value, key) => {
+                                            _card.set(key, value instanceof Y.AbstractType ? value.clone() : value);
+                                        })
+
+                                        project.get(action.column)?.delete(action.startIx, 1);
+                                        project.get(action.column)?.insert(action.destIx, [_card])
+                                    }
+                                    
+                                    return project.toJSON();
+                              default:
+                                  return state;
+                          }
+                      })
+
+                    console.log(project.toJSON());
 
                     return (
                         <Paper style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
                             <GraphKanban 
+                                template={cols}
+                                realtime={mgmt}
+                                cards={project.toJSON()}
                                 onChange={({value}) => {
-                                    
-                                    setCols(value)
+                                    let v = value;
+                                    if(value instanceof Y.Map){
+                                        v = value.toJSON();
+                                    }
+                                    console.log(typeof(value), value, v)
+
+                                    /*Object.keys(value).map((x) => {
+
+                                        project.set(x, value[x])
+                                    })*/
+
+
+                                   /* value.forEach((item, index) => {
+                                        if(!project.get(index)){
+
+                                        //    project.insert(index, [map])
+                                        }
+                                        if(!isEqual(item.rows, project.get(index).get('rows'))){
+                                            project.get(index).set('rows', item.rows);
+                                        }
+                                    })*/
                                 }}
-                                columns={cols}
                                 graph={{nodes: [], links: []}} />
                         </Paper>
                     )
