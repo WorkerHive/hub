@@ -8,6 +8,7 @@
     "allowJs": true,
     "outDir": "dist",
     "declaration": true,
+    "noImplicitAny": false,
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },

@@ -45,17 +45,17 @@ export default (models: any, client?: any, dispatch?: any) => {
             return result.data[`${camelCase(model.name)}s`]
         }
 
-        actions[`add${model.name}`] = async (file: any) => {
+        actions[`add${model.name}`] = async (file: string) => {
             let result = await client.mutate({
                 mutation: gql`
-                    mutation Add${model.name}($file: Upload){
-                        add${model.name}(file: $file){
+                    mutation Add${model.name}($cid: String){
+                        add${model.name}(file: $cid){
                             ${fields}
                         }
                     }
                 `,
                 variables: {
-                    file: file
+                    cid: file
                 }
             })
             return result.data[`add${model.name}`]

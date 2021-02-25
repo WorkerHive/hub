@@ -180,14 +180,17 @@ export const WorkhubFileBrowser: React.FC<FileBrowserProps> = (props) => {
         <FileContextMenu />
         <FileDrop noClick onDrop={props.onFileUpload!} >
           {(isDragActive : boolean) => {
-            return [
-              <FileList />,
-              isDragActive && (
+            return (
+              <>
+              <FileList />
+              {isDragActive && (
                 <div className="ipfs-loader">
                   <Backup style={{ fontSize: 44 }} />
                   <Typography variant="h6" style={{ fontWeight: 'bold' }}>Drop files here</Typography>
                 </div>
-              )]
+              )}
+              </>
+            )
           }}
 
         </FileDrop>
@@ -208,4 +211,11 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  .ipfs-loader{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `

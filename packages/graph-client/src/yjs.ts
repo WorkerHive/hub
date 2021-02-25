@@ -1,8 +1,46 @@
+import React from 'react';
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 
 import 'websocket-polyfill'
 import { cleanObject } from './utils';
+import { YMap } from 'yjs/dist/src/internals';
+import { isEqual } from 'lodash';
+
+export function useRealtime(syncObject : Y.Array<any> | Y.Map<any>, reducer : (state: any, action: any) => any){
+    const [ state, setState ] = React.useState<any>(syncObject.toJSON());
+
+    const observer = (event: any, transaction: any) => {
+        if(!isEqual(syncObject.toJSON(), state)){
+            console.log("Sync Object Observer")
+            setState(syncObject.toJSON())
+        }
+    }
+
+    React.useEffect(() => {
+        if(!isEqual(syncObject.toJSON(), state)){
+            console.log("Sync Object Effect")
+            setState(syncObject.toJSON());
+        }
+
+        console.log("Setting observer")
+        syncObject.observeDeep(observer)
+
+        return () => {
+            console.log("Unsetting observer")
+            syncObject.unobserveDeep(observer)
+        }
+    }, [syncObject])
+
+
+
+
+    const dispatch = (action : any) => {
+        setState(reducer(state, action))
+    }
+
+    return [state, dispatch];
+}
 
 export class RealtimeSync {
     public doc = new Y.Doc();
@@ -28,8 +66,8 @@ export class RealtimeSync {
         return new RealtimeArray(this.doc.getArray(key), model)
     }
 
-    getMap(){
-
+    getMap(key: string){
+        return new RealtimeMap(this.doc.getMap(key))
     }
 }
 
@@ -78,5 +116,22 @@ export class RealtimeArray {
 
 
 export class RealtimeMap {
-    
+    private map : YMap<any>;
+
+    constructor(yMap: YMap<any>){
+        this.map = yMap;
+    }
+
+    set(key: string, value: any){
+        this.map.set(key, value);
+    }
+
+    get(key: string){
+        this.map.get(key);
+    }
+
+    toJSON(){
+        return this.map.toJSON();
+    }
+
 }

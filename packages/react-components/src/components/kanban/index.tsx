@@ -1,29 +1,64 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 
 import styled from 'styled-components'
 import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
 import { AddCard } from './add-card';
 import { v4 } from 'uuid';
-import { Typography } from '@material-ui/core';
+import { TextField, Typography } from '@material-ui/core';
+import { isEqual } from 'lodash';
 
 export interface GraphKanbanProps {
     className?: string;
+    template?: Array<{id: string, title: string, status: string}>;
+    cards?: any;
+    realtime?: any;
     graph: { nodes: Array<any>, links: Array<any> };
-    columns?: Array<any>;
     selfish?: boolean;
     onClick?: (args: { item: object }) => void;
     onStatusChange?: (args: { card: object, status: string }) => void;
-    onChange?: (args: { value: Array<any> }) => void;
+    onChange?: (args: { value: any }) => void;
     allowAddColumn?: boolean;
     allowAddCard?: boolean;
     user?: { id: string };
 }
 
+const initialState = {
+    cards: {}
+}
+
+const reducer = (state : any, action : any) : any => {
+    let cards = Object.assign({}, state.cards);
+
+    switch(action.type){
+        case 'ADD_CARD':
+            if(!cards[action.column]) cards[action.column] = [];
+            cards[action.column] = cards[action.column].concat([action.card]);
+            return {cards};
+        case 'UPDATE_CARD':
+            cards[action.column][action.card] = {
+                ...cards[action.column][action.card],
+                ...action.data
+            }
+            return {cards};
+        default:
+            return state;
+    }
+}
+
 export const GraphKanban: React.FC<GraphKanbanProps> = ({
-    columns = [],
+    template = [],
+    cards = {},
+    realtime,
     className,
     onChange
 }) => {
+
+    const [ state, dispatch ] = realtime || useReducer(reducer, cards)
+
+    const _onChange = ({value}: any) => {
+       
+    }
+
     const reorder = (list: Array<any>, startIndex: number, endIndex: number) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -100,53 +135,54 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
             return;
         }
 
-        const sInd = +source.droppableId
-        const dInd = +destination.droppableId
+        const sourceId = source.droppableId;
+        const destId = destination.droppableId;
 
-        console.log(source.droppableId, sInd)
+        if (isEqual(sourceId, destId)) {
+            dispatch({type: 'REORDER_COLUMN', column: sourceId, startIx: source.index, destIx: destination.index})
+           /* const items = reorder(cards[sourceId], source.index, destination.index);
+            cards[sourceId] = items;
 
-        if (sInd === dInd) {
-            const items = reorder(columns[sInd].rows, source.index, destination.index);
-            columns[sInd].rows = items;
-            if (onChange) onChange({ value: columns })
+            _onChange({ value: cards })*/
         } else {
-            const result = move(columns[sInd].rows, columns[dInd].rows, source, destination);
-            columns[sInd].rows = result[source.droppableId]
-            columns[dInd].rows = result[destination.droppableId]
-            if (onChange) onChange({ value: columns })
+            dispatch({type: 'MOVE_CARD', startColumn: sourceId, destColumn: destId, source, destination })
+           /* const result = move(cards[sourceId], cards[destId], source, destination);
+            cards[sourceId] = result[source.droppableId]
+            cards[destId] = result[destination.droppableId]
+            _onChange({ value: cards })*/
         }
 
         console.log(result)
 
     }
 
-    const addCard = (index: number) => {
-        let cols = columns.slice();
-        cols[index].rows.push({ id: v4(), draft: true });
-        if (onChange) onChange({ value: cols })
+    const addCard = (colId: string) => {
+  //      if(!(realtime ? cards.get(colId) : cards[colId])) realtime ? cards.set(colId, []) : cards[colId] = [];
+//        (realtime ? cards.get(colId) : cards[colId]).push({ id: v4(), draft: true });
+
+        dispatch({type: 'ADD_CARD', column: colId, card: {id: v4(), draft: true}})
+
+       // _onChange({ value: realtime ? cards.toJSON() : cards })
     }
 
-    const changeCard = (col: number, card: number, data: any) => {
-        let cols = columns.slice();
-        cols[col].rows[card] = {
-            ...columns[col].rows[card],
-            ...data
-        }
-        if(onChange) onChange({ value: cols });
+    const changeCard = (colId: string, card: number, data: any) => {
+        dispatch({type: 'UPDATE_CARD', column: colId, card: card, data: data})
     }
 
-    const renderCard = (row: any, colIndex: number, index: number) => {
+    const renderCard = (row: any, colId: string, index: number) => {
         let rowBody : any;
 
         if(row.draft){
             rowBody = (
-                <textarea
+                <TextField
+                    multiline
+                    variant="standard"
                     value={row.title}
-                    onChange={(e) => changeCard(colIndex, index, {title: e.target.value})} 
+                    onChange={(e) => changeCard(colId, index, {title: e.target.value})} 
                     onKeyDown={(e) => {
                         console.log(e)
                         if(e.key === 'Enter' || e.keyCode === 13 || e.which === 13){
-                            changeCard(colIndex, index, {draft: false})
+                            changeCard(colId, index, {draft: false})
                         }
                     }}    
                     style={{flex: 1, outline: 'none', border: 'none'}}
@@ -154,15 +190,15 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
             )
         }else{
             rowBody = (
-                <Typography variant="h6">{row.title}</Typography>
+                <Typography variant="subtitle2">{row.title}</Typography>
             )
         }
 
         return (
             <Draggable
                 index={index}
-                draggableId={`row-${colIndex}-${index}`}
-                key={`r-${colIndex}-${index}`}>
+                draggableId={`row-${colId}-${index}`}
+                key={`r-${colId}-${index}`}>
                 {(provided, snapshot) => (
                     <div
                         className="kanban-row"
@@ -182,13 +218,12 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
         )
     }
 
-
     return (
         <div className={className}>
             <DragDropContext onDragEnd={onDragEnd}>
-                {columns.map((column, colIndex) => {
+                {template.map((column, colIndex) => {
                     return (
-                        <Droppable key={colIndex} droppableId={`${colIndex}`}>
+                        <Droppable key={colIndex} droppableId={`${column.id}`}>
                             {(provided) => (
                                 <div
                                     className="kanban-column"
@@ -199,9 +234,11 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
                                         {column.title}
                                     </div>
                                     <div className="kanban-column__rows">
-                                        {column.rows.map((row: any, index: number) => renderCard(row, colIndex, index))}
+                                        {(state[column.id] || []).map((row: any, index: number) => renderCard(row, column.id, index))}
                                     </div>
-                                    <AddCard onClick={() => addCard(colIndex)} />
+                                    <AddCard onClick={() => {
+                                        addCard(column.id)
+                                    }} />
                                     {provided.placeholder}
                                 </div>
                             )}

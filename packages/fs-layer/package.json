@@ -14,7 +14,6 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
-    "ipfs": "^0.52.3",
     "uint8-to-base64": "^0.2.0",
     "uuid": "^8.3.2"
   }

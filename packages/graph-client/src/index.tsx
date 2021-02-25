@@ -7,7 +7,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import CRUD from './crud';
 import UPLOAD from './upload';
 import {WorkhubFS} from '@workerhive/ipfs'
-import {RealtimeSync } from './yjs';
+import {useRealtime, RealtimeSync } from './yjs';
 import jwt_decode from 'jwt-decode'
 
 import { WorkhubProvider, useHub } from './react'
@@ -46,7 +46,8 @@ if(ENVIRONMENT == "NODE"){
 export {
     WorkhubProvider,
     useHub, 
-    RealtimeSync
+    RealtimeSync,
+    useRealtime
 }
 
 
@@ -66,7 +67,7 @@ export class WorkhubClient {
     
     public realtimeSync?: RealtimeSync;
 
-    private fsLayer?: WorkhubFS;
+    public fsLayer?: WorkhubFS;
 
     private accessToken?: string;
     private swarmKey?: string;
@@ -114,6 +115,7 @@ export class WorkhubClient {
         this.swarmKey = key;
         if(this.fsLayer) await this.fsLayer.stop();
         this.fsLayer = new WorkhubFS({
+            Bootstrap: [],
             Swarm: [
                 `/dns4/${(this.hostName == "localhost" ? 'thetechcompany.workhub.services' : this.hostName)}/tcp/443/wss/p2p-webrtc-star`
             ]
