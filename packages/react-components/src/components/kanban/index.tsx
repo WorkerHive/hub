@@ -237,7 +237,7 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
                                         {(state[column.id] || []).map((row: any, index: number) => renderCard(row, column.id, index))}
                                     </div>
                                     <AddCard onClick={() => {
-                                        setInterval(() => { addCard(column.id) }, 1000)
+                                        addCard(column.id)
                                     }} />
                                     {provided.placeholder}
                                 </div>

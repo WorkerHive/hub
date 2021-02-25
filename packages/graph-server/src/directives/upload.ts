@@ -40,11 +40,14 @@ export const transform = (composer: SchemaComposer<any>) => {
             [addKey]: {
                 type: type.name,
                 args: {
-                    file: 'Upload'
+                    cid: 'String',
+                    filename: 'String',
                 },
                 resolve: async (parent, args, context : GraphContext) => {
                     //TODO add file to fsLayer
-                    return await context.connector.create(type.name, {cid: 'test-cid'})
+                    const pinned = await context.fs.pinFile(args.cid)
+                    console.log("Pin result ", pinned);
+                    return await context.connector.create(type.name, {filename: args.filename, cid: args.cid})
                 }
             },
             [deleteKey]: {

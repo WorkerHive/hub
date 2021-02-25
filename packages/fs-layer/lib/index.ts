@@ -17,7 +17,7 @@ if(ENVIRONMENT == "NODE"){
 const {fromCharCode} = String;
 
 const encode = (uint8array : Uint8Array) => {
-  const output = [];
+  const output : Array<string> = [];
   for (let i = 0, {length} = uint8array; i < length; i++)
     output.push(fromCharCode(uint8array[i]));
   return global.btoa(output.join(''));
@@ -29,7 +29,7 @@ const decode = (chars : string) => Uint8Array.from(global.atob(chars), asCharCod
 const fs = require('fs')
 const { generate } = require('libp2p/src/pnet')
 const { v4 } = require('uuid')
-import IPFS from 'ipfs'
+import IPFS, { CID } from 'ipfs'
 import { P2PStack } from './p2p-stack'
 
 interface IPFSInterface {
@@ -44,6 +44,8 @@ export class  WorkhubFS {
 
     public node?: IPFS.IPFS;
     private config: IPFSInterface;
+
+    public version: number = 1;
 
     constructor(config: any = {}, swarmKey?: string){
         this.config = config;
@@ -72,10 +74,12 @@ export class  WorkhubFS {
     }
 
     async init(){
+        console.log("Starting IPFS with Bootstrap list", this.config.Bootstrap)
         this.node = await IPFS.create({
             repo: this.config.repo || 'workhub',
             libp2p: P2PStack(this.key),
             config: {
+                Bootstrap: this.config.Bootstrap || [],
                 Addresses: {
                     Swarm: this.config.Swarm || [],
                 },
@@ -98,9 +102,31 @@ export class  WorkhubFS {
         return content;
     }
 
-    async addFile(file: any){
-        const result = await this.node!.add(file)
-        return result.cid;
+    async pinFile(cid: string){
+        return await this.node?.pin.add(new CID(cid))
+    }
+
+    async addFile(file: File){
+        console.log("Add ", file)
+
+        const result = await this.node!.add({path: file.name, content: file})
+        return result.cid.toString();
+        /*
+        return new Promise((resolve, reject) => {
+            let fr = new FileReader();
+
+            fr.onload = async (event) => {
+                let buffer : ArrayBuffer = event.target?.result as ArrayBuffer;
+                const result = await this.node!.add({path: file.name, content: buffer});
+                resolve(result.cid.toString())
+                console.log(result.cid.toString());
+            }  
+    
+            fr.readAsArrayBuffer(file);
+        })*/
+        
+   //     const result = await this.node!.add(file)
+     //   return result.cid;
     }
 }
 

@@ -1,6 +1,8 @@
 const ENVIRONMENT = (typeof process !== 'undefined') && (process.release && process.release.name === 'node') ? 'NODE' : 'BROWSER'
 
 const MDNS = require('libp2p-mdns')
+const Bootstrap = require('libp2p-bootstrap')
+
 let TCP: any, wrtc : any;
 if(ENVIRONMENT == "NODE") {
     console.log("ENV", ENVIRONMENT)

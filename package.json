@@ -105,6 +105,7 @@
     "chonky-icon-fontawesome": "^2.1.0",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
+    "ipfs": "^0.54.2",
     "react-workerhub": "file:packages/web-ui",
     "workhub-server": "file:packages/server"
   },

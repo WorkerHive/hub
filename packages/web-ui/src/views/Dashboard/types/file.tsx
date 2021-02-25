@@ -33,7 +33,14 @@ export const FILE_VIEW = {
                                 console.log("Upload files")
                             }}
                             onFileUpload={({files}: any) => {
-                                client.actions.addFile(files[0])
+                                console.log(files);
+                                client?.fsLayer?.addFile(files[0]).then((cid : any) => {
+                                   // let cid = data.toString();
+                                   client?.actions.addFile(cid).then((r: any) => {
+                                       console.log("Upload response", r);
+                                   });
+                                    console.log('Upload file', data);
+                                }) //.actions.addFile(files[0])
                             }} />
                 )
             }

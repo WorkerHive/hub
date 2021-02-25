@@ -30,8 +30,8 @@ const Types = [
 export default (props: any) => {
     return (
         <>
-            {Types.map((x) => (
-                <Route path={x.path} exact render={(props) => (
+            {Types.map((x, ix) => (
+                <Route key={ix} path={x.path} exact render={(props) => (
                     <Layout {...props} schema={x} />
                 )} />
             ))}
