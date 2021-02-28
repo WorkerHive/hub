@@ -96,14 +96,16 @@ app.post('/login', async (req, res) => {
     let username = req.body.username;
     let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
     let user : any = await connector.read("TeamMember", {username: username, password: password})
-
+    console.log(username, password);
     if(user.id){
+        console.log("Success user", user)
         res.send({token: jwt.sign({
             sub: user.id,
             name: user.name,
             email: user.email
         }, 'secret')})
     }else{
+        console.log("User result", user)
         res.status(404).send({error: "No user found"})
     }
 })
