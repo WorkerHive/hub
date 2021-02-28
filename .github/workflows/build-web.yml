@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 14
       - run: npm install
-      - run: npx lerna bootstrap --no-ci --scope react-workerhub
+      - run: npx lerna bootstrap --no-ci --scope react-workerhub --include-dependencies
       - run: echo "NODE_ENV=production" >> $GITHUB_ENV
       - run: echo $NODE_ENV
       - run: SKIP_PREFLIGHT_CHECK=true NODE_OPTIONS="--max_old_space_size=4096" npm run build:web
