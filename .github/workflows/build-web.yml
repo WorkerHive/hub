@@ -14,15 +14,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: yarn install
-      - run: yarn build:fs
-      - run: yarn install --force
-      - run: yarn build:web-deps
-      - run: yarn install --force
+      - run: npm install
       - run: npx lerna bootstrap
       - run: echo "NODE_ENV=production" >> $GITHUB_ENV
       - run: echo $NODE_ENV
-      - run: NODE_OPTIONS="--max_old_space_size=4096" yarn build:web
+      - run: NODE_OPTIONS="--max_old_space_size=4096" npm run build:web
         env: 
           CI: false
       - name: Create Release
