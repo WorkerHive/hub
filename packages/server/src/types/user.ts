@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import mongodb from 'mongodb';
 
 export const typeDef = `
 
