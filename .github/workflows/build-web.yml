@@ -14,8 +14,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: npm install
-      - run: npx lerna bootstrap
+      - run: npx lerna bootstrap --ignore-prepublish
+        env:
+          CI: false
       - run: echo "NODE_ENV=production" >> $GITHUB_ENV
       - run: echo $NODE_ENV
       - run: NODE_OPTIONS="--max_old_space_size=4096" npm run build:web
