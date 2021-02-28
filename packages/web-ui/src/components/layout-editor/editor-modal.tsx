@@ -2,7 +2,7 @@ import * as Components from '@workerhive/react-ui'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import * as React from 'react';
 
-const WorkUIProps = require('@workerhive/react-ui/dist/prop-spec.js')
+const WorkUIProps : any = {} // require('@workerhive/react-ui/dist/prop-spec.js')
 
 const WorkUI : any = {...Components}
 
