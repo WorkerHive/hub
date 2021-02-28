@@ -1,16 +1,12 @@
 import { GraphQLSchema } from 'graphql'
 import { ObjectTypeComposer, SchemaComposer, schemaComposer } from 'graphql-compose';
 
-import StoreManager from './stores';
-
-import { MongoStore, MSSQLStore } from './stores'
 import { v4 } from 'uuid'
 import { BaseConnector, BaseGraph } from '@workerhive/graph';
 //Replace below
 import { transform as setupConfig } from './transforms/integration'
 import {merge} from 'lodash';
 import resolvers from './resolver-base'
-import MergedAdapter from './adapters';
 import FlowPath from './flow-path';
 import { hydrate } from './flow-path/hydration';
 
@@ -134,10 +130,3 @@ export class FlowConnector extends BaseConnector{
     }
 
 }
-
-
-export { 
-    MongoStore,
-    MSSQLStore
-}
-
