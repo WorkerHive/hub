@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
 import { useHub } from '@workerhive/client';
 import React from 'react';
 
-const WorkUIProps = require('@workerhive/react-ui/dist/prop-spec.js')
+const WorkUIProps = {} //require('@workerhive/react-ui/dist/prop-spec.js')
 
 export interface DataModalProps {
     open: boolean;
