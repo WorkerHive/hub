@@ -8,7 +8,10 @@ export const FILE_VIEW = {
         label: "Files",
         data: {
             files: {
-                type: '[File]'
+                type: '[File]',
+                query: () => {
+
+                }
             }
         },
         layout: (sizes: any, rowHeight: number) => [
@@ -26,9 +29,12 @@ export const FILE_VIEW = {
                 y: 1,
                 w: 12,
                 h: (sizes.height / rowHeight) - 1,
-                component: (data: any, params: any, types: any, client: any) => (
-               
-                        <FileBrowser files={data.files} 
+                component: (data: any, params: any, types: any, client: any) => {
+                    console.log(data)
+
+                    return (
+                        <FileBrowser 
+                            files={data.files} 
                             onUploadFiles={() => {
                                 console.log("Upload files")
                             }}
@@ -36,13 +42,14 @@ export const FILE_VIEW = {
                                 console.log(files);
                                 client?.fsLayer?.addFile(files[0]).then((cid : any) => {
                                    // let cid = data.toString();
-                                   client?.actions.addFile(cid).then((r: any) => {
+                                   client?.actions.addFile(files[0].name, cid).then((r: any) => {
                                        console.log("Upload response", r);
                                    });
-                                    console.log('Upload file', data);
+                                    console.log('Upload file', cid);
                                 }) //.actions.addFile(files[0])
                             }} />
                 )
+                        }
             }
         ]
     }

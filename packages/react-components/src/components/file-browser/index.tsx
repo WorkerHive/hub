@@ -40,8 +40,6 @@ export interface FileBrowserProps {
 
 export const WorkhubFileBrowser: React.FC<FileBrowserProps> = (props) => {
 
-  const [files, setFiles] = React.useState<Array<any>>([])
-
   const [folderDialog, dialogFolder] = React.useState(false)
   const [folderChain ] = React.useState([{ id: 'default', name: props.title || 'File Storage', isDir: true }])
 
@@ -65,7 +63,7 @@ export const WorkhubFileBrowser: React.FC<FileBrowserProps> = (props) => {
         //  cb(null, {...x, size: stat.size})
       }*/
 
-      setFiles(f)
+   //   setFiles(f)
 
     }
   }, [props.files, props.loading])
@@ -141,6 +139,8 @@ export const WorkhubFileBrowser: React.FC<FileBrowserProps> = (props) => {
 
   const [folders, setFolders] = React.useState<Array<any>>([])
 
+  console.log(props.files);
+
   return (
     <div className={props.className}>
       <MutableDialog
@@ -163,7 +163,7 @@ export const WorkhubFileBrowser: React.FC<FileBrowserProps> = (props) => {
         disableDragAndDropProvider={true}
         instanceId="workhub-fs"
         onFileAction={onFileAction}
-        files={(files || []).filter((a: any) => a && (a.filename || a.name)).concat(folders).map((x: any) => ({
+        files={(props.files || []).filter((a: any) => a && (a.filename || a.name)).concat(folders).map((x: any) => ({
           id: x.id,
           cid: x.cid,
           size: x.size,
@@ -213,9 +213,19 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   flex: 1;
 
   .ipfs-loader{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
+
+  .file-drop__inner .chonky-fileListWrapper{
+    flex: 1;
+  }
+
 `

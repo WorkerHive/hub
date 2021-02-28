@@ -42,22 +42,25 @@ export default (models: any, client?: any, dispatch?: any) => {
                     }
                 `,
             })
+            dispatch({type: `GETS_${model.name}`, data: result.data[`${camelCase(model.name)}s`]})
             return result.data[`${camelCase(model.name)}s`]
         }
 
-        actions[`add${model.name}`] = async (file: string) => {
+        actions[`add${model.name}`] = async (filename: string, cid: string) => {
             let result = await client.mutate({
                 mutation: gql`
-                    mutation Add${model.name}($cid: String){
-                        add${model.name}(file: $cid){
+                    mutation Add${model.name}($filename: String, $cid: String){
+                        add${model.name}(filename: $filename, cid: $cid){
                             ${fields}
                         }
                     }
                 `,
                 variables: {
-                    cid: file
+                    filename,
+                    cid
                 }
             })
+            dispatch({type: `ADD_${model.name}`, data: result.data[`add${model.name}`]})
             return result.data[`add${model.name}`]
         }
 
