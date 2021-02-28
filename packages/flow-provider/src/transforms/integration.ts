@@ -25,6 +25,7 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
                     name: 'String',
                     type: 'StoreTypeInput',
                     host: 'String',
+                    port: 'Int',
                     dbName: 'String',
                     user: 'String',
                     pass: 'String'
@@ -73,6 +74,7 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
                     id: 'ID',
                     name: 'String',
                     host: 'String',
+                    port: 'Int',
                     user: 'String',
                     pass: 'String',
                     dbName: 'String',
@@ -95,7 +97,29 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
                     args: {
                         integrationStore: 'IntegrationStoreInput'
                     },
-                    resolve: async (parent, args, context : GraphContext) => {
+                    resolve: async (parent, {integrationStore}, context : GraphContext) => {
+                        /*
+                   name: 'String',
+                    type: 'StoreTypeInput',
+                    host: 'String',
+                    dbName: 'String',
+                    user: 'String',
+                    pass: 'String'
+                        */
+
+                        let serverResult = await (context.connector as FlowConnector).db.linkServer(integrationStore.name, {
+                            host: integrationStore.host,
+                            port: integrationStore.port,
+                            database: integrationStore.dbName
+                        } )
+
+                        let userResult = await (context.connector as FlowConnector).db.linkUser('postgres', integrationStore.name, {name: integrationStore.user, pass: integrationStore.pass})
+
+                        let importResult = await (context.connector as FlowConnector).db.importServer(integrationStore.name);
+
+
+                        console.log(serverResult, userResult, importResult);
+                        return {server: serverResult, user: userResult, import: importResult};
                 //        (context.connector as FlowConnector).stores.setupStore(args.integrationStore)
                 //TODO        return await context.connector.create('IntegrationStore', args.integrationStore)
                     }
@@ -145,6 +169,9 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
                 storeTypes: {
                     type: '[StoreType]',
                     resolve: (parent, args, context : GraphContext) => {
+                        return [
+                            {id: 'mssql', name: "MS-SQL", description: "Microsoft SQL Server"}
+                        ]
                     //TODO    return (context.connector as FlowConnector).stores.getTypes();
                     }
                 },
