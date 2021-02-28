@@ -14,9 +14,9 @@
     "build": "npx rollup -c rollup.config.js",
     "build:doc": "node src/make-doc.js",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
-    "predeploy": "cd example && yarn install && yarn run build",
+    "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build",
-    "prepublish": "yarn build && yarn build:doc",
+    "prepublish": "npm run build && npm run build:doc",
     "storybook": "start-storybook -s src/stories/assets -p 6006",
     "build-storybook": "build-storybook -o docs-build -s ./src/stories/assets"
   },
@@ -48,6 +48,15 @@
   },
   "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e",
   "devDependencies": {
-    "@types/react-beautiful-dnd": "^13.0.0"
+    "@storybook/addon-actions": "^6.1.20",
+    "@storybook/addon-essentials": "^6.1.20",
+    "@storybook/addon-links": "^6.1.20",
+    "@storybook/react": "^6.1.20",
+    "postcss": "^8.2.6",
+    "rollup": "^2.40.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "silly-ts-json-schema-generator": "^0.84.0"
   }
 }

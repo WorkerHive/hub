@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 
 import styled from 'styled-components'
-import { DragDropContext, Draggable, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
 import { AddCard } from './add-card';
 import { v4 } from 'uuid';
 import { TextField, Typography } from '@material-ui/core';
@@ -20,10 +20,6 @@ export interface GraphKanbanProps {
     allowAddColumn?: boolean;
     allowAddCard?: boolean;
     user?: { id: string };
-}
-
-const initialState = {
-    cards: {}
 }
 
 const reducer = (state : any, action : any) : any => {
@@ -50,15 +46,11 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
     cards = {},
     realtime,
     className,
-    onChange
 }) => {
 
     const [ state, dispatch ] = realtime || useReducer(reducer, cards)
 
-    const _onChange = ({value}: any) => {
-       
-    }
-
+/*
     const reorder = (list: Array<any>, startIndex: number, endIndex: number) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -80,7 +72,7 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
 
         return result;
     };
-
+*/
     const getItemStyle = (isDragging: boolean, dragStyle: any) => {
         return {
             userSelect: 'none',

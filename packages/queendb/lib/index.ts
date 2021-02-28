@@ -226,7 +226,10 @@ export default class QueenDb {
     async linkServer(name:string, server: {host: string, port: number, database: string}){
         let query = CREATE_SERVER(name, server)
         await this.client.query(query)
-        query = IMPORT_SERVER(name)
+    }
+
+    async importServer(name: string){
+        let query = IMPORT_SERVER(name)
         await this.client.query(query)
     }
 

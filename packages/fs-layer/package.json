@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepublish": "yarn build"
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "uint8-to-base64": "^0.2.0",
