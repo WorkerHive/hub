@@ -121,6 +121,8 @@ export class Cell {
             })
         } 
 
+        console.log(valid_query, query, query_vars);
+
         if(valid_query){
             const result = await this.client.query({
                 text: query,
