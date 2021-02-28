@@ -85,7 +85,7 @@
     "build:queendb": "cd packages/queendb && npm run build",
     "build:web-deps": "npm run build:react-components && npm run build:web-client",
     "build:server-deps": "npm run build:queendb && npm run build:fs && npm install --force && npm run build:graph",
-    "build:web": "npm run build:react-components && cd packages/web-ui && NODE_OPTIONS='--max_old_space_size=4096' npm run build",
+    "build:web": "cd packages/web-ui && NODE_OPTIONS='--max_old_space_size=4096' npm run build",
     "start:server": "cd packages/server && npm start",
     "start:dev-web": "cd packages/web-ui && npm start",
     "start:storybook": "cd packages/react-components && npm storybook",
