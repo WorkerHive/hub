@@ -29,7 +29,8 @@ export class Nectar {
                 local: fieldName,
                 remote: mapping[this.serverName][this.serverTable][fieldName]
             }
-            return `${field.remote} as "${field.local.toLowerCase()}"`
+            console.log(field.local.toLowerCase(), field.type);
+            return `cast(${field.remote} as ${field.type}) as "${field.local.toLowerCase()}"`
           //  return `"${field.local.toLowerCase()}" ${field.type} options (column_name '${field.remote}')`
         }).join(',\n')
 
@@ -48,7 +49,7 @@ export class Nectar {
       //  await this.client.query(dropQ);
 
         let q = `
-            CREATE OR REPLACE VIEW ${this.tableName}
+            CREATE OR REPLACE VIEW public.${this.tableName}
             AS SELECT 
                 ${this.serverFields}
             FROM "${this.serverName}"."${this.serverTable}"
