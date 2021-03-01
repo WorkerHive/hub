@@ -214,6 +214,7 @@ export const PROJECT_VIEW = {
                                      open={open} />
 
                                 <SearchTable 
+                                    filter={({item, filterText}) => item.name.indexOf(filterText) > -1}
                                     renderItem={({item}: {item: any}) => (
                                        <div style={{cursor: 'pointer', alignItems: 'center', flex: 1, display: 'flex'}} onClick={() => {params.navigate(`/dashboard/projects/${item.id}`)}}>
 

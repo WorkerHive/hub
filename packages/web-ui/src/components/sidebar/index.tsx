@@ -71,7 +71,7 @@ export function Sidebar(props : SidebarProps){
           label: "Documentation",
           path: '/kb'
         },
-        {
+      /*  {
           icon: <Contacts />,
           label: "Contacts",
           path: "/contacts"
@@ -80,7 +80,7 @@ export function Sidebar(props : SidebarProps){
           icon: <EmojiNature />,
           label: "Workflows",
           path: '/workflows'
-        }
+        }*/
       ]
 
     return (

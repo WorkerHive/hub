@@ -8,6 +8,7 @@ import { merge } from 'lodash'
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import multer from 'multer';
+import nodemailer from "nodemailer"
 
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 
@@ -89,6 +90,25 @@ setTimeout(() => {
 
 app.use(bodyParser.json())
 app.use(cors())
+
+const mailTransport = nodemailer.createTransport({
+    host: 'mail',
+    port: 25,
+    secure: false
+})
+
+app.post('/forgot', async (req, res) => {
+    const info = await mailTransport.sendMail({
+        from: `"WorkHive" <noreply@${process.env.WORKHUB_DOMAIN}>`,
+        to: "professional.balbatross@gmail.com",
+        subject: "Test Forgotten password",
+        text: "Forgot password please reset, if this was not you please click the link below",
+        html: "<div>Forgot password</div>"
+    })
+    console.log(info.messageId);
+
+    res.send({info})
+})
 
 app.post('/login', async (req, res) => {
     let strategy = req.body.strategy;

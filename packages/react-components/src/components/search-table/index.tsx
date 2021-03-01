@@ -24,7 +24,7 @@ export interface SearchTableProps{
   className?: string;
   data?: Array<object>;
   renderItem?: (args: {item: object}) => any;
-  filter?: (args: {item: object, filterText: string}) => boolean;
+  filter?: (args: {item: any, filterText: string}) => boolean;
 }
 
 export const SearchTable : React.FC<SearchTableProps> = ({
