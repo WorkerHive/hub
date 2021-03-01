@@ -132,7 +132,7 @@ app.post('/login', async (req, res) => {
 
 hiveGraph.addTransport((conf:any) => {
     
-    app.post('/graphql',/* passport.authenticate('jwt', {session: false}),*/ multer().single('file'), (req : any, res) => {
+    app.post('/graphql', passport.authenticate('jwt', {session: false}), multer().single('file'), (req : any, res) => {
         let query = req.body.query;
         let variables = req.body.variables || {};
         if(variables && typeof(variables) !== 'object') variables = JSON.parse(variables)
