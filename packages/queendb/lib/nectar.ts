@@ -29,8 +29,11 @@ export class Nectar {
                 local: fieldName,
                 remote: mapping[this.serverName][this.serverTable][fieldName]
             }
-            return `"${field.local.toLowerCase()}" ${field.type} options (column_name '${field.remote}')`
+            return `${field.remote} as "${field.local.toLowerCase()}"`
+          //  return `"${field.local.toLowerCase()}" ${field.type} options (column_name '${field.remote}')`
         }).join(',\n')
+
+        console.log("Nectar setup ", this.serverFields);
 
         this.tableName = `nectar_${this.definition.name.toLowerCase()}`
 
@@ -45,11 +48,12 @@ export class Nectar {
       //  await this.client.query(dropQ);
 
         let q = `
-            CREATE FOREIGN TABLE IF NOT EXISTS ${this.tableName} (
+            CREATE OR REPLACE VIEW ${this.tableName}
+            AS SELECT 
                 ${this.serverFields}
-            ) server ${this.serverName} options (table_name '${this.serverTable}')
+            FROM "${this.serverName}"."${this.serverTable}"
         `        
-
+        console.log("Nectar replacement", q)
         await this.client.query(q)
 //        console.log(q)
     }

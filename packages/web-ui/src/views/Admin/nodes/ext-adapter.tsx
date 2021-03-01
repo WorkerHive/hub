@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 
 import { Autocomplete } from '@material-ui/lab'
 import { NodeWrapper, useEditor, withEditor } from '@workerhive/hive-flow';
-import { FormControl, InputLabel, MenuItem, Select, TextField, Typography, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
+import { QueryBuilder } from '@material-ui/icons';
+import { FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
 import { useHub } from '@workerhive/client';
 
 export const type = 'extAdapter'
@@ -46,15 +47,30 @@ const Modal = (props: any) => {
         }
     }
 
+    const setFieldSQL = (key: string, sql: string | null) => {
+        let m = Object.assign({}, typeMap);
+        m[key] = sql != null ? {sql: sql} : ''
+        console.log(key, sql, m)
+        setTypeMap(m)
+    }
+
     const renderFields = () => {
         let type: any = getModel();
         let returnType = type.data.typedef.map((x: any) => {
             
-            const selected : string = typeMap[x.name];
+            const selected : any = typeMap[x.name];
             console.log(undefined === selected)
             return (
                 <div style={{ borderBottom: '1px solid green', marginBottom: 4, paddingBottom: 4, display: 'flex', alignItems: 'center' }}>
                     <Typography style={{ flex: 1 }} variant="subtitle1">{x.name}</Typography>
+
+                    {selected && selected.sql != null ? (
+                        <textarea 
+                          value={selected.sql}
+                          onChange={(e) => setFieldSQL(x.name, e.target.value)}
+                          style={{flex: 1}}
+                          placeholder="SQL Query" />
+                    ) : (
                     <Select
                         value={selected || ''}
                         onChange={(e: any) => {
@@ -78,6 +94,16 @@ const Modal = (props: any) => {
                         ))}
                         <MenuItem value={'n/a'}>N/A</MenuItem>
                     </Select>
+                    )}
+                    <IconButton onClick={() => {
+                        if(selected && selected.sql){
+                            setFieldSQL(x.name, null)
+                        }else{
+                            setFieldSQL(x.name, '')
+                        }
+                    }}>
+                        <QueryBuilder />
+                    </IconButton>
                 </div>
             )
         })
