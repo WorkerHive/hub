@@ -147,7 +147,7 @@ export default class QueenDb {
             };
             if(adapter.node.type_map){
                 Object.keys(adapter.node.type_map).forEach((key) => {
-                    if(adapter.node.type_map[key] && adapter.node.type_map[key].length > 0 && adapter.node.type_map[key] !== 'n/a'){
+                    if(adapter.node.type_map[key] && (adapter.node.type_map[key].length > 0 || adapter.node.type_map[key].sql != null) && adapter.node.type_map[key] !== 'n/a'){
                         mapping[adapter.source!][adapter.node.collection][key] = adapter.node.type_map[key].sql != null ? adapter.node.type_map[key].sql : `"${adapter.node.type_map[key]}"`
                     }
                 })
