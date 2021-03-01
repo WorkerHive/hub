@@ -86,10 +86,10 @@ export function Sidebar(props : SidebarProps){
     return (
       <Paper className="sidebar" style={{width: minimized ? 64 : 200}} >
         <List style={{flex: 1, maxWidth: minimized ? 64 : 200, transition: 'max-width 200ms ease-in'}}> 
-        <ListItem style={{position: 'relative', color: 'teal', padding: 12, fontSize: 20, justifyContent: 'flex-start'}}>
+        <ListItem style={{position: 'relative', color: 'rgb(34, 151, 147)', padding: 12, fontSize: 20, justifyContent: 'flex-start'}}>
            <img src={'/assets/teal.png'} alt="Workhub" style={{height: 33, marginRight: minimized ? 0 : 8, marginLeft: minimized ? 0: 0}} /> 
 
-           {!minimized && <Typography>Workhub</Typography>}
+           {!minimized && <Typography variant="h6" style={{fontWeight: 'bold'}}>Workhub</Typography>}
 
            <IconButton size="small" style={{backgroundColor: 'green', zIndex: 9, position: 'absolute', right: -12, bottom: -12}} onClick={() => setMinimized(!minimized)}>
               {minimized ? <ChevronRight style={{color: 'rgb(222,222,222)'}}/> : <ChevronLeft style={{color: 'rgb(222,222,222)'}} />}  

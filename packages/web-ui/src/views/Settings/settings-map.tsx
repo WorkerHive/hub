@@ -22,6 +22,10 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
 
   return [
     {
+      title: <Typography variant="h6" style={{display: 'flex'}}>Profile</Typography>,
+      body: <div></div>
+    },
+    {
       title: <Typography variant="h6" style={{display: 'flex'}}>Add-ons</Typography>,
       body: <CRUDList title={"Add-ons"} data={converters} />
     },
