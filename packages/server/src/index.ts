@@ -91,15 +91,23 @@ setTimeout(() => {
 app.use(bodyParser.json())
 app.use(cors())
 
-const mailTransport = nodemailer.createTransport({
-    host: 'mail',
-    port: 25,
-    secure: false
-})
+let mailOpts : any = {
+    host: process.env.SMTP_SERVER || 'mail',
+    port: process.env.SMTP_PORT || 25,
+    secure: (process.env.SMTP_PORT || 25) == '465'
+}
+
+if(process.env.SMTP_USER || process.env.SMTP_PASS){
+    mailOpts.auth = {};
+    mailOpts.auth.user = process.env.SMTP_USER;
+    mailOpts.auth.pass = process.env.SMTP_PASS;
+}
+
+const mailTransport = nodemailer.createTransport(mailOpts)
 
 app.post('/forgot', async (req, res) => {
     const info = await mailTransport.sendMail({
-        from: `"WorkHive" <noreply@${process.env.WORKHUB_DOMAIN}>`,
+        from: `"WorkHive" <noreply@workhub.services>`,
         to: "professional.balbatross@gmail.com",
         subject: "Test Forgotten password",
         text: "Forgot password please reset, if this was not you please click the link below",
