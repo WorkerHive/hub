@@ -86,6 +86,15 @@ export const CALENDAR_VIEW =  {
                             let p = data.projects.find((a : any) => a.id == item.project.id)
                             item.project = p || item.project
                         }
+
+                        if(Object.keys(item.people).length == 1){
+                            let people = item.people.id.map((x : string) => data.people.find((a: any) => a.id == x))
+                            item.people = people.filter((a : any) => a != undefined).length > 0 ? people : item.people;
+                        }
+                        if(Object.keys(item.resources).length == 1){
+                            let eqpt = item.resources.id.map((x : string) => data.equipment.find((a: any) => a.id == x))
+                            item.resources = eqpt.filter((a : any) => a != undefined).length > 0 ? eqpt : item.resources;
+                        }
                         console.log(item.project)
                         return {
                             ...item,
@@ -105,47 +114,20 @@ export const CALENDAR_VIEW =  {
                             data={userData}
                             projects={data.projects}
                             team={data.people}
+                            equipment={data.equipment}
                             open={modalOpen}
-                            onSave={(data: any) => console.log(data)}
+                            onSave={(data: any) => {
+                                if(data.id){
+                                    dispatch({type: 'UPDATE_SCHEDULE', item: data })
+                                }else{
+                                   data.id = v4()
+                                   dispatch({type: 'ADD_SCHEDULE', item: data}) 
+                                }
+                                openModal(false)
+                            }}
                             onClose={() => {openModal(false); setData(undefined)}}
                              />
-                      {/*  <MutableDialog 
-                            open={modalOpen} 
-                            onSave={({item} : any) => {
-                                if(item.id){
-                                    console.log("Update")
-                                    dispatch({type: 'UPDATE_SCHEDULE', item: item})
-                                    openModal(false)
-                                  /*  const id = item.id;
-                                    if(item.project) item.project = {id: item.project.id};
-                                    client?.actions.updateSchedule(id, item).then(() => {
-                                        openModal(false)
-                                    })
-                                }else{
-
-                                    console.log("New schedule", item)
-                                 //  client!.realtimeSync?.getArray('Schedule', type['Schedule']).push([item])
-                                    item.id = v4()
-                                    openModal(false)
-
-                                    dispatch({type: 'ADD_SCHEDULE', item: item})
-                                 
-                                   /* client?.actions.addSchedule(item).then(() => {
-                                        openModal(false)
-                                    })
-                                }
-                            }}
-                            onClose={() => {
-                                openModal(false);
-                                setData({})
-                            }}
-                            models={client?.models?.map((x: any) => ({
-                                ...x,
-                                data: stores[x.name]
-                            }))}
-                            data={userData}
-                            structure={t} 
-                            title={"Schedule"}/>*/}
+                     
                         <Calendar 
                         
                         events={calendar.toJSON().map(calendarParse)} 

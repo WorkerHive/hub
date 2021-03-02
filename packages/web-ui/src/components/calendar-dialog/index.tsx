@@ -1,10 +1,13 @@
-import { Typography, Collapse, Accordion, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Paper } from '@material-ui/core';
+import { Divider, Tabs, Tab, Typography, Collapse, Accordion, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Paper } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { ExpandMore, ChevronRight } from '@material-ui/icons';
 import { isEqual } from 'lodash';
 import React from 'react';
 import { TeamCircles } from '@workerhive/react-ui';
+import {InfoCard} from './info-card';
+import {EquipmentCard} from './equipment-card'
+import {TeamCard} from './team-card';
 
 export interface CalendarDialogProps {
     open: boolean;
@@ -19,6 +22,7 @@ export interface CalendarDialogProps {
     } | undefined;
     projects: Array<{id: string, name: string}>;
     team: Array<{id: string, name: string}>;
+    equipment: Array<{id: string, name: string}>;
 }
 
 export const CalendarDialog : React.FC<CalendarDialogProps> = ({
@@ -27,11 +31,11 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     onSave = () => {},
     open,
     projects,
+    equipment,
     team
 }) => {
 
-    const [tOpen, setTOpen] = React.useState(false)
-    const [eOpen, setEOpen] = React.useState(false)
+    const [tab, setTab] = React.useState<number>(0)
 
     const [ _data, setData ] = React.useState<any>(data)
 
@@ -42,9 +46,40 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     }, [data])
     console.log(data, _data);
 
+    const tabs = ["Info", "Team", "Equipment"]
+    const renderTab = () => {
+        let t = tabs[tab] || '';
+        console.log(tab, t)
+        switch(t.toLowerCase()){
+            case 'info':
+                return <InfoCard />
+            case 'equipment':
+                return <EquipmentCard equipment={equipment} selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} onChange={(equipment: any) => {
+                    setData({
+                        ..._data,
+                        resources: {id: equipment}
+                    })  
+                }}/>
+            case 'team':
+                return <TeamCard team={team} selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} onChange={(people : any) => {
+                    setData({
+                        ..._data,
+                        people: {id: people}
+                    })  
+                }}/>
+            default:
+                return null;
+        }
+    }
+
     return (
         <Dialog fullWidth open={open} onClose={onClose}>
-            <DialogTitle style={{display: 'flex', flexDirection: 'column'}}>
+            <DialogTitle style={{
+                paddingBottom: 8,
+                paddingTop: 12,
+                borderBottom: '1px solid #dfdfdf',
+                display: 'flex', 
+                flexDirection: 'column'}}>
             <Autocomplete 
                     value={projects.find((a : any) => a.id == _data.project?.id)}
                     onChange={(event, newVal) => {
@@ -86,70 +121,27 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         }}/>
                 </div>
             </DialogTitle>
-            <DialogContent>
+            <DialogContent style={{paddingLeft: 0, display: 'flex'}}>
                
-               
-                <TextField 
-                    label="Description"
-                    multiline
-                    fullWidth
-                    rows={4}
-                    rowsMax={7} />
-                <Paper style={{
-                    flexDirection: 'column',
-                    background: 'darkgray', 
-                    color: 'white', 
-                    display: 'flex', 
-                    marginTop: 4, 
-                    padding: 4,
-                    cursor: 'pointer'
-                }} >
-                    <div onClick={() => setTOpen(!tOpen)} style={{display: 'flex', flexDirection:'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                   
-                    <div style={{display: 'flex'}}>
-                        {tOpen ? <ExpandMore /> : <ChevronRight />}  <Typography variant="subtitle1">Team</Typography>
-                    </div>
-                  
-                    <TeamCircles 
-                        options={team}
-                        onChange={(members : any) => {
-                          setData({
-                            ..._data,
-                            people: members
-                          })
-                          console.log(members)
-                        }}
-                        members={_data.people}/>
-                    </div>
-                    
-                    <Collapse in={tOpen}>
-                        <div>E</div>
-                    </Collapse>
-                </Paper>
-                <Paper style={{
-                    flexDirection: 'column',
-                    background: 'darkgray', 
-                    color: 'white', 
-                    display: 'flex', 
-                    marginTop: 4, 
-                    padding: 4,
-                    cursor: 'pointer'
-                }} >
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }} onClick={() => setEOpen(!eOpen)}>
-                   <div style={{display: 'flex'}}>
-                   {eOpen ? <ExpandMore /> : <ChevronRight />}<Typography variant="subtitle1">Equipment</Typography>
-                    </div> 
-
-                    </div>
-                    <Collapse in={eOpen}>
-                        <div>T</div>
-                    </Collapse>
-                </Paper>
-                
+               <Tabs
+                onChange={(event, newValue) => {
+                    console.log(newValue)
+                    setTab(newValue)
+                }}
+                value={tab}
+                orientation="vertical"
+                style={{borderRight: '1px solid #dfdfdf', display: 'flex', marginRight: 8}}
+                >
+                    {tabs.map((x : any, ix) => [
+                        <Tab label={x} value={ix} />,
+                        <Divider />
+                    ])}
+        
+               </Tabs>
+               <div style={{minHeight: '37vh', maxHeight: '50vh', flex: 1, display: 'flex', flexDirection: 'column'}}>
+                    {renderTab()}
+               </div>
+  
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>
