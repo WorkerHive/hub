@@ -44,7 +44,8 @@
     "react-pdf": "^5.1.0",
     "react-spinkit": "^3.0.0",
     "rich-markdown-editor": "^11.1.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "y-indexeddb": "^9.0.6"
   },
   "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e",
   "devDependencies": {

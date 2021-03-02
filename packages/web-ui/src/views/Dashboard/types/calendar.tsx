@@ -3,6 +3,7 @@ import *  as Y from 'yjs';
 import { v4 } from 'uuid';
 import { useRealtime, WorkhubClient, useHub } from "@workerhive/client";
 import { Calendar, Header, MutableDialog } from "@workerhive/react-ui";
+import { CalendarDialog } from '../../../components/calendar-dialog';
 import React from "react";
 
 export const CALENDAR_VIEW =  {
@@ -11,10 +12,6 @@ export const CALENDAR_VIEW =  {
         data: {
             projects: {
                 type: '[Project]'
-            },
-            scheduleItems: {
-                type: '[Schedule]',
-                poll: 15 * 1000
             },
             people: {
                 type: '[TeamMember]'
@@ -82,14 +79,37 @@ export const CALENDAR_VIEW =  {
                     if (type["Schedule"]) type["Schedule"].def.forEach((_type: any) => {
                         t[_type.name] = _type.type;
                     })
+
+                    const calendarParse = ( item: any) => {
+                        console.log(item.project)
+                        if(Object.keys(item.project).length == 1) {
+                            let p = data.projects.find((a : any) => a.id == item.project.id)
+                            item.project = p || item.project
+                        }
+                        console.log(item.project)
+                        return {
+                            ...item,
+                            start: typeof(item.start) === 'string' || typeof(item.start) === 'number' ? new Date(item.start) : item.start,
+                            end: typeof(item.end) === 'string' || typeof(item.end) === 'number' ? new Date(item.end) : item.end
+                        }
+                    }
+
                     return ((props) => {
                         const [ c, stores ] = useHub()
                         const [ modalOpen, openModal ] = React.useState<boolean>(false);
 
-                        const [ userData, setData ] = React.useState<object>({});
+                        const [ userData, setData ] = React.useState<{start: Date, end: Date}>();
                         
                           return <>
-                        <MutableDialog 
+                          <CalendarDialog
+                            data={userData}
+                            projects={data.projects}
+                            team={data.people}
+                            open={modalOpen}
+                            onSave={(data: any) => console.log(data)}
+                            onClose={() => {openModal(false); setData(undefined)}}
+                             />
+                      {/*  <MutableDialog 
                             open={modalOpen} 
                             onSave={({item} : any) => {
                                 if(item.id){
@@ -100,7 +120,7 @@ export const CALENDAR_VIEW =  {
                                     if(item.project) item.project = {id: item.project.id};
                                     client?.actions.updateSchedule(id, item).then(() => {
                                         openModal(false)
-                                    })*/
+                                    })
                                 }else{
 
                                     console.log("New schedule", item)
@@ -112,7 +132,7 @@ export const CALENDAR_VIEW =  {
                                  
                                    /* client?.actions.addSchedule(item).then(() => {
                                         openModal(false)
-                                    })*/
+                                    })
                                 }
                             }}
                             onClose={() => {
@@ -124,14 +144,11 @@ export const CALENDAR_VIEW =  {
                                 data: stores[x.name]
                             }))}
                             data={userData}
-                            structure={t} title={"Schedule"}/>
-                        <Calendar events={calendar.toJSON().map((x:any) => {
-                            return {
-                                ...x,
-                                start: typeof(x.start) === 'string' || typeof(x.start) === 'number' ? new Date(x.start) : x.start,
-                                end: typeof(x.end) === 'string' || typeof(x.end) === 'number' ? new Date(x.end) : x.end
-                            }
-                        })} 
+                            structure={t} 
+                            title={"Schedule"}/>*/}
+                        <Calendar 
+                        
+                        events={calendar.toJSON().map(calendarParse)} 
                         onDoubleClickEvent={(event: any) => {
                             setData(event)
                             openModal(true)

@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Y from 'yjs';
+import {IndexeddbPersistence} from 'y-indexeddb'
 import { WebsocketProvider } from 'y-websocket';
 
 import 'websocket-polyfill'
@@ -46,11 +47,12 @@ export class RealtimeSync {
     public doc = new Y.Doc();
 
     private websocketProvider : WebsocketProvider;
-
+    private persistence : IndexeddbPersistence;
     public status: string = '';
 
     constructor(url: string){
-        this.websocketProvider = new WebsocketProvider(`wss://${url}/yjs`, 'workhub', this.doc)
+        this.websocketProvider = new WebsocketProvider(`wss://${url}/yjs`, 'yjs-hub', this.doc)
+        this.persistence = new IndexeddbPersistence('yjs-hub', this.doc)
 
         this.websocketProvider.on('status', (e : any) => {
             this.status = e.status;

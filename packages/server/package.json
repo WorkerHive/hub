@@ -19,6 +19,7 @@
     "nodemailer": "^6.5.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "y-indexeddb": "^9.0.6"
   }
 }

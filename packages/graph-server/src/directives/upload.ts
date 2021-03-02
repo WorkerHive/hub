@@ -45,6 +45,8 @@ export const transform = (composer: SchemaComposer<any>) => {
                 },
                 resolve: async (parent, args, context : GraphContext) => {
                     //TODO add file to fsLayer
+                    const content = await context.fs.getFile(args.cid, `/tmp/${args.filename}`)
+                    console.log("File contents fetched")
                     const pinned = await context.fs.pinFile(args.cid)
                     console.log("Pin result ", pinned);
                     return await context.connector.create(type.name, {filename: args.filename, cid: args.cid})
