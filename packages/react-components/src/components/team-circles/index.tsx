@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, Avatar,IconButton, Popover, TextField, MenuItem} from '@material-ui/core';
+import { List, ListItem, Avatar,IconButton, Popover, TextField } from '@material-ui/core';
 import { Done, Add } from '@material-ui/icons'
 import styled from 'styled-components'
 
