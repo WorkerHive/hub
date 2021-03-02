@@ -87,11 +87,11 @@ export const CALENDAR_VIEW =  {
                             item.project = p || item.project
                         }
 
-                        if(Object.keys(item.people).length == 1){
+                        if(item.people && item.people.id && Object.keys(item.people).length == 1){
                             let people = item.people.id.map((x : string) => data.people.find((a: any) => a.id == x))
                             item.people = people.filter((a : any) => a != undefined).length > 0 ? people : item.people;
                         }
-                        if(Object.keys(item.resources).length == 1){
+                        if(item.resources && item.resources.id && Object.keys(item.resources).length == 1){
                             let eqpt = item.resources.id.map((x : string) => data.equipment.find((a: any) => a.id == x))
                             item.resources = eqpt.filter((a : any) => a != undefined).length > 0 ? eqpt : item.resources;
                         }
