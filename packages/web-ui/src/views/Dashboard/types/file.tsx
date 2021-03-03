@@ -1,4 +1,6 @@
 import { WorkhubClient } from "@workerhive/client";
+import { WorkhubFS } from "@workerhive/ipfs";
+import { CID } from 'ipfs-core';
 import { FileDrop, FileBrowser, Header } from "@workerhive/react-ui";
 import React from "react";
 
@@ -40,11 +42,15 @@ export const FILE_VIEW = {
                             }}
                             onFileUpload={({files}: any) => {
                                 console.log(files);
-                                client?.fsLayer?.addFile(files[0]).then((cid : any) => {
+                                client?.fsLayer?.addFile(files[0]).then(async (cid : any) => {
                                    // let cid = data.toString();
-                                   client?.actions.addFile(files[0].name, cid).then((r: any) => {
+                                    
+                                   let e = await client?.fsLayer?.repo.blocks.has(new CID(cid))
+                                    console.log(e)
+                                    client?.actions.addFile(files[0].name, cid).then((r: any) => {
                                        console.log("Upload response", r);
-                                   });
+                                    });
+
                                     console.log('Upload file', cid);
                                 }) //.actions.addFile(files[0])
                             }} />

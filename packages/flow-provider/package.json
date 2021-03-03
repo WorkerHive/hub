@@ -22,8 +22,7 @@
     "camel-case": "^4.1.2",
     "file-extension": "^4.0.5",
     "graphql-type-json": "^0.3.2",
-    "lodash": "^4.17.20",
-    "y-indexeddb": "^9.0.6"
+    "lodash": "^4.17.20"
   },
   "resolutions": {
     "graphql": "15.3.0"

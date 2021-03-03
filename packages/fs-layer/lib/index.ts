@@ -29,7 +29,10 @@ const decode = (chars : string) => Uint8Array.from(global.atob(chars), asCharCod
 const fs = require('fs')
 const { generate } = require('libp2p/src/pnet')
 const { v4 } = require('uuid')
-import IPFS, { CID } from 'ipfs'
+
+const Repo = require('ipfs-repo'); //keep an eye on PR might be included within the week https://github.com/ipfs/js-ipfs-repo/pull/275
+
+import IPFS, { CID } from 'ipfs-core'
 import { P2PStack } from './p2p-stack'
 
 interface IPFSInterface {
@@ -42,6 +45,7 @@ export class  WorkhubFS {
     private key : Uint8Array = new Uint8Array(95);
     public swarmKey?: string;
 
+    public repo?: typeof Repo;
     public node?: IPFS.IPFS;
     private config: IPFSInterface;
 
@@ -75,8 +79,9 @@ export class  WorkhubFS {
 
     async init(){
         console.log("Starting IPFS with Bootstrap list", this.config.Bootstrap)
+        this.repo = new Repo(this.config.repo || 'workhub')
         this.node = await IPFS.create({
-            repo: this.config.repo || 'workhub',
+            repo: this.repo,
             libp2p: P2PStack(this.key),
             config: {
                 Bootstrap: this.config.Bootstrap || [],
