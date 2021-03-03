@@ -3,6 +3,7 @@ import { camelCase, schemaComposer, SchemaComposer } from "graphql-compose";
 import { GraphQLUpload } from 'graphql-upload';
 import { GraphContext } from "..";
 import { getTypesWithDirective } from "../utils";
+import { CID } from 'ipfs-core';
 
 export const directiveName = "upload";
 
@@ -45,14 +46,15 @@ export const transform = (composer: SchemaComposer<any>) => {
                 },
                 resolve: async (parent, args, context : GraphContext) => {
                     //TODO add file to fsLayer
-                    let exists = await context.fs.repo.blocks.has(args.cid)
+                    let cid = new CID(args.cid);
+                    let exists = await context.fs.repo.blocks.has(cid)
                     console.log("File exists", exists)
                     /*const content = await context.fs.getFile(args.cid, `/tmp/${args.filename}`)
                     console.log("File contents fetched")*/
                     const pinned = await context.fs.pinFile(args.cid)
                     console.log("Pin result ", pinned);
-                    
-                    exists = await context.fs.repo.blocks.has(args.cid)
+
+                    exists = await context.fs.repo.blocks.has(cid)
                     console.log("File exists", exists)
                     return await context.connector.create(type.name, {filename: args.filename, cid: args.cid})
                 }
