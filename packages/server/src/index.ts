@@ -47,11 +47,19 @@ const mqLayer = new MQ({
         mqLayer.watch('ipfs-pinning', async (blob: any) => {
 
             console.log("Pinning in background", blob)
+
             let {cid, filename, id} = blob;
+
+            console.log("Pinning", cid)
+
             let cid2 = await fsLayer.pinFile(cid)
+
             console.log("Pinned", cid2)
+
             let res = await connector.update('File', {id: id}, {pinned: true})
+
             console.log("Pinning result", res)
+            
         }).then(() => {
             console.log("Watching ipfs-pinning")
         })
