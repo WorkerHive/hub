@@ -59,7 +59,7 @@ const mqLayer = new MQ({
             let res = await connector.update('File', {id: id}, {pinned: true})
 
             console.log("Pinning result", res)
-            
+            return res;
         }).then(() => {
             console.log("Watching ipfs-pinning")
         })
