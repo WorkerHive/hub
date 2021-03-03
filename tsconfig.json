@@ -15,6 +15,7 @@
             "@workerhive/react-ui": ["react-components/src"],
             "@workerhive/client": ["graph-client/src"],
             "@workerhive/queendb": ["queendb/lib"],
+            "@workerhive/mq": ["message-queue/src"],
             "@workerhive/*": ["*/src"],
         }
     }

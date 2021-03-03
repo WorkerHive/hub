@@ -47,16 +47,29 @@ export const transform = (composer: SchemaComposer<any>) => {
                 resolve: async (parent, args, context : GraphContext) => {
                     //TODO add file to fsLayer
                     let cid = new CID(args.cid);
-                    let exists = await context.fs.repo.blocks.has(cid)
-                    console.log("File exists", exists)
-                    /*const content = await context.fs.getFile(args.cid, `/tmp/${args.filename}`)
-                    console.log("File contents fetched")*/
-                    const pinned = await context.fs.pinFile(args.cid)
-                    console.log("Pin result ", pinned);
 
-                    exists = await context.fs.repo.blocks.has(cid)
-                    console.log("File exists", exists)
-                    return await context.connector.create(type.name, {filename: args.filename, cid: args.cid})
+                    let exists = await context.fs.repo.blocks.has(cid)
+
+                    let newFile : any = await context.connector.create(type.name, {
+                        pinned: exists,
+                        filename: args.filename, 
+                        cid: args.cid
+                    })
+
+
+                    console.log(`CID(${args.cid}) exists: ${exists}`)
+
+                    if(!exists){
+                        let queued = await context.mq.queue('ipfs-pinning', {
+                            cid: args.cid,
+                            id: newFile.id,
+                            filename: args.filename
+                        })
+                    }else{
+                        await context.fs.pinFile(args.cid);
+                    }
+        
+                    return newFile
                 }
             },
             [deleteKey]: {

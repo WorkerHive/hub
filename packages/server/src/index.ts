@@ -12,6 +12,7 @@ import nodemailer from "nodemailer"
 
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 
+import MQ from '@workerhive/mq';
 import { WorkhubFS } from "@workerhive/ipfs"
 
 import { FlowConnector } from '@workerhive/flow-provider'
@@ -38,6 +39,17 @@ const fsLayer = new WorkhubFS({
     Swarm: [
         `/dns4/${process.env.WORKHUB_DOMAIN ? process.env.WORKHUB_DOMAIN : 'thetechcompany.workhub.services'}/tcp/443/wss/p2p-webrtc-star`
     ]
+}, null, )
+
+const mqLayer = new MQ({
+    host: process.env.MQ_URL || 'amqp://rabbitmq:rabbitmq@rabbit1'
+})
+
+mqLayer.watch('ipfs-pinning', async (blob: any) => {
+    console.log("Pinning in background", blob)
+    let {cid, filename, id} = blob;
+    await fsLayer.pinFile(cid)
+    connector.update('File', {id: id}, {pinned: true})
 })
 
 let connector = new FlowConnector({}, {})
@@ -79,14 +91,6 @@ let hiveGraph = new Graph(`
     dbName: (process.env.WORKHUB_DOMAIN ? 'workhub' : 'workhub')
 })*/
 
-const a = (async () => {
-    let stores = await connector.readAll('IntegrationStore')
-    console.log("Read stores", stores)
-  //  connector.stores.setupDefaultStores(stores)
-})
-setTimeout(() => {
-    a();
-}, 500)
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -149,7 +153,11 @@ hiveGraph.addTransport((conf:any) => {
             query,
             variables,
             req.body.operationName,
-            {user: req['user'], fs: fsLayer}
+            {
+                user: req['user'], 
+                fs: fsLayer,
+                mq: mqLayer
+            }
         ).then((r) => res.send(r))
     })
 

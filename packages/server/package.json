@@ -11,6 +11,7 @@
     "@workerhive/flow-provider": "file:../flow-provider",
     "@workerhive/graph": "file:../graph-server",
     "@workerhive/ipfs": "file:../fs-layer",
+    "@workerhive/mq": "file:../message-queue",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",

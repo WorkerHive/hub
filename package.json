@@ -65,6 +65,7 @@
     "build:web-client": "cd packages/graph-client && npm run build",
     "build:web-ui": "cd packages/web-ui && npm run build",
     "build:fs": "cd packages/fs-layer && npm run build",
+    "build:mq": "cd packages/message-queue && npm run build",
     "build:graph": "cd packages/graph-server && npm run build",
     "build:flow": "cd packages/flow-provider && npm run build",
     "build:queendb": "cd packages/queendb && npm run build",

@@ -25,6 +25,7 @@ export const typeDef = `
     id: ID
     cid: String
     filename: String
+    pinned: Boolean
     extension: String
   }
 

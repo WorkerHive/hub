@@ -34,6 +34,7 @@ const Repo = require('ipfs-repo'); //keep an eye on PR might be included within 
 
 import IPFS, { CID } from 'ipfs-core'
 import { P2PStack } from './p2p-stack'
+import { MessageQueue } from './queue'
 
 interface IPFSInterface {
     repo: string;
@@ -42,6 +43,7 @@ interface IPFSInterface {
 }
 
 export class  WorkhubFS {
+
     private key : Uint8Array = new Uint8Array(95);
     public swarmKey?: string;
 
