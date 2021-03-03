@@ -60,6 +60,7 @@ export const transform = (composer: SchemaComposer<any>) => {
                     console.log(`CID(${args.cid}) exists: ${exists}`)
 
                     if(!exists){
+                        console.log("Queuing")
                         let queued = await context.mq.queue('ipfs-pinning', {
                             cid: args.cid,
                             id: newFile.id,

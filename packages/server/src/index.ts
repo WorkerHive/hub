@@ -50,6 +50,8 @@ mqLayer.watch('ipfs-pinning', async (blob: any) => {
     let {cid, filename, id} = blob;
     await fsLayer.pinFile(cid)
     connector.update('File', {id: id}, {pinned: true})
+}).then(() => {
+    console.log("Watching ipfs-pinning")
 })
 
 let connector = new FlowConnector({}, {})

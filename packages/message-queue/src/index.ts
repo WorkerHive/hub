@@ -10,7 +10,9 @@ export default class MessageQueue {
     private channel? : amqplib.Channel
 
     constructor(opts : MessageQueueOpts){
+        console.log("Setting up MQ", opts)
         amqplib.connect(opts.host).then((connection) => {
+            console.log("Connected to MQ")
             this.connection = connection
             this.connection.createChannel().then((channel) => {
                 this.channel = channel
@@ -19,6 +21,7 @@ export default class MessageQueue {
     }
 
     async queue(queue: string, blob: object){
+        console.log("Send to Queue", queue, blob)
         await this.channel?.assertQueue(queue)
         return this.channel?.sendToQueue(queue, Buffer.from(JSON.stringify(blob)))
     }
@@ -26,6 +29,7 @@ export default class MessageQueue {
     async watch(queue: string, fn: Function){
         await this.channel?.assertQueue(queue)
         return this.channel?.consume(queue, async (msg) => {
+            console.log("MSG", msg)
             if(msg !== null){
                 try{
                     let result = await fn(JSON.parse(msg.content.toString()))
