@@ -42,16 +42,17 @@ const fsLayer = new WorkhubFS({
 }, null, )
 
 const mqLayer = new MQ({
-    host: process.env.MQ_URL || 'amqp://rabbitmq:rabbitmq@rabbit1'
-})
-
-mqLayer.watch('ipfs-pinning', async (blob: any) => {
-    console.log("Pinning in background", blob)
-    let {cid, filename, id} = blob;
-    await fsLayer.pinFile(cid)
-    connector.update('File', {id: id}, {pinned: true})
-}).then(() => {
-    console.log("Watching ipfs-pinning")
+    host: process.env.MQ_URL || 'amqp://rabbitmq:rabbitmq@rabbit1',
+    ready: () => {
+        mqLayer.watch('ipfs-pinning', async (blob: any) => {
+            console.log("Pinning in background", blob)
+            let {cid, filename, id} = blob;
+            await fsLayer.pinFile(cid)
+            connector.update('File', {id: id}, {pinned: true})
+        }).then(() => {
+            console.log("Watching ipfs-pinning")
+        })
+    }
 })
 
 let connector = new FlowConnector({}, {})

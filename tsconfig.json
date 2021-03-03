@@ -10,12 +10,12 @@
             "graphql": ["../node_modules/graphql"],
             "graphql-compose": ["../node_modules/graphql-compose"],
             "@workerhive/ipfs": ["fs-layer/lib"],
+            "@workerhive/mq": ["message-queue/src"],
             "@workerhive/graph": ["graph-server/src"],
             "@workerhive/flow-provider": ["flow-provider/src"],
             "@workerhive/react-ui": ["react-components/src"],
             "@workerhive/client": ["graph-client/src"],
             "@workerhive/queendb": ["queendb/lib"],
-            "@workerhive/mq": ["message-queue/src"],
             "@workerhive/*": ["*/src"],
         }
     }

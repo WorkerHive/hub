@@ -2,6 +2,7 @@ import amqplib from 'amqplib'
 
 export interface MessageQueueOpts{
     host: string;
+    ready: Function
 }
 
 export default class MessageQueue {
@@ -16,6 +17,7 @@ export default class MessageQueue {
             this.connection = connection
             this.connection.createChannel().then((channel) => {
                 this.channel = channel
+                opts.ready()
             })
         });
     }
