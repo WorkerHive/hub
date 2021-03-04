@@ -108,7 +108,7 @@ export class Cell {
             Object.keys(where).forEach((key, ix) => {
                 const EOL = ix < Object.keys(where).length - 1 ? ' AND ': ''
 
-                if(where[key]['$in']){
+                if(where[key] && where[key]['$in']){
                     if(where[key]['$in'].length < 1){
                         valid_query = false;
                     }
