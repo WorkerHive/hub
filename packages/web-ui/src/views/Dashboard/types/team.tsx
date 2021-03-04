@@ -1,5 +1,5 @@
 import { Divider, Fab, ListItem, Typography } from "@material-ui/core";
-import { Add, Delete, Edit } from "@material-ui/icons";
+import { Add, Delete, Edit, Email } from "@material-ui/icons";
 import { Header, MoreMenu, MutableDialog, SearchTable } from "@workerhive/react-ui";
 import React from "react";
 
@@ -68,7 +68,14 @@ export const TEAM_VIEW = {
                                                }},
                                                {icon: <Delete />, label: "Delete", color: 'red', action: () => {
                                                    props.client.actions.deleteTeamMember(item.id)
-                                               }}
+                                               }},
+                                               {
+                                                   icon: <Email />,
+                                                   label: "Invite",
+                                                   action: () => {
+                                                       props.client.actions.inviteTeamMember(item.id)
+                                                   }
+                                               }
                                            ]} />
                                         </>
                                        

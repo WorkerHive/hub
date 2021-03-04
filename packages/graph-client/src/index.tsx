@@ -275,6 +275,17 @@ export class WorkhubClient {
             ]
         })
 
+        this.actions['inviteTeamMember'] = async (id: string) => {
+            let result = await this.mutation(`
+                mutation InviteMember($id: ID){
+                    inviteMember(id: $id)
+                }
+            `, {
+                id
+            })
+            return result.data.inviteMember
+        }
+
         this.actions['changePassword'] = async (current: string, next: string) => {
             let result = await this.mutation(`
                 mutation ChangePassword($current: Hash, $next: Hash){
