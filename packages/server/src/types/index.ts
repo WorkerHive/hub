@@ -11,6 +11,7 @@ import {
 
 import {
   typeDef as Team,
+  resolvers as teamResolvers
 } from './team';
 
 import {
@@ -47,5 +48,5 @@ import {
 const { merge } = lodash;
 
 
-export const resolvers = merge(projectResolvers, fileResolvers, userResolvers, integrationResolvers)
+export const resolvers = merge(teamResolvers, projectResolvers, fileResolvers, userResolvers, integrationResolvers)
 export const typeDefs = [Layout, Contacts, Knowledge, Project, Team, Equipment, File, User, Integrations, Calendar].join('\n')

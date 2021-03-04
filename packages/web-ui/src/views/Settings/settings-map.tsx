@@ -7,6 +7,12 @@ import React from 'react';
 export const SettingsMap = (props: any, stores: any, storeTypes : any, converters : any, _roles: any) => {
   const [ client, store, isReady, err ] = useHub()
 
+  const [ password, setPassword ] = React.useState<{current: string, new: string, confirm: string}>({
+    current: '',
+    new: '',
+    confirm: ''
+  });
+
   const [ models, setModels ] = React.useState<any>([]);
   const [ roles, setRoles ] = React.useState<any>([])
 
@@ -24,10 +30,40 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Profile</Typography>,
       body: (
-      <div>
-        <TextField label="Current password" />
-        <TextField label="New Password" />
-        <TextField label="Confirm Password" />
+      <div style={{display: 'flex', flex: 1}}>
+        <div style={{flex: 0.5, display: 'flex', flexDirection: "column"}}>
+          <Typography>
+            {client?.user.name}
+          </Typography>
+          <Typography >
+            {client?.user.email}
+          </Typography>
+        </div>
+        <div style={{flex: 0.5, display: 'flex', flexDirection: 'column'}}>
+          <TextField 
+            type="password"
+            value={password.current}
+            onChange={(e) => setPassword({...password, current: e.target.value})}
+            fullWidth 
+            label="Current password" />
+          <TextField 
+            type="password"
+            value={password.new}
+            onChange={(e) => setPassword({...password, new: e.target.value})}
+            fullWidth 
+            label="New Password" />
+          <TextField 
+            type="password"
+            value={password.confirm}
+            onChange={(e) => setPassword({...password, confirm: e.target.value})}
+            fullWidth 
+            label="Confirm Password" />
+            <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: 4}}>
+              <Button color="primary" variant="contained">
+                Update password
+              </Button>
+            </div>
+        </div>
       </div>
       )
     },

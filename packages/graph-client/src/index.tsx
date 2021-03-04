@@ -103,7 +103,7 @@ export class WorkhubClient {
         }
     }
 
-    get user(){
+    get user(): any{
         return jwt_decode(this.accessToken!)
     }
 

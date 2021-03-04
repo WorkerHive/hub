@@ -1,4 +1,9 @@
+import { GraphContext } from "@workerhive/graph";
+
 export const typeDef = `
+  extend type Mutation {
+    chanePassword(current: Hash, next: Hash): Boolean
+  }
 
   type TeamMember @crud @configurable {
     "A member of your WorkHub Team"
@@ -13,3 +18,11 @@ export const typeDef = `
   }
 
 `
+
+export const resolvers =  {
+  Mutation: {
+    changePassword: async (parent, {current, next}, context : GraphContext) => {
+      console.log("Change password", current, next);
+    }
+  }
+}
