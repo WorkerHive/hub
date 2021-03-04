@@ -22,9 +22,9 @@ export const typeDef = `
 export const resolvers =  {
   Mutation: {
     changePassword: async (parent, {current, next}, context : GraphContext) => {
-      let user : any = await context.connector.read('TeamMember', {id: context.user.sub})
+      let user : any = await context.connector.read('TeamMember', {id: context.user.id})
       if(user.password == current){
-        let result = await context.connector.update('TeamMember', {id: context.user.sub}, {password: next})
+        let result = await context.connector.update('TeamMember', {id: context.user.id}, {password: next})
         console.log("Change password result", result);
         return result != null;
       }else{
