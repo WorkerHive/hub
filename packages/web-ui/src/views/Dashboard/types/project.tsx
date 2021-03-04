@@ -130,22 +130,6 @@ export const PROJECT_DRILLDOWN = {
                                         v = value.toJSON();
                                     }
                                     console.log(typeof(value), value, v)
-
-                                    /*Object.keys(value).map((x) => {
-
-                                        project.set(x, value[x])
-                                    })*/
-
-
-                                   /* value.forEach((item, index) => {
-                                        if(!project.get(index)){
-
-                                        //    project.insert(index, [map])
-                                        }
-                                        if(!isEqual(item.rows, project.get(index).get('rows'))){
-                                            project.get(index).set('rows', item.rows);
-                                        }
-                                    })*/
                                 }}
                                 graph={{nodes: [], links: []}} />
                         </Paper>

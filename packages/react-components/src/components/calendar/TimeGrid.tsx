@@ -375,7 +375,6 @@ export default class TimeGrid extends Component<TimeGridProps, {gutterWidth: any
   }*/
 
   memoizedResources = memoize((resources, accessors)=>{
-    console.log(Resources)
        return Resources(resources, accessors)
 
   })

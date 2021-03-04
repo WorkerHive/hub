@@ -44,14 +44,12 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
             setData(data)
         }
     }, [data])
-    console.log(data, _data);
 
-    const tabs = ["Info", "Team", "Equipment"]
+    const tabs = ["Team", "Equipment", "Notes"]
     const renderTab = () => {
         let t = tabs[tab] || '';
-        console.log(tab, t)
         switch(t.toLowerCase()){
-            case 'info':
+            case 'notes':
                 return <InfoCard />
             case 'equipment':
                 return <EquipmentCard equipment={equipment} selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} onChange={(equipment: any) => {

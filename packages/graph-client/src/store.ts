@@ -18,6 +18,8 @@ export function clientReducer(state : State, action : Action): State {
     if(!store[actionParts[1]]) store[actionParts[1]] = [];
     let ix = action.id != null ? store[actionParts[1]].map((x: any) => x.id).indexOf(action.id) : null;
 
+    console.log(actionParts[0], actionParts[1])
+
     switch(actionParts[0]){
         case 'ADD':
             console.log(actionParts, store)

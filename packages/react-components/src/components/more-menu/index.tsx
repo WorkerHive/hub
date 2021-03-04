@@ -40,9 +40,9 @@ export const MoreMenu : React.FC<MoreMenuProps> = (props) => {
             {props.horizontal ? <MoreHoriz /> : <MoreVert />}
         </IconButton>
         <Menu open={props.menu.length > 0 && menuOpen != null} onClose={() => openMenu(null)} anchorEl={menuOpen}>
-            {props.menu.map((x) => {
+            {props.menu.map((x, ix) => {
                 return (
-                    <MenuItem onClick={(e) => {
+                    <MenuItem key={ix} onClick={(e) => {
                         e.stopPropagation()
                         openMenu(null)
                         if(x.action) x.action()

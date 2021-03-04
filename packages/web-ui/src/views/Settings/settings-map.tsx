@@ -1,4 +1,4 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, Typography, TextField } from '@material-ui/core';
 import { CRUDList } from '@workerhive/react-ui';
 import { useHub } from '@workerhive/client'
 import React from 'react';
@@ -23,7 +23,13 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
   return [
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Profile</Typography>,
-      body: <div></div>
+      body: (
+      <div>
+        <TextField label="Current password" />
+        <TextField label="New Password" />
+        <TextField label="Confirm Password" />
+      </div>
+      )
     },
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Add-ons</Typography>,

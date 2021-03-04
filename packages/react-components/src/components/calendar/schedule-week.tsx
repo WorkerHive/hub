@@ -27,8 +27,6 @@ export const ScheduleEvent = (props : any) => {
   const fullName = props.event.project && `${props.event.project.id}-${props.event.project.name}`;
   const color = intToRGB(hashCode(fullName))
 
-  console.log("Event card props", props);
-
   return (
     <div style={{borderRadius: 3, overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
       <div style={{

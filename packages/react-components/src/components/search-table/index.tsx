@@ -62,8 +62,8 @@ export const SearchTable : React.FC<SearchTableProps> = ({
                             return filter({item: a, filterText: search})
                         }
                         return true;
-                    }).map((x) => (
-                    <ListItem>
+                    }).map((x, ix) => (
+                    <ListItem key={ix}>
                         {renderItem({item: x})}
                     </ListItem>
                     ))}

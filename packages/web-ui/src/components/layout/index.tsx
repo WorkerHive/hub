@@ -96,7 +96,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                             if (isArray) {
                                 currentValue = store[model.name]
                                 console.log("Current value", currentValue, store, model.name)
-                                if (currentValue && currentValue.length > 0) {
+                                if (currentValue && currentValue.length > 1) {
                                     console.log("Current value", currentValue)
                                 } else {
                                     if(pollLength && pollLength > 0){
@@ -157,6 +157,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
     }, [props.schema, schema, client, props.match.params, data, store, types])
 
     function getData() : object{
+        console.log("Get data called")
         let obj : any = {};
 
         for(const k in props.schema.data){
@@ -199,6 +200,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
         return obj
     }
 
+    const _data = getData();
+
     return (
         <Suspense fallback={<div>loading</div>}>
             {resizeListener}
@@ -213,7 +216,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                 {props.schema.layout(sizes, 64).map((x) => (
                     <div key={x.i} style={{ display: 'flex', flexDirection: 'column' }}>
                         {x.component instanceof Function ? x.component({
-                            ...getData(),
+                            ..._data,
                             label: props.schema.label,
                             path: props.schema.path
                         }, { ...props.match.params, navigate: (url: string) => props.history.push(url) }, types, client) : x.component}

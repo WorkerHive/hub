@@ -67,12 +67,10 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
     d[key] = value;
     setData(d)
 
-    console.log(d, key, value)
   }
 
   const renderItem = (key: string, type: any) : any => {
     let typeName = type.type ? type.type : type;
-        console.log(key, type)
 
     if(props.models && props.models.length > 0){
       if(props.models.map((x: any) => x.name).indexOf(typeName) > -1){
@@ -110,7 +108,6 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
           />
         )
       case 'Select':
-        console.log("SELECT")
         return (
           <FormControl key={key}>
             <InputLabel>{uppercase(key)}</InputLabel>
