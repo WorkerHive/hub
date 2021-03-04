@@ -1,5 +1,5 @@
 import Graph, { LoggerConnector } from '@workerhive/graph' 
-import { typeDefs } from './types';
+import { typeDefs, resolvers as typeResolvers } from './types';
 import express from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors';
@@ -76,7 +76,7 @@ const workhubResolvers = merge({
             return fsLayer.swarmKey
         }
     }
-}, resolvers)
+}, merge(resolvers, typeResolvers))
 
 let hiveGraph = new Graph(`
 
