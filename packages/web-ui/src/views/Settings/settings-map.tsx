@@ -59,7 +59,16 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
             fullWidth 
             label="Confirm Password" />
             <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: 4}}>
-              <Button color="primary" variant="contained">
+              <Button onClick={() => {
+                if(password.confirm == password.new){
+                  client?.actions.changePassword(password.current, password.new).then((r: any) => {
+                    console.log("password res", r)
+                  })
+
+                }else{
+                  alert("Passwords dont match")
+                }
+              }} color="primary" variant="contained">
                 Update password
               </Button>
             </div>

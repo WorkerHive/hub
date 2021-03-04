@@ -275,6 +275,18 @@ export class WorkhubClient {
             ]
         })
 
+        this.actions['changePassword'] = async (current: string, next: string) => {
+            let result = await this.mutation(`
+                mutation ChangePassword($current: Hash, $next: Hash){
+                    changePassword(current: $current, next: $next)
+                }
+            `, {
+                current,
+                next
+            })
+            return result.data.changePassword
+        }
+
 
         this.actions['updateType'] = async (name : string, fields : any) => {
             let result = await this.mutation(`

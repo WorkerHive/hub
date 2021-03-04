@@ -2,7 +2,7 @@ import { GraphContext } from "@workerhive/graph";
 
 export const typeDef = `
   extend type Mutation {
-    chanePassword(current: Hash, next: Hash): Boolean
+    changePassword(current: Hash, next: Hash): Boolean
   }
 
   type TeamMember @crud @configurable {
