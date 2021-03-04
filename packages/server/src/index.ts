@@ -124,16 +124,32 @@ if(process.env.SMTP_USER || process.env.SMTP_PASS){
 const mailTransport = nodemailer.createTransport(mailOpts)
 
 app.post('/forgot', async (req, res) => {
-    const info = await mailTransport.sendMail({
-        from: `"WorkHive" <noreply@workhub.services>`,
-        to: "professional.balbatross@gmail.com",
-        subject: "Test Forgotten password",
-        text: "Forgot password please reset, if this was not you please click the link below",
-        html: "<div>Forgot password</div>"
-    })
-    console.log(info.messageId);
+    const user : any = await connector.read('TeamMember', {email: req.body.email})
+    if(user && user.id){
+        const token = jwt.sign({
+            id: user.id
+        }, 'test-secret')
 
-    res.send({info})
+        const info = await mailTransport.sendMail({
+            from: `"WorkHive" <noreply@workhub.services>`,
+            to: user.email,
+            subject: "Password reset",
+            text: `Kia Ora ${user.name},
+
+A password reset request has been made for your WorkHive account, click the link below to reset your password.
+If this wasn't you please ignore this email.
+
+https://${process.env.WORKHUB_DOMAIN}/reset?token=${token}
+
+Nga Mihi,
+WorkHive
+`,
+        })
+
+        res.send({info})
+    }else{
+        res.send({error: "User not found"})
+    }
 })
 
 app.post('/login', async (req, res) => {

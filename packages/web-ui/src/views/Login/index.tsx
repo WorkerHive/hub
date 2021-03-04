@@ -1,6 +1,7 @@
 import { Divider, Button, Paper, TextField, Typography } from '@material-ui/core';
 import React from 'react';
-import { authenticate } from '../../actions/auth'
+import { authenticate, forgotPassword } from '../../actions/auth'
+import { Link } from 'react-router-dom';
 import './index.css';
 
 export interface LoginProps{
@@ -10,6 +11,10 @@ export interface LoginProps{
 
 export const Login = (props : LoginProps) => {
     
+    const [ forgot, setForgot ] = React.useState<boolean>(false);
+
+    const [ email, setEmail ] = React.useState<string>('')
+
     const [username, setUsername] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
 
@@ -36,6 +41,24 @@ export const Login = (props : LoginProps) => {
                     <Typography style={{color: 'teal'}} variant="h5">{props.title || 'Workhub'}</Typography>
                 </div>
                 <Divider />
+                {forgot ? (
+                    <>
+                        <TextField 
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value)
+                            }}
+                            label="Email" />
+                        <Button 
+                            onClick={() => {
+
+                            }}
+                            style={{marginTop: 8}} 
+                            color="primary" 
+                            variant="contained">Submit</Button>
+                    </>
+                ) : (
+                    <>
                 <TextField 
                     label="Username"
                     value={username}
@@ -55,6 +78,16 @@ export const Login = (props : LoginProps) => {
                     style={{marginTop: 8}}
                     color="primary"
                     variant="contained">Login</Button>
+                    </>)}
+                
+                <Divider style={{marginTop: 8, marginBottom: 8}} />
+
+                <div style={{display: 'flex', justifyContent: 'center', cursor: 'pointer'}} onClick={() => {
+                    setForgot(!forgot)
+                }} >
+                    {!forgot ? "Forgot Password" : "Go to Login" }
+                </div>
+
             </Paper>
         </div>
     )

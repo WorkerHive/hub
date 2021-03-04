@@ -15,3 +15,7 @@ export const authenticate = (username : string, password : string) => {
         })
     }).then((r) => r.json())
 }
+
+export const forgotPassword = (email: string) => {
+    
+}
