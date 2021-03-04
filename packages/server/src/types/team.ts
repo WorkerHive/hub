@@ -35,16 +35,14 @@ export const resolvers =  {
           from: `"WorkHive" <noreply@workhub.services>`,
           to: user.email,
           subject: "Invite to WorkHive",
-          text: `
-            Kia Ora ${user.name},
+          text: `Kia Ora ${user.name},
 
-            You've been invited to join a WorkHive organisation, click the link below to set up your account.
+You've been invited to join a WorkHive organisation, click the link below to set up your account.
 
-            ${process.env.WORKHUB_DOMAIN}/signup?token=${token}
+https://${process.env.WORKHUB_DOMAIN}/signup?token=${token}
 
-            Nga Mihi,
-            WorkHive
-          `
+Nga Mihi,
+WorkHive`
         })
         return true;
       }else{
