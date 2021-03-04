@@ -1,7 +1,9 @@
 import { GraphContext } from "@workerhive/graph";
+import jwt from 'jsonwebtoken'
 
 export const typeDef = `
   extend type Mutation {
+    inviteMember(id: ID): Boolean
     changePassword(current: Hash, next: Hash): Boolean
   }
 
@@ -21,6 +23,34 @@ export const typeDef = `
 
 export const resolvers =  {
   Mutation: {
+    inviteMember: async (parent, {id}, context: GraphContext) => {
+      let user: any = await context.connector.read('TeamMember', {id: id})
+      if(user.email){
+        const token = jwt.sign({
+          id: user.id,
+          inviter: context.user.id
+        }, 'test-secret')
+
+        context.mail.sendMail({
+          from: `"WorkHive" <noreply@workhub.services>`,
+          to: user.email,
+          subject: "Invite to WorkHive",
+          text: `
+            Kia Ora ${user.name},
+
+            You've been invited to join a WorkHive organisation, click the link below to set up your account.
+
+            ${process.env.WORKHUB_DOMAIN}/signup?token=${token}
+
+            Nga Mihi,
+            WorkHive
+          `
+        })
+        return true;
+      }else{
+        return false;
+      }
+    },
     changePassword: async (parent, {current, next}, context : GraphContext) => {
       let user : any = await context.connector.read('TeamMember', {id: context.user.id})
       if(user.password == current){

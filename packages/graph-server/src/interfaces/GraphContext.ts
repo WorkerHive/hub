@@ -7,4 +7,5 @@ export default interface GraphContext {
     fs?: WorkhubFS;
     mq?: MessageQueue;
     user?: any;
+    mail?: any;
 }

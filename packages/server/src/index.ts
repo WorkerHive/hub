@@ -170,7 +170,8 @@ hiveGraph.addTransport((conf:any) => {
             {
                 user: req['user'], 
                 fs: fsLayer,
-                mq: mqLayer
+                mq: mqLayer,
+                mail: mailTransport
             }
         ).then((r) => res.send(r))
     })
