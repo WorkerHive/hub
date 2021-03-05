@@ -10,6 +10,7 @@ if(ENVIRONMENT == "NODE") {
     TCP = require('libp2p-tcp')
     wrtc = require('wrtc')
 }
+const Libp2p = require('libp2p')
 const MPLEX = require('libp2p-mplex');
 const NOISE = require('libp2p-noise').NOISE;
 const Protector = require('libp2p/src/pnet');
@@ -22,7 +23,7 @@ const wrtcTransport = {
 }
 
 const peerDiscovery = {
-    autoDial: false,
+    autoDial: true,
     [Bootstrap.tag]: {
         enabled: false,
         list: []
@@ -42,7 +43,7 @@ if(ENVIRONMENT == "NODE") {
 }
 
 export const P2PStack = (swarmKey) => {
-    return new Libp2p({
+    return {
         modules: {
             transport: ENVIRONMENT == "NODE" ? [TCP, WebRTCStar] : [WebRTCStar],
             streamMuxer: [MPLEX],
@@ -55,5 +56,5 @@ export const P2PStack = (swarmKey) => {
             },
             peerDiscovery: peerDiscovery
         }
-    })
+    }
 }

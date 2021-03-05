@@ -31,11 +31,12 @@ const { generate } = require('libp2p/src/pnet')
 const { v4 } = require('uuid')
 
 const Repo = require('ipfs-repo'); //keep an eye on PR might be included within the week https://github.com/ipfs/js-ipfs-repo/pull/275
-const P2PStack = require('./p2p-stack')
+const {P2PStack} = require('./p2p-stack')
 
 import LibP2P from 'libp2p'
 import IPFS, { CID } from 'ipfs-core'
 import { MessageQueue } from './queue'
+import { FSNode } from './fs'
 
 interface IPFSInterface {
     repo: string;
@@ -85,28 +86,24 @@ export class  WorkhubFS {
     async init(){
         console.log("Starting IPFS with Bootstrap list", this.config.Bootstrap)
         this.repo = new Repo(this.config.repo || 'workhub')
-        this.libp2p = P2PStack(this.key)
-        this.node = await IPFS.create({
-            repo: this.repo,
-            libp2p: this.libp2p,
-            config: {
-                Bootstrap: this.config.Bootstrap || [],
-                Addresses: {
-                    Swarm: this.config.Swarm || [],
-                },
-                Discovery: {
-                    webRTCStar: {Enabled: true},
-                    MDNS: {Enabled: true}
-                }
-            },
-            relay: {enabled: true, hop: {enabled: true}}
-        })
+        const {node, libp2p} = await FSNode(this.config, this.repo, this.key)
+        this.node = node;
+        this.libp2p = libp2p;
 
         let boot = await this.node.bootstrap.list();
        // let swarm = await this.node.swarm.peers()
-        
-        console.log(this.libp2p)
+       let peers = this.libp2p?.peerStore.peers.entries();
+    
+       for(let obj of peers){
+           let id = obj[1].id;
+           console.log("Deleting", id, typeof(id))
+        //   this.libp2p?.peerStore.delete(id)
+       }
+       console.log(this.libp2p?.peerStore.peers)
+
+    
         this.libp2p?.on('peer:discovery', (info) => {
+            console.log("Kill me now")
             console.log("Peer found", info)
         });
 
