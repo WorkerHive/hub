@@ -92,18 +92,11 @@ export class  WorkhubFS {
 
         let boot = await this.node.bootstrap.list();
        // let swarm = await this.node.swarm.peers()
-       let peers = this.libp2p?.peerStore.peers.entries();
-    
-       for(let obj of peers){
-           let id = obj[1].id;
-           console.log("Deleting", id, typeof(id))
-        //   this.libp2p?.peerStore.delete(id)
-       }
-       console.log(this.libp2p?.peerStore.peers)
 
+
+       console.log(this.libp2p?.peerStore.peers)
     
         this.libp2p?.on('peer:discovery', (info) => {
-            console.log("Kill me now")
             console.log("Peer found", info)
         });
 
