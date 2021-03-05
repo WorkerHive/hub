@@ -3,7 +3,8 @@ const ENVIRONMENT = (typeof process !== 'undefined') && (process.release && proc
 const MDNS = require('libp2p-mdns')
 const Bootstrap = require('libp2p-bootstrap')
 
-let TCP: any, wrtc : any;
+let TCP, wrtc;
+
 if(ENVIRONMENT == "NODE") {
     console.log("ENV", ENVIRONMENT)
     TCP = require('libp2p-tcp')
@@ -16,7 +17,7 @@ const WebRTCStar = require('libp2p-webrtc-star')
 
 const transportKey = WebRTCStar.prototype[Symbol.toStringTag]
 
-const wrtcTransport : any = {
+const wrtcTransport = {
     enabled: true,
 }
 
@@ -40,17 +41,19 @@ if(ENVIRONMENT == "NODE") {
     wrtcTransport.wrtc = wrtc
 }
 
-export const P2PStack = (swarmKey: Uint8Array) => ({
-    modules: {
-        transport: ENVIRONMENT == "NODE" ? [TCP, WebRTCStar] : [WebRTCStar],
-        streamMuxer: [MPLEX],
-        connEncryption: [NOISE],
-        connProtector: new Protector(swarmKey),
-    },
-    config: {
-        transport: {
-            [transportKey]: wrtcTransport
+export const P2PStack = (swarmKey) => {
+    return new Libp2p({
+        modules: {
+            transport: ENVIRONMENT == "NODE" ? [TCP, WebRTCStar] : [WebRTCStar],
+            streamMuxer: [MPLEX],
+            connEncryption: [NOISE],
+            connProtector: new Protector(swarmKey),
         },
-        peerDiscovery: peerDiscovery
-    }
-})
+        config: {
+            transport: {
+                [transportKey]: wrtcTransport
+            },
+            peerDiscovery: peerDiscovery
+        }
+    })
+}
