@@ -16,7 +16,7 @@
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/build",
-    "prepublish": "npm run build && npm run build:doc",
+    "prepublish": "npm run build",
     "storybook": "start-storybook -s src/stories/assets -p 6006",
     "build-storybook": "build-storybook -o docs-build -s ./src/stories/assets"
   },
@@ -27,12 +27,12 @@
     "dist"
   ],
   "dependencies": {
+    "@babylonjs/core": "^5.0.0-alpha.12",
+    "@babylonjs/loaders": "^5.0.0-alpha.12",
     "@date-io/moment": "1.x",
     "@lourenci/react-kanban": "^2.1.0",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
-    "babylonjs": "^5.0.0-alpha.6",
-    "babylonjs-loaders": "^5.0.0-alpha.6",
     "chonky": "^2.1.0",
     "chonky-icon-fontawesome": "^2.1.0",
     "file-saver": "^2.0.5",

@@ -1,6 +1,10 @@
 import React from 'react';
-import { Engine, Scene, Vector3, ArcRotateCamera, SceneLoader } from 'babylonjs';
-import 'babylonjs-loaders';
+import { Engine } from '@babylonjs/core/Engines/engine';
+import { Scene } from '@babylonjs/core/scene';
+import { Vector3 } from '@babylonjs/core/Maths/math';
+import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera'
+import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
+import '@babylonjs/loaders';
 
 
 export interface GLBCardProps {
@@ -32,7 +36,7 @@ export const GLBCard : React.FC<GLBCardProps> = (props) => {
 
       if (!scene) {
         scene = new Scene(engine)
-        scene.createDefaultEnvironment();
+     //   scene.envir createDefaultEnvironment();
       }
 
       var camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new Vector3(0, 0, 10), scene);

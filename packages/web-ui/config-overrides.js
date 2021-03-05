@@ -1,7 +1,10 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const rewireWebpackBundleAnalyzer = require('react-app-rewire-webpack-bundle-analyzer')
+const { useBabelRc, override } = require('customize-cra')
 
-module.exports = function override(config, env){
+module.exports = override(
+    useBabelRc(),
+    function (config, env){
 
     if(env == 'production'){
         config = rewireWebpackBundleAnalyzer(config, env, {
@@ -21,4 +24,4 @@ module.exports = function override(config, env){
     tsRule.exclude = /node_modules/;
 
     return config;
-}
+})
