@@ -3,8 +3,6 @@ const rewireWebpackBundleAnalyzer = require('react-app-rewire-webpack-bundle-ana
 const { useBabelRc, override } = require('customize-cra')
 
 module.exports = function (config, env){
-
-    config = useBabelRc()(config)
     
     if(env == 'production'){
         config = rewireWebpackBundleAnalyzer(config, env, {
