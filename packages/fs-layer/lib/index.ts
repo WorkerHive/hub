@@ -32,6 +32,7 @@ const { v4 } = require('uuid')
 
 const Repo = require('ipfs-repo'); //keep an eye on PR might be included within the week https://github.com/ipfs/js-ipfs-repo/pull/275
 
+import LibP2P from 'libp2p'
 import IPFS, { CID } from 'ipfs-core'
 import { P2PStack } from './p2p-stack'
 import { MessageQueue } from './queue'
@@ -97,6 +98,16 @@ export class  WorkhubFS {
             },
             relay: {enabled: true, hop: {enabled: true}}
         })
+
+        let boot = await this.node.bootstrap.list();
+       // let swarm = await this.node.swarm.peers()
+        console.log((this.node as any).libp2p as LibP2P);
+
+        ((this.node as any).libp2p as LibP2P).on('peer:discovery', (info) => {
+            console.log("Peer found", info)
+        });
+        console.log("Bootstrap nodes", boot)
+
     }
 
     async getFile(cid: string, tmpPath: string){

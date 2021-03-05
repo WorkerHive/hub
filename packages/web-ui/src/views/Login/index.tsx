@@ -10,6 +10,8 @@ export interface LoginProps{
 }
 
 export const Login = (props : LoginProps) => {
+
+    const [ forgotError, setForgotError] = React.useState<boolean>(false)
     
     const [ forgot, setForgot ] = React.useState<boolean>(false);
 
@@ -44,6 +46,7 @@ export const Login = (props : LoginProps) => {
                 {forgot ? (
                     <>
                         <TextField 
+                            error={forgotError}
                             value={email}
                             onChange={(e) => {
                                 setEmail(e.target.value)
@@ -51,7 +54,14 @@ export const Login = (props : LoginProps) => {
                             label="Email" />
                         <Button 
                             onClick={() => {
-
+                                forgotPassword(email).then((r : any) => {
+                                    if(r.error){
+                                        setForgotError(true)
+                                    }else{
+                                        setForgotError(false)
+                                        setForgot(false)
+                                    }
+                                })
                             }}
                             style={{marginTop: 8}} 
                             color="primary" 

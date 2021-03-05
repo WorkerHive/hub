@@ -21,11 +21,17 @@ const wrtcTransport : any = {
 }
 
 const peerDiscovery = {
-    autoDial: true,
+    autoDial: false,
+    [Bootstrap.tag]: {
+        enabled: false,
+        list: []
+    },
     [WebRTCStar.tag]:{
         enabled: true
     }
 }
+
+console.log("peer discovery", peerDiscovery)
 
 if(ENVIRONMENT == "NODE") {
     peerDiscovery[MDNS.tag] = {
@@ -39,7 +45,7 @@ export const P2PStack = (swarmKey: Uint8Array) => ({
         transport: ENVIRONMENT == "NODE" ? [TCP, WebRTCStar] : [WebRTCStar],
         streamMuxer: [MPLEX],
         connEncryption: [NOISE],
-        connProtector: new Protector(swarmKey)
+        connProtector: new Protector(swarmKey),
     },
     config: {
         transport: {
