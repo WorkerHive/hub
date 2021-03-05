@@ -8,10 +8,9 @@ import {
     TreeItem
 } from '@material-ui/lab'
 
-import {
-    Edit,
-    Add
-} from "@material-ui/icons"
+import Edit from '@material-ui/icons/Edit';
+import Add from '@material-ui/icons/Add';
+
 
 export interface BranchProps {
   onEdit?: () => void;

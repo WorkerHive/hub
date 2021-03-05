@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 
 import styled from 'styled-components'
-import { MoreVert } from '@material-ui/icons'
+import MoreVert from '@material-ui/icons/MoreVert';
 
 import { MutableDialog } from '../mutable-dialog'
 

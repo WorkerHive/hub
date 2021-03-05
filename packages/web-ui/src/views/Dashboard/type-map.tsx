@@ -1,9 +1,6 @@
 import React, { FC, ReactElement } from 'react';
-import { Calendar, DocumentEditor, FileBrowser, Header, MutableDialog, PermissionForm, SearchTable } from '@workerhive/react-ui'
 import { Route } from 'react-router-dom';
 import { Layout } from '../../components/layout';
-import { Paper, Fab } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
 
 import { CALENDAR_VIEW } from './types/calendar'
 import { PROJECT_DRILLDOWN, PROJECT_VIEW } from './types/project';

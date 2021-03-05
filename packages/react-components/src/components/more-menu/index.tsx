@@ -1,9 +1,7 @@
 import React from 'react';
 
-import {
-    MoreHoriz,
-    MoreVert
-} from '@material-ui/icons'
+import MoreHoriz from '@material-ui/icons/MoreHoriz';
+import MoreVert from '@material-ui/icons/MoreVert';
 
 import {
     IconButton,

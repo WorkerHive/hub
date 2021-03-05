@@ -1,10 +1,9 @@
 import { Divider, Tabs, Tab, Typography, Collapse, Accordion, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Paper } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { ExpandMore, ChevronRight } from '@material-ui/icons';
+
 import { isEqual } from 'lodash';
 import React from 'react';
-import { TeamCircles } from '@workerhive/react-ui';
 import {InfoCard} from './info-card';
 import {EquipmentCard} from './equipment-card'
 import {TeamCard} from './team-card';

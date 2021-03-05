@@ -1,4 +1,4 @@
-import { People } from '@material-ui/icons';
+import People from '@material-ui/icons/People';
 import React from 'react';
 import Editor from 'rich-markdown-editor';
 

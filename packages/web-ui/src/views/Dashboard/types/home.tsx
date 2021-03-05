@@ -1,4 +1,6 @@
-import { AccountTree, Description, Settings } from "@material-ui/icons";
+import AccountTree from '@material-ui/icons/AccountTree';
+import Description from '@material-ui/icons/Description'
+import Settings from "@material-ui/icons/Settings";
 import { Calendar, ShortcutLinks } from "@workerhive/react-ui";
 import React from "react";
 

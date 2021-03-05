@@ -1,6 +1,8 @@
 import React from 'react';
 import { List, ListItem, Avatar,IconButton, Popover, TextField } from '@material-ui/core';
-import { Done, Add } from '@material-ui/icons'
+import Done from '@material-ui/icons/Done';
+import Add from '@material-ui/icons/Add';
+
 import styled from 'styled-components'
 
 function hashCode(str: string) { // java String#hashCode

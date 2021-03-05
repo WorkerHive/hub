@@ -1,4 +1,4 @@
-import { Add } from '@material-ui/icons';
+import Add from '@material-ui/icons/Add';
 import styled from 'styled-components'
 import React from 'react';
 

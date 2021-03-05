@@ -1,10 +1,8 @@
 import React from 'react';
 
-import {
-    Search,
-    ViewHeadline,
-    ViewModule
-} from '@material-ui/icons';
+import Search from '@material-ui/icons/Search';
+import ViewHeadline from '@material-ui/icons/ViewHeadline';
+import ViewModule from '@material-ui/icons/ViewModule';
 
 import {
     Paper,

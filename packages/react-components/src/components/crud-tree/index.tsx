@@ -1,9 +1,7 @@
 import React from 'react';
 
-import {
-    ExpandLess,
-    ExpandMore
-} from '@material-ui/icons'
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import {
     TreeView

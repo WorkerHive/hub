@@ -1,5 +1,8 @@
 import { Fab, Menu, MenuItem, Typography } from '@material-ui/core';
-import { Add, Cancel, Edit } from '@material-ui/icons';
+import Add from '@material-ui/icons/Add';
+import Cancel from '@material-ui/icons/Cancel';
+import Edit from '@material-ui/icons/Edit';
+
 import React from 'react';
 import { v4 } from 'uuid';
 import { isEqual } from 'lodash'

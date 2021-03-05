@@ -1,7 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import TimeGrid from './TimeGrid';
-import { Delete, Edit } from '@material-ui/icons';
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+
 import { MoreMenu } from '../more-menu';
 
 const invert = require('invert-color');

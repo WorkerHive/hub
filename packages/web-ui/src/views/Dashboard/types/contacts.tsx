@@ -1,5 +1,6 @@
 import { Fab, Typography } from "@material-ui/core"
-import { Add, Edit } from "@material-ui/icons"
+import Add from '@material-ui/icons/Add'
+import Edit from "@material-ui/icons/Edit"
 import { MutableDialog, Header, SearchTable, MoreMenu } from "@workerhive/react-ui"
 
 import React from "react"

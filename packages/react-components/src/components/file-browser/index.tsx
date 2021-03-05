@@ -2,9 +2,7 @@ import React from 'react';
 
 import { ChonkyActions, FileBrowser, FileNavbar, FileContextMenu, FileList, FileToolbar } from 'chonky';
 
-import {
-  Backup
-} from '@material-ui/icons'
+import Backup from '@material-ui/icons/Backup'
 
 import { StyledFileDrop as FileDrop } from '../file-drop';
 import { MutableDialog } from '../mutable-dialog'

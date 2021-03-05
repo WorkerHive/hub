@@ -9,20 +9,18 @@ import {
     Paper
 } from '@material-ui/core';
 
-import {
-  Contacts,
-    AccountTree,
-    Dashboard,
-    CalendarToday,
-    SupervisorAccount,
-    BusinessCenter,
-    Description,
-    EmojiNature,
-    Settings,
-    LocalLibrary,
-    ChevronLeft,
-    ChevronRight
-  } from '@material-ui/icons';
+import Contacts from '@material-ui/icons/Contacts';
+import AccountTree from '@material-ui/icons/AccountTree';
+import Dashboard from '@material-ui/icons/Dashboard';
+import CalendarToday from '@material-ui/icons/CalendarToday';
+import SupervisorAccount from '@material-ui/icons/SupervisorAccount'
+import BusinessCenter from '@material-ui/icons/BusinessCenter'
+import Description from '@material-ui/icons/Description';
+import EmojiNature from '@material-ui/icons/EmojiNature'
+import Settings from '@material-ui/icons/Settings';
+import LocalLibrary from '@material-ui/icons/LocalLibrary';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
 
 import { withRouter } from 'react-router-dom'
 

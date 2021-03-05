@@ -1,8 +1,8 @@
-import { IconButton, List, ListItem, Paper, Typography } from '@material-ui/core';
+import { List, ListItem, Paper, Typography } from '@material-ui/core';
 import React from 'react';
 import { CRUDKV, Header } from "@workerhive/react-ui"
 import './index.css';
-import { Add, ArrowBack } from '@material-ui/icons';
+import Add from '@material-ui/icons/Add';
 import { useHub } from '@workerhive/client';
 
 export interface TypeEditorProps{

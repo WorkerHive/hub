@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-    Add
-} from '@material-ui/icons';
+import Add from '@material-ui/icons/Add';
 
 import {
     Fab,

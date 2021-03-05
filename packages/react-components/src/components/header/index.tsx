@@ -1,8 +1,6 @@
 import React from 'react';
 
-import {
-    Notifications
-} from "@material-ui/icons"
+import Notifications from '@material-ui/icons/Notifications';
 
 import {
     Paper,

@@ -3,8 +3,8 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
 import {StyledShortcutLinks as ShortcutLinks, ShortcutLinksProps} from '../components/shortcut-links';
-import { FileCopyTwoTone, History } from '@material-ui/icons';
-
+import FileCopyTwoTone from '@material-ui/icons/FileCopyTwoTone';
+import History from '@material-ui/icons/History';
 
 export default {
   title: 'Example/Shortcut Links',

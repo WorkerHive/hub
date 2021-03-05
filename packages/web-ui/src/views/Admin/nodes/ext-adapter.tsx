@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 
 import { Autocomplete } from '@material-ui/lab'
-import { NodeWrapper, useEditor, withEditor } from '@workerhive/hive-flow';
-import { QueryBuilder } from '@material-ui/icons';
+import { NodeWrapper, withEditor } from '@workerhive/hive-flow';
+import QueryBuilder from '@material-ui/icons/QueryBuilder';
 import { FormControl, IconButton, InputLabel, MenuItem, Select, TextField, Typography, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
-import { useHub } from '@workerhive/client';
 
 export const type = 'extAdapter'
 

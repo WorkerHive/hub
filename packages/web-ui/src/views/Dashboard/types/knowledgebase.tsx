@@ -1,5 +1,5 @@
 import { Fab } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import Add from "@material-ui/icons/Add";
 import { Header, MutableDialog, SearchTable } from "@workerhive/react-ui";
 import React from "react";
 
