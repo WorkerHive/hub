@@ -5,11 +5,14 @@ import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 
 import { MoreMenu } from '../more-menu';
+import { Popover } from '@material-ui/core';
 
 const invert = require('invert-color');
 
 export const ScheduleEvent = (props : any) => {
   
+  console.log(props);
+
   function hashCode(str: string) { // java String#hashCode
       var hash = 0;
       for (var i = 0; i < str.length; i++) {
@@ -29,8 +32,52 @@ export const ScheduleEvent = (props : any) => {
   const fullName = props.event.project && `${props.event.project.id}-${props.event.project.name}`;
   const color = intToRGB(hashCode(fullName))
 
+  const [ popper, setPopper ] = React.useState<any>(null)
+
+  const showPopper = (anchor?: any) => {
+    setPopper(anchor)
+  }
+
+  console.log(props.event.project, moment(props.event.end).isoWeekday())
+  const popperDirection = moment(props.event.end).isoWeekday() > 4 ? 'left': 'right'
+
   return (
-    <div style={{borderRadius: 3, overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
+    <div 
+      onMouseEnter={(e) => showPopper(e.currentTarget)}
+      onMouseLeave={() => {
+        console.log("Mouse LEave")
+        showPopper(null)
+      }}
+      style={{
+        borderRadius: 3, 
+        overflow: 'hidden', 
+        display: 'flex', 
+        flexDirection: 'column'
+      }}>
+        {props.event.notes && props.event.notes.length > 0 && (
+        <Popover
+          style={{pointerEvents: 'none'}}
+          open={Boolean(popper)}
+          anchorEl={popper}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: popperDirection
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: popperDirection == 'right' ? 'left' : 'right'
+          }}
+          onClose={() => showPopper(null)}
+          >
+            <div style={{padding: 8}}>
+            {(props.event.notes || []).map((x : string) => (
+              <>
+              {x}
+              <br />
+              </>
+            ))}
+            </div>
+          </Popover>)}
       <div style={{
           display: 'flex',
           textAlign: 'center', 
@@ -63,7 +110,7 @@ export const ScheduleEvent = (props : any) => {
         {Array.isArray(props.event.people) && props.event.people.map((x: any) => (
           <div>{x.name}</div>
          ))}
-        <div style={{fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 4}}>Equipment</div>
+        {Array.isArray(props.event.resources) && props.event.resources.length > 0 && <div style={{fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 4}}>Equipment</div>}
         {Array.isArray(props.event.resources) && props.event.resources.map((x: any) => (
           <div>{x.name}</div>
         ))}

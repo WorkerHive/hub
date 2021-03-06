@@ -4,6 +4,7 @@ import Delete from '@material-ui/icons/Delete';
 import Edit from "@material-ui/icons/Edit";
 import { useRealtime, WorkhubClient } from "@workerhive/client";
 import * as Y from 'yjs';
+import KanbanDialog from '../../../components/kanban-dialog';
 import { GraphKanban, Header, MoreMenu, MutableDialog, SearchTable } from "@workerhive/react-ui";
 import React from "react";
 import { isEqual } from "lodash";
@@ -122,6 +123,10 @@ export const PROJECT_DRILLDOWN = {
 
                     return (
                         <Paper style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+                            <KanbanDialog
+                                title=""
+                                open={true}
+                                 />
                             <GraphKanban 
                                 template={cols}
                                 realtime={mgmt}

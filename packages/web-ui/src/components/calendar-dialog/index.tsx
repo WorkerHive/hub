@@ -1,40 +1,47 @@
-import { Divider, Tabs, Tab, Typography, Collapse, Accordion, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Paper } from '@material-ui/core';
+import { Divider, Tabs, Tab, IconButton, Typography, Collapse, Accordion, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Paper } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { isEqual } from 'lodash';
-import React from 'react';
-import {InfoCard} from './info-card';
-import {EquipmentCard} from './equipment-card'
-import {TeamCard} from './team-card';
+import React, {lazy, Suspense} from 'react';
 
-export interface CalendarDialogProps {
-    open: boolean;
-    onClose: any | undefined;
-    onSave: any | undefined;
-    data: {
+import NotesCard from './notes-card';
+import InfoCard from './info-card';
+import EquipmentCard from './equipment-card'
+import TeamCard from './team-card';
+import { ExitToApp } from '@material-ui/icons';
+
+
+export interface CalendarDialogProps extends RouteComponentProps{
+    open?: boolean;
+    onClose?: any | undefined;
+    onSave?: any | undefined;
+    data?: {
         project?: {id: string},
         people?: {id: Array<string>},
         resources?: {id: Array<string>},
+        notes?: Array<string>,
+        description?: string,
         start?: Date,
         end?: Date
     } | undefined;
-    projects: Array<{id: string, name: string}>;
-    team: Array<{id: string, name: string}>;
-    equipment: Array<{id: string, name: string}>;
+    projects?: Array<{id: string, name: string}>;
+    team?: Array<{id: string, name: string}>;
+    equipment?: Array<{id: string, name: string}>;
 }
 
 export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     data = {}, 
     onClose = () => {}, 
     onSave = () => {},
-    open,
-    projects,
-    equipment,
-    team
+    open = false,
+    projects = [],
+    equipment = [],
+    team = [],
+    history
 }) => {
 
-    const [tab, setTab] = React.useState<number>(0)
+    const [tab, setTab] = React.useState<number>(1)
 
     const [ _data, setData ] = React.useState<any>(data)
 
@@ -44,19 +51,41 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         }
     }, [data])
 
-    const tabs = ["Team", "Equipment", "Notes"]
+    const tabs = ["Info", "Team", "Equipment", "Notes"]
     const renderTab = () => {
         let t = tabs[tab] || '';
         switch(t.toLowerCase()){
             case 'notes':
-                return <InfoCard />
-            case 'equipment':
-                return <EquipmentCard equipment={equipment} selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} onChange={(equipment: any) => {
+                return (
+                <NotesCard 
+                    notes={_data?.notes}
+                    onChange={(notes) => {
+                        setData({
+                            ..._data,
+                            notes: notes
+                        })   
+                    }}/>
+                )
+            case 'info':
+                return (
+                <InfoCard 
+                    description={_data?.description} 
+                    onChange={(description) => {
                     setData({
                         ..._data,
-                        resources: {id: equipment}
-                    })  
-                }}/>
+                        description: description
+                    })
+                   }}/>)
+            case 'equipment':
+                return (<EquipmentCard 
+                    equipment={equipment} 
+                    selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} 
+                    onChange={(equipment: any) => {
+                        setData({
+                            ..._data,
+                            resources: {id: equipment}
+                        })  
+                    }}/>)
             case 'team':
                 return <TeamCard team={team} selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} onChange={(people : any) => {
                     setData({
@@ -77,18 +106,26 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                 borderBottom: '1px solid #dfdfdf',
                 display: 'flex', 
                 flexDirection: 'column'}}>
-            <Autocomplete 
-                    value={projects.find((a : any) => a.id == _data.project?.id)}
-                    onChange={(event, newVal) => {
-                        setData({
-                            ..._data,
-                            project: newVal ? {id: newVal?.id} : null
-                        })
-                    }}
-                    options={projects}
-                    getOptionLabel={(option) => option.name || ''}
-                    renderInput={(params) => <TextField {...params} label="Project"  /> }/>
-
+                    <div style={{display: 'flex', alignItems: 'flex-end'}}>
+                        <Autocomplete 
+                        fullWidth
+                        value={projects.find((a : any) => a.id == _data.project?.id)}
+                        onChange={(event, newVal) => {
+                            setData({
+                                ..._data,
+                                project: newVal ? {id: newVal?.id} : null
+                            })
+                        }}
+                        options={projects}
+                        getOptionLabel={(option) => option.name || ''}
+                        renderInput={(params) => <TextField {...params} label="Project"  /> }/>
+                        {_data.project && _data.project.id && <IconButton onClick={() => {
+                            history.push(`/dashboard/projects/${_data.project?.id}`)
+                        }} size="small">
+                            <ExitToApp />
+                        </IconButton>}
+                    </div>
+      
                 <div style={{display: 'flex', marginTop: 8, marginRight: '30%'}}>
                     <KeyboardDatePicker 
                         margin="dense"
@@ -136,7 +173,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         
                </Tabs>
                <div style={{minHeight: '37vh', maxHeight: '50vh', flex: 1, display: 'flex', flexDirection: 'column'}}>
-                    {renderTab()}
+                        {renderTab()}
                </div>
   
             </DialogContent>
@@ -151,3 +188,5 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         </Dialog>
     )
 }
+
+export default withRouter(CalendarDialog)

@@ -3,7 +3,7 @@ import *  as Y from 'yjs';
 import { v4 } from 'uuid';
 import { useRealtime, WorkhubClient, useHub } from "@workerhive/client";
 import { Calendar, Header, MutableDialog } from "@workerhive/react-ui";
-import { CalendarDialog } from '../../../components/calendar-dialog';
+import CalendarDialog from '../../../components/calendar-dialog';
 import React from "react";
 
 export const CALENDAR_VIEW =  {

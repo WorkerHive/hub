@@ -7,12 +7,12 @@ export interface EquipmentCardProps {
     onChange: any;
 }
 
-export const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
+const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
     console.log("equipment", props.equipment, props.selected)
     return (
         <List style={{overflowY: 'auto'}}>
-            {props.equipment.map((x) => [
-                <ListItem dense>
+            {props.equipment.map((x, ix) => [
+                <ListItem key={ix} dense>
                     <Checkbox checked={props.selected.indexOf(x.id) > -1} onChange={(e) => {
                         let ix = props.selected.indexOf(x.id);
                         let s = props.selected.slice();
@@ -30,3 +30,5 @@ export const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
         </List>
     )
 }
+
+export default EquipmentCard;

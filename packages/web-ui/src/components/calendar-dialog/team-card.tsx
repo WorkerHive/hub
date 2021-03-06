@@ -8,11 +8,11 @@ export interface TeamCardProps {
 
 }
 
-export const TeamCard : React.FC<TeamCardProps> = (props) => {
+const TeamCard : React.FC<TeamCardProps> = (props) => {
     return (
         <List style={{overflowY: 'auto'}}>
-            {props.team.map((x) => [
-                <ListItem dense>
+            {props.team.map((x, ix) => [
+                <ListItem key={ix} dense>
                     <Checkbox checked={props.selected.indexOf(x.id) > -1} onChange={(e) => {
                         let ix = props.selected.indexOf(x.id) 
                         let s = props.selected.slice();
@@ -31,3 +31,5 @@ export const TeamCard : React.FC<TeamCardProps> = (props) => {
         </List>
     )
 }
+
+export default TeamCard;
