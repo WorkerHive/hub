@@ -100,9 +100,6 @@ export class  WorkhubFS {
             console.log("Peer found", info)
         });
 
-        setInterval(async () => {
-            console.log(await this.node?.swarm.peers())
-        }, 1000)
         console.log("Bootstrap nodes", boot)
 
     }
