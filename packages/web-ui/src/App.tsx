@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {Suspense, lazy} from 'react';
 import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
 import {Login} from './views/Login';
 
 import './App.css';
-import { Dashboard } from './views/Dashboard';
+
+const Dashboard = lazy(() => import('./views/Dashboard'));
 
 let Router : any;
 
@@ -27,9 +28,11 @@ function App() {
               const token = localStorage.getItem('token')
               if(token && token.length > 0){
                 return (
+                  <Suspense fallback={(<div>Loading</div>)}>
                       <WorkhubProvider token={token} url={hubUrl || ''}>
                         <Dashboard {...props} />
                       </WorkhubProvider>
+                  </Suspense>
                 )
               }else{
                 return (

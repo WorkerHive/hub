@@ -1,10 +1,13 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const rewireWebpackBundleAnalyzer = require('react-app-rewire-webpack-bundle-analyzer')
+const rewireUglifyjs = require('react-app-rewire-uglifyjs')
+
 const { useBabelRc, override } = require('customize-cra')
 
 module.exports = function (config, env){
     
     if(env == 'production'){
+        config = rewireUglifyjs(config)
         config = rewireWebpackBundleAnalyzer(config, env, {
             analyzerMode: 'static',
             reportFilename: 'report.html'

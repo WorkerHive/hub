@@ -27,7 +27,7 @@ const Fallback = (props : any) => {
     return (<div>Loading {props.reason} ...</div>)
 }
 
-export const Dashboard: React.FC<DashboardProps> = (props) => {
+const Dashboard: React.FC<DashboardProps> = (props) => {
     const [ hub, store, isReady, err ] = useHub()
     return (
         <div className="dashboard-view">
@@ -50,3 +50,5 @@ export const Dashboard: React.FC<DashboardProps> = (props) => {
         </div>        
     )
 }
+
+export default Dashboard;
