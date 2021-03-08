@@ -7,7 +7,7 @@ import CalendarDialog from '../../../components/calendar-dialog';
 import React from "react";
 
 export const CALENDAR_VIEW =  {
-        path: '/dashboard/calendar',
+        path: '/dashboard',
         label: "Calendar",
         data: {
             projects: {

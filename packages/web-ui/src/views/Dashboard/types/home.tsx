@@ -5,7 +5,7 @@ import { Calendar, ShortcutLinks } from "@workerhive/react-ui";
 import React from "react";
 
 export const HOME_VIEW = {
-    path: '/dashboard/',
+    path: '/dashboard/home',
     label: 'Home',
     data: {
         schedule: {

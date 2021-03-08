@@ -34,15 +34,15 @@ export interface SidebarProps {
 export function Sidebar(props : SidebarProps){
   const [ minimized, setMinimized ] = React.useState(true);
     const menu = [
-        {
+      /*  {
           icon: <Dashboard />,
           label: "Dashboard",
           path: ""
-        },
+        },*/
         {
           icon: <img src="/assets/calendar1.svg" />, 
           label: "Calendar",
-          path: "/calendar"
+          path: ""
         },
         {
           icon: <img src="/assets/project1.svg" />,
@@ -64,12 +64,12 @@ export function Sidebar(props : SidebarProps){
           label: "Files",
           path: "/files"
         },
-        {
+       /* {
           icon: <img src="/assets/document1.svg" />, 
           label: "Documentation",
           path: '/kb'
         },
-      /*  {
+        {
           icon: <Contacts />,
           label: "Contacts",
           path: "/contacts"

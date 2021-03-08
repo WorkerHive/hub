@@ -53,7 +53,6 @@ export default class QueenDb {
     }
 
     
-
     async createViewUpdater(view_name: string, tables: Array<any>, update_name?: string){
         let functionName = `${update_name || view_name}_mod`;
         let triggerName = `${functionName}_trigger`

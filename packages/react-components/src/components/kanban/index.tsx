@@ -46,33 +46,12 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
     cards = {},
     realtime,
     className,
+    onClick
 }) => {
 
     const [ state, dispatch ] = realtime || useReducer(reducer, cards)
 
-/*
-    const reorder = (list: Array<any>, startIndex: number, endIndex: number) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
 
-        return result;
-    };
-
-    const move = (source: Array<any>, destination: Array<any>, droppableSource: DraggableLocation, droppableDestination: DraggableLocation) => {
-        const sourceClone = Array.from(source);
-        const destClone = Array.from(destination);
-        const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-        destClone.splice(droppableDestination.index, 0, removed);
-
-        const result: any = {};
-        result[droppableSource.droppableId] = sourceClone;
-        result[droppableDestination.droppableId] = destClone;
-
-        return result;
-    };
-*/
     const getItemStyle = (isDragging: boolean, dragStyle: any) => {
         return {
             userSelect: 'none',
@@ -82,44 +61,7 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
             ...dragStyle
         }
     }
-/*
-    const getColumns = () => {
-        const cols = columns.map((col: any) => {
-            let cards: Array<any> = [];
-            if (col.status) {
-                cards = graph.nodes.filter((a) => {
-                    return a.data.status == col.status
-                }) || []
-            } else if (typeof (col.numParents) == "number") {
-                cards = graph.nodes.filter((node) => {
-                    return graph.links.filter((link) => link.target == node.id).length <= col.numParents
-                }) || []
-            }
 
-            return {
-                ...col,
-                cards: cards.filter((a: any) => {
-                    if (!selfish) return true;
-                    if (selfish) return (a.members || []).indexOf(user.id) > -1
-                }).sort((a: any, b: any) => {
-
-                    if (!(a.data && a.data.dueDate)) a.data.dueDate = Infinity;
-                    if (!(b.data && b.data.dueDate)) b.data.dueDate = Infinity
-
-                    return a.data.dueDate - b.data.dueDate
-                }).map((x: any) => {
-                    let parents = graph.links.filter((a) => a.target == x.id).map((y) => graph.nodes.filter((a) => a.id == y.source)[0])
-                    return {
-                        ...x,
-                        title: x.data.label,
-                        description: parents.length > 0 && parents[0].data.label,
-                    }
-                })
-            }
-        })
-        console.log(cols);
-        return cols;
-    }*/
 
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
@@ -148,14 +90,14 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
 
     }
 
-    const addCard = (colId: string) => {
+   /* const addCard = (colId: string) => {
   //      if(!(realtime ? cards.get(colId) : cards[colId])) realtime ? cards.set(colId, []) : cards[colId] = [];
 //        (realtime ? cards.get(colId) : cards[colId]).push({ id: v4(), draft: true });
 
         dispatch({type: 'ADD_CARD', column: colId, card: {id: v4(), draft: true}})
 
        // _onChange({ value: realtime ? cards.toJSON() : cards })
-    }
+    }*/
 
     const changeCard = (colId: string, card: number, data: any) => {
         dispatch({type: 'UPDATE_CARD', column: colId, card: card, data: data})
@@ -193,6 +135,7 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
                 key={`r-${colId}-${index}`}>
                 {(provided, snapshot) => (
                     <div
+                        onClick={() => {if(onClick) onClick({item: {...row, column: colId}})}}
                         className="kanban-row"
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -229,7 +172,8 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
                                         {(state[column.id] || []).map((row: any, index: number) => renderCard(row, column.id, index))}
                                     </div>
                                     <AddCard onClick={() => {
-                                        addCard(column.id)
+                                        if(onClick) onClick({item: {column: column.id, draft: false, title: '', description: ''}})
+                                        //if(addCard) addCard(column.id)
                                     }} />
                                     {provided.placeholder}
                                 </div>
@@ -243,95 +187,6 @@ export const GraphKanban: React.FC<GraphKanbanProps> = ({
     )
 }
 
-/*this
-
- <Board
-            draggable
-            editable
-            onCardClick={(clicked: any) => console.log(clicked)}
-            data={{
-                lanes: [
-                    {
-                        id: 'lane1',
-                        title: 'Planned Tasks',
-                        label: '2/2',
-                        cards: [
-                            {id: 'card-1', title: 'Test Card', label: '30 mins', draggable: true}
-                        ]
-                    },
-                    {
-                        id: 'lane2',
-                        title: 'In Progress',
-                        label: '3/2',
-                        cards: [
-                            {id: 'card-2', title: 'Tester Card', draggable: true}
-                        ]
-                    }
-                ]
-            }}
-            onDragStart={(evt: any) => console.log("Drag start", evt)}
-            onDragEnd={(evt: any) => console.log("Drag end", evt)}
-            renderCard={(row : any) => {
-                return (
-                    <div>
-                        {row.name}    
-                    </div>
-                )
-            }}
-        
-        />
-            
-
-allowAddColumn={allowAddColumn}
-            allowAddCard={allowAddCard}
-            renderCard={(card : any) => {
-                return (
-                    <div onClick={() => {
-                        if(onClick){
-                            onClick({item: card})
-                        }
-                    }} className="react-kanban-card">
-                        <div className="react-kanban-card__title">
-                            {card.title}
-
-                        </div>
-                        {card.data.dueDate != Infinity && <div style={{textAlign: 'left'}}>
-                                ETA: {moment(new Date(card.data.dueDate * 1000)).format('DD/MM/yyyy')}
-                            </div>}
-                        <div>
-                            {card.description}
-                        </div>
-                        <TeamCircles members={(!Array.isArray(card.members) && typeof(card.members) == "object") ? [] : card.members || []} />
-
-                    </div>
-                )
-            }}
-            onCardDragEnd={(card : any, source : any, destination : any) => {
-                console.log(source, destination)
-                let cols = columns.slice()
-
-                let fromIx = cols.map((x) => x.id).indexOf(source.fromColumnId);
-                let toIx = cols.map((x) => x.id).indexOf(destination.toColumnId)
-
-                let spliced = cols[fromIx].cards.splice(source.fromPosition, 1)
-                cols[toIx].cards.splice(destination.toPosition, 0, spliced[0])
-
-
-                if(onStatusChange) onStatusChange({card: card, status: template.filter((a) => a.id == destination.toColumnId)[0].status})
-                if(onChange) onChange({value: cols})
-                setColumns(cols)
-            }}
-            onColumnDragEnd={(_obj : any, source : any, destination : any) => {
-                let cols = columns.slice()
-
-                let spliced = cols.splice(source.fromPosition, 1)[0]
-                cols.splice(destination.toPosition, 0, spliced)
-                //if(onChange) onChange(cols)
-                //setColumns(cols)
-            }}
-            children={{columns: getColumns()}} />
-
-*/
 export const StyledKanban = styled(GraphKanban)`
     flex: 1;
     display: flex;

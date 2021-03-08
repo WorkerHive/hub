@@ -1,5 +1,6 @@
 import { Client } from "pg";
 import { QType } from "./graph2sql";
+import cron from 'node-cron';
 
 export class Nectar {
     private definition: QType;
@@ -42,20 +43,36 @@ export class Nectar {
     }
 
     async init(){
+
+        //TODO make materialized view and cache time optional
+
         let dropQ = `
             DROP FOREIGN TABLE IF EXISTS ${this.tableName}
         `
 
       //  await this.client.query(dropQ);
 
-        let q = `
-            CREATE OR REPLACE VIEW public.${this.tableName}
+      //CREATE OR REPLACE - old
+
+        let constructionQuery = `
+            CREATE MATERIALIZED VIEW IF NOT EXISTS public.${this.tableName}
             AS SELECT 
                 ${this.serverFields}
             FROM "${this.serverName}"."${this.serverTable}"
         `        
-        console.log("Nectar replacement", q)
-        await this.client.query(q)
+
+        let refreshQuery = `
+            REFRESH MATERIALIZED VIEW public.${this.tableName}
+        `
+
+        console.log("Nectar Construction", constructionQuery)
+        await this.client.query(constructionQuery)
+        
+        //Default refresh of 10 minutes
+        cron.schedule('*/10 * * * *', async () => {
+            console.log(`CRON: Refreshing ${this.tableName}`)
+            await this.client.query(refreshQuery)
+        })
 //        console.log(q)
     }
 }

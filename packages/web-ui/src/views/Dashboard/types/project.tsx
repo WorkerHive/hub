@@ -7,6 +7,7 @@ import * as Y from 'yjs';
 import KanbanDialog from '../../../components/kanban-dialog';
 import { GraphKanban, Header, MoreMenu, MutableDialog, SearchTable } from "@workerhive/react-ui";
 import React from "react";
+import { v4 } from 'uuid';
 import { isEqual } from "lodash";
 
 
@@ -42,8 +43,10 @@ export const PROJECT_DRILLDOWN = {
                
                 return ((props) => {
 
-                    console.log("Component rendered")
-                     const [ cols, setCols ] = React.useState<Array<any>>([
+                    const [ selected, setSelected ] = React.useState<any>(null)
+                    const [ modalOpen, openModal ] = React.useState<boolean>(false);
+
+                    const [ cols, setCols ] = React.useState<Array<any>>([
                                 {id: 'backlog', title: 'Backlog', status: 'to-do', rows:[]},
                                 {id: 'in-progress', title: 'In Progress', status: 'in-progress', rows:[]},
                                 {id: 'review', title: 'Review', status: 'review', rows:[]},
@@ -59,6 +62,9 @@ export const PROJECT_DRILLDOWN = {
                           
                           switch(action.type){
                               case 'ADD_CARD':
+                                  if(!action.card.id) action.card.id = v4();
+                                  if(action.card.column) delete action.card.column;
+
                                   let column = project.get(action.column);
                                   if(column === undefined){
                                       column = new Y.Array();
@@ -74,12 +80,23 @@ export const PROJECT_DRILLDOWN = {
 
                                   return project.toJSON()
                                 case 'UPDATE_CARD':
-                                    console.log("Update card", action)
-                                    Object.keys(action.data).map((x) => {
-                                        project.get(action.column)?.get(action.card).set(x, action.data[x]);
-                                    })
+                                    let col = project.get(action.column)
+                                    let card_ix : number = typeof(action.card) === 'number' ? action.card : col?.toArray().map((x) => x.toJSON().id).indexOf(action.card)
+                                    console.log("Update card", action, card_ix, col)
+                                    if(card_ix > -1){
+                                        Object.keys(action.data).map((x) => {
+                                            col?.get(card_ix).set(x, action.data[x]);
+                                        })
+                                    }
                         
                                   return project.toJSON()
+                                case 'REMOVE_CARD':
+                                    let cols = project.get(action.column)
+                                    let ix : number = typeof(action.card) === 'number' ? action.card : cols?.toArray().map((x) => x.toJSON().id).indexOf(action.card)
+                                    if(ix > -1){
+                                        cols?.delete(ix);
+                                    }
+                                    return project.toJSON();
                                 case 'MOVE_CARD':
                                     let mc = project.get(action.startColumn)?.get(action.source.index)
 
@@ -124,13 +141,44 @@ export const PROJECT_DRILLDOWN = {
                     return (
                         <Paper style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
                             <KanbanDialog
-                                title=""
-                                open={true}
+                                data={selected}
+                                onArchive={() => {
+                                    mgmt[1]({type: 'REMOVE_CARD', column: selected.column, card: selected.id})
+                                    openModal(false);
+                                }}
+                                onClose={() => {
+                                    openModal(false)
+                                }}
+                                onSave={(data) => {
+                                    let column = data.column;
+                                    let card = data.id;
+                                    delete data.id;
+                                    delete data.column
+
+                                    console.log('onSave', data, card, column)
+                                    const dispatch = mgmt[1];
+
+                                    if(card){
+                                     dispatch({type: 'UPDATE_CARD', column: column, card: card, data: data})
+                                     console.log("Save card ", data)
+                                     openModal(false);
+                                    }else{
+                                        console.log("Add card", data)
+                                        dispatch({type: 'ADD_CARD', column: column, card: data})
+                                        openModal(false);
+                                    }
+                                }}
+                                open={modalOpen}
                                  />
                             <GraphKanban 
                                 template={cols}
                                 realtime={mgmt}
                                 cards={project.toJSON()}
+                                onClick={({item}) => {
+                                    console.log("Clicked", item)
+                                    openModal(true)
+                                    setSelected(item)
+                                }}
                                 onChange={({value}) => {
                                     let v = value;
                                     if(value instanceof Y.Map){
