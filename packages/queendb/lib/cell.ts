@@ -12,6 +12,7 @@ import { QType } from "./graph2sql";
 import { Nectar } from "./nectar";
 import { Pollen } from "./pollen";
 import { v4 } from 'uuid';
+import { query } from "express";
 export interface CellContent{
     name: string; //table name
     foreign: boolean; //updatable
@@ -146,8 +147,24 @@ export class Cell {
     }
 
     async deleteContents(where?: any){
-        let updateTables : any = {};
+        let values : any[] = [];
 
+        let query = `
+            DELETE FROM ${this.cellName}`
+
+        if(where && Object.keys(where).length > 0){
+            query += " WHERE "
+            Object.keys(where).forEach((key, ix) => {
+                const EOL = ix < Object.keys(where).length - 1 ? ' AND ': ''
+
+                values.push(where[key])
+
+                query += `${key}=$${ix}::${this.defintion.fields.find((a) => a.name == key)?.type} ${EOL}`
+            })
+        }
+        console.log(query)
+
+        await this.client.query({text: query, values: values})
       /*  await Promise.all(Object.keys(update).map(async (update_field) => {
             if(this.fieldMap[update_field].indexOf('nectar_') < 0){
                 updateTables[this.fieldMap[update_field]] = {
@@ -156,6 +173,7 @@ export class Cell {
                 } 
             }
         }))*/
+        return true;
     }
 
     async updateContents(update: any, where?: any){
