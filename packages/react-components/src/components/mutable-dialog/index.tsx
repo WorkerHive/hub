@@ -59,6 +59,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   }
 
   const onSave = () => {
+    setData({})
     if (props.onSave) props.onSave({item: data})
   }
 

@@ -61,7 +61,7 @@ export const SearchTable : React.FC<SearchTableProps> = ({
                         }
                         return true;
                     }).map((x, ix) => (
-                    <ListItem key={ix}>
+                    <ListItem dense className="grid-list__item" key={ix}>
                         {renderItem({item: x})}
                     </ListItem>
                     ))}
@@ -81,6 +81,10 @@ export const StyledSearchTable = styled(SearchTable)`
   .grid-list{
       overflow-y: auto;
       flex: 1;
+  }
+
+  .grid-list .grid-list__item:hover{
+    background: #dfdfdf;
   }
 
   .options-bar{
