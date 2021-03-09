@@ -190,6 +190,12 @@ export default class QueenDb {
         return result && result.length > 0 ? result[0] : {};
     }
 
+    async deleteCell(cell_name: string, query: any){
+        const cell = this.getCell(cell_name);
+        const result = await cell?.deleteContents(query);
+        console.log("Delete result", result)
+        return result;
+    }
     async updateCell(cell_name: string, query: any, update: any){
         const cell = this.getCell(cell_name);
         const result = await cell?.updateContents(update, query);

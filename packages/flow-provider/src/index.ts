@@ -114,9 +114,7 @@ export class FlowConnector extends BaseConnector{
     }
 
     async delete(type : string, query: object) : Promise<boolean> {
-        let flowDef = this.flowDefs[type] || {};
-        let objectType = this.schemaFactory.getOTC(type)
-        return true;
+        return await this.db.deleteCell(type, query)
     }
 
     async read(type, query){

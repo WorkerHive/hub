@@ -134,6 +134,7 @@ export class Cell {
         }
         
     }
+    
 
     async addContents(object: any){
         //Add new row to pollinator and join with nectar if needed.
@@ -142,6 +143,19 @@ export class Cell {
             object[idField.name] = v4();
         }
         return await this.updateContents(object, {})
+    }
+
+    async deleteContents(where?: any){
+        let updateTables : any = {};
+
+      /*  await Promise.all(Object.keys(update).map(async (update_field) => {
+            if(this.fieldMap[update_field].indexOf('nectar_') < 0){
+                updateTables[this.fieldMap[update_field]] = {
+                    ...updateTables[this.fieldMap[update_field]],
+                    [update_field]: update[update_field]
+                } 
+            }
+        }))*/
     }
 
     async updateContents(update: any, where?: any){

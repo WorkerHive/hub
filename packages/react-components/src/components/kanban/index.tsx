@@ -3,7 +3,6 @@ import React, { useReducer } from 'react';
 import styled from 'styled-components'
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
 import { AddCard } from './add-card';
-import { v4 } from 'uuid';
 import { TextField, Typography } from '@material-ui/core';
 import { isEqual } from 'lodash';
 
