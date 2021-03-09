@@ -1,7 +1,8 @@
 import React from 'react';
 import { List,ListItem,ListItemIcon, ListItemText, Paper } from '@material-ui/core'
 import styled from 'styled-components'
-import { ChevronLeft, Description, ChevronRight, CreateNewFolder, Delete, Edit, GetApp, Publish } from '@material-ui/icons';
+import { Sync, ChevronLeft, Description, ChevronRight, CreateNewFolder, Delete, Edit, GetApp, Publish, CloudUpload } from '@material-ui/icons';
+import { StyledFileDrop as FileDrop } from '../file-drop';
 
 
 export interface FileBrowserProps {
@@ -29,7 +30,8 @@ export interface FileBrowserProps {
 
 export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
     files = [],
-    className
+    className,
+    onFileUpload = ({files}) => console.log("Dropped files", files)
 }) => {
 
     const [ selected, setSelected ] = React.useState<any>([])
@@ -44,6 +46,11 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
         }
         setSelected(s)
     }
+
+    const dropFiles = ({files}: {files: File[]}) => {
+        console.log(files)
+        onFileUpload({files});
+    }
     return (
         <Paper className={className}>
             <div className={"file-browser__header"}>
@@ -55,23 +62,33 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                     <CreateNewFolder />
                     <Publish />
                     <div className="vert-divider" />
-                    <Edit />
-                    <GetApp />
+                    <Edit className={selected.length == 1 ? '': 'disabled'} />
+                    <GetApp className={selected.length > 0 ? '':'disabled'} />
                     <Delete />
                 </div>
             </div>
-            <List className="file-browser__list">
-                {files.map((x) => (
-                    <ListItem className={selected.map((x: any) => x.id).indexOf(x.id) > -1 ? 'selected': ''} button dense onClick={() => selectItem(x)}>
-                        <ListItemIcon style={{color: x.pinned ? 'green' : 'blue'}}>
-                            <Description />
-                        </ListItemIcon>
-                        <ListItemText>
-                            {x.filename}
-                        </ListItemText>
-                    </ListItem>
-                ))}
-            </List>
+            <FileDrop onDrop={dropFiles}>
+                {(dragActive : boolean) => (
+                    <>
+                    {dragActive && <div className="ipfs-loader">
+                        <CloudUpload />
+                        <span>Drop files to upload</span>    
+                    </div>}
+                    <List className="file-browser__list">
+                        {files.map((x) => (
+                            <ListItem className={selected.map((x: any) => x.id).indexOf(x.id) > -1 ? 'selected': ''} button dense onClick={() => selectItem(x)}>
+                                <ListItemIcon style={{color: x.pinned ? 'green' : 'blue'}}>
+                                    {x.pinned ? <Description /> : <Sync />}
+                                </ListItemIcon>
+                                <ListItemText>
+                                    {x.filename}
+                                </ListItemText>
+                            </ListItem>
+                        ))}
+                    </List>
+                    </>
+                )}
+            </FileDrop>
         </Paper>
     )
 }
@@ -80,6 +97,11 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  .file-browser__list {
+      flex: 1;
+      position: relative;
+  }
 
   .file-browser__list .selected{
       background: rgb(44, 152, 240);
@@ -105,6 +127,11 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
       border-radius: 3px;
   }
 
+  .file-browser__header svg.disabled{
+      pointer-events: none;
+      color: gray;
+  }
+
   .header-actions svg:hover, .header-info svg:hover{
       background: #dfdfdf;
   }
@@ -115,6 +142,9 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   }
 
   .ipfs-loader{
+      background: rgba(255, 255, 255, 0.8);
+      width: 100%;
+      z-index: 9;
     position: absolute;
     left: 0;
     right: 0;

@@ -3,6 +3,7 @@ import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
 import {Login} from './views/Login';
+import { PageLoader } from './components/page-loader';
 
 import './App.css';
 
@@ -28,11 +29,13 @@ function App() {
               const token = localStorage.getItem('token')
               if(token && token.length > 0){
                 return (
-                  <Suspense fallback={(<div>Loading</div>)}>
+                <Suspense fallback={
+                  (<PageLoader size={42} text={"Loading the hub..."} />)
+                  }>
                       <WorkhubProvider token={token} url={hubUrl || ''}>
                         <Dashboard {...props} />
                       </WorkhubProvider>
-                  </Suspense>
+                </Suspense>
                 )
               }else{
                 return (

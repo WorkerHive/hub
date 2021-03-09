@@ -36,6 +36,7 @@ export const StyledFileDrop = styled(FileDrop)`
     min-height: 100px;
     flex: 1;
     position: relative;
+    display: flex;
 
     .file-drop__inner{
         position: absolute;
@@ -44,7 +45,5 @@ export const StyledFileDrop = styled(FileDrop)`
         right: 0;
         bottom: 0;
         display: flex;
-        align-items: center;
-        justify-content: center;
     }
 `

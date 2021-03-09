@@ -13,6 +13,7 @@ import { TypeEditor } from '../TypeEditor';
 
 
 import './index.css';
+import { PageLoader } from 'web-ui/src/components/page-loader';
 
 
 const TypeMap = lazy(() => import('./type-map'))
@@ -33,7 +34,7 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
         <div className="dashboard-view">
             <Sidebar />
             {hub != null && isReady ?(
-                <Suspense fallback={<Fallback reason="Components"/>}>
+                <Suspense fallback={(<PageLoader size={18} text={"Loading page..."} />)}>
                 <div className="dashboard-body">
                     <Switch>
                         <Route path={`${props.match.url}/workflows`} exact component={Workflows} />

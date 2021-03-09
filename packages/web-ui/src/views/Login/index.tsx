@@ -2,6 +2,7 @@ import { Divider, Button, Paper, TextField, Typography } from '@material-ui/core
 import React from 'react';
 import { authenticate, forgotPassword } from '../../actions/auth'
 import { Link } from 'react-router-dom';
+import SyncLoader from 'react-spinners/SyncLoader'
 import './index.css';
 
 export interface LoginProps{
@@ -10,6 +11,9 @@ export interface LoginProps{
 }
 
 export const Login = (props : LoginProps) => {
+
+    const [ loginError, setLoginError] = React.useState<boolean>(false)
+    const [ loading, setLoading ] =  React.useState<boolean>(false)
 
     const [ forgotError, setForgotError] = React.useState<boolean>(false)
     
@@ -21,11 +25,15 @@ export const Login = (props : LoginProps) => {
     const [password, setPassword] = React.useState<string>('');
 
     const login = () => {
+        setLoading(true)
+        setLoginError(false);
         authenticate(username, password).then((data: any) => {
+            setLoading(false)
             if(data.token){
                 localStorage.setItem('token', data.token) //Change this to reducer
                 props.history.push(`/dashboard`)
             }else{
+                setLoginError(Boolean(data.error))
                 console.log(data.error)
             }
            
@@ -65,15 +73,17 @@ export const Login = (props : LoginProps) => {
                             }}
                             style={{marginTop: 8}} 
                             color="primary" 
-                            variant="contained">Submit</Button>
+                            variant="contained">{loading ? <SyncLoader color={'#079692'} size={10} loading /> : "Submit"}</Button>
                     </>
                 ) : (
                     <>
                 <TextField 
+                    error={loginError}
                     label="Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)} />
                 <TextField 
+                    error={loginError}
                     value={password}
                     onKeyDown={(e) => {
                         if(e.which === 13 || e.keyCode === 13){
