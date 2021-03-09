@@ -159,7 +159,7 @@ export class Cell {
 
                 values.push(where[key])
 
-                query += `${key}=$${ix}::${this.defintion.fields.find((a) => a.name == key)?.type} ${EOL}`
+                query += `${key}=$${ix + 1}::${this.defintion.fields.find((a) => a.name == key)?.type} ${EOL}`
             })
         }
         console.log(query)
