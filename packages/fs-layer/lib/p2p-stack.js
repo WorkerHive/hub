@@ -39,7 +39,7 @@ if(ENVIRONMENT == "NODE") {
     wrtcTransport.wrtc = wrtc
 }
 
-export const P2PStack = (swarmKey) => {
+const P2PStack = (swarmKey) => {
     return {
         modules: {
             transport: ENVIRONMENT == "NODE" ? [TCP, WebRTCStar] : [WebRTCStar],
@@ -54,4 +54,8 @@ export const P2PStack = (swarmKey) => {
             peerDiscovery: peerDiscovery
         }
     }
+}
+
+module.exports = { 
+    P2PStack
 }
