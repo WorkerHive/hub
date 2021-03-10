@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/parsers",
-  "version": "1.0.0",
+  "version": "2.1.16",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
