@@ -68,13 +68,13 @@ export function Sidebar(props : SidebarProps){
           icon: <img src="/assets/document1.svg" />, 
           label: "Documentation",
           path: '/kb'
-        },
+        },*/
         {
           icon: <Contacts />,
           label: "Contacts",
           path: "/contacts"
         },
-        {
+        /*{
           icon: <EmojiNature />,
           label: "Workflows",
           path: '/workflows'

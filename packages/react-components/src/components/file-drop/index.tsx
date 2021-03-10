@@ -9,6 +9,7 @@ export interface FileDropProps {
   children?: any;
   className?: string;
   border?: boolean;
+  accept?: Array<string>
 }
 
 export const FileDrop : React.FC<FileDropProps> = (props) => {
@@ -18,7 +19,7 @@ export const FileDrop : React.FC<FileDropProps> = (props) => {
         if(props.onDrop) props.onDrop({files: acceptedFiles})
     }, [])
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, noClick: props.noClick || false})
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, noClick: props.noClick || false, accept: props.accept && props.accept?.join(', ')})
 
     return (
         <div className={props.className} {...getRootProps()}>

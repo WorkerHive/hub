@@ -62,6 +62,7 @@
     "bootstrap": "lerna bootstrap --ignore-prepublish",
     "boot": "lerna exec yarn && lerna link",
     "changed": "lerna changed",
+    "build:parsers": "cd packages/parsers && npm run build",
     "build:react-components": "cd packages/react-components && npm run prepublish",
     "build:web-client": "cd packages/graph-client && npm run build",
     "build:web-ui": "cd packages/web-ui && npm run build",

@@ -52,14 +52,20 @@ const mqLayer = new MQ({
 
             console.log("Pinning", cid)
 
-            let cid2 = await fsLayer.pinFile(cid)
+            let cid2 = await fsLayer.pinFile(cid, 15 * 60 * 1000)
 
-            console.log("Pinned", cid2)
+            
+            if(cid2){
+                console.log("Pinned", cid2)
+                let res = await connector.update('File', {id: id}, {pinned: true})
 
-            let res = await connector.update('File', {id: id}, {pinned: true})
-
-            console.log("Pinning result", res)
-            return res;
+                console.log("Pinning result", res)
+        
+                return res;
+            }else{
+                console.log("Couldnt pin, trying again soon")
+                return null;
+            }
         }).then(() => {
             console.log("Watching ipfs-pinning")
         })

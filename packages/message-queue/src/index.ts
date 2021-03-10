@@ -35,9 +35,11 @@ export default class MessageQueue {
             if(msg !== null){
                 try{
                     let result = await fn(JSON.parse(msg.content.toString()))
+                    console.log("Pinning result", result)
                     if(result) this.channel?.ack(msg)
                     if(!result) this.channel?.nack(msg)
                 }catch(e){
+                    console.log("Error pinning file", e)
                     this.channel?.nack(msg)
                 }
             }

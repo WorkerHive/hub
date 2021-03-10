@@ -11,6 +11,7 @@
     "@types/node": "^12.0.0",
     "@workerhive/client": "file:../graph-client",
     "@workerhive/hive-flow": "^1.1.5",
+    "@workerhive/parsers": "file:../parsers",
     "@workerhive/react-ui": "file:../react-components",
     "is-electron": "^2.2.0",
     "lodash": "^4.17.20",

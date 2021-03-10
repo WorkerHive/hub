@@ -1,7 +1,8 @@
 import { Fab, Typography } from "@material-ui/core"
 import Add from '@material-ui/icons/Add'
 import Edit from "@material-ui/icons/Edit"
-import { MutableDialog, Header, SearchTable, MoreMenu } from "@workerhive/react-ui"
+import { MSContactCard } from '@workerhive/parsers';
+import { MutableDialog, Header, SearchTable, MoreMenu, FileDrop } from "@workerhive/react-ui"
 
 import React from "react"
 
@@ -64,6 +65,30 @@ export const CONTACT_VIEW = {
                                     }}
                                     onClose={() => modalOpen(false)}
                                      open={open} />
+                            <FileDrop accept={[".contact"]} noClick onDrop={({files}) => {
+                                if(files.length == 1){
+                                    var fr = new FileReader();
+                                    fr.onload = (e) => {
+                                        let data = e.target?.result;
+                                        if(data){
+                                            let contact = new MSContactCard(data.toString());
+                                            
+                                            setSelected({
+                                                name: contact?.names && contact?.names[0].formattedName,
+                                                email: contact?.emails && contact?.emails[0].address
+                                            })
+
+                                            modalOpen(true);
+
+                                            console.log("Contact", contact)
+                                        }
+                                    }
+
+                                    fr.readAsText(files[0])
+                                }
+                                console.log("Contact files", files)
+                            }}>
+                                {(isDragActive: boolean) => (
                                 <SearchTable renderItem={({item}: any) => (
                                     <div style={{display: 'flex', flex: 1, alignItems: 'center'}}>
                                         <Typography style={{flex: 1}}>{item.name}</Typography>
@@ -75,6 +100,8 @@ export const CONTACT_VIEW = {
                                         ]}/>
                                     </div>
                                 )} data={data.contacts || []} />
+                                )}
+                            </FileDrop>
                                 <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
                                 </Fab>

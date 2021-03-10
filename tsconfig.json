@@ -16,6 +16,7 @@
             "@workerhive/react-ui": ["react-components/src"],
             "@workerhive/client": ["graph-client/src"],
             "@workerhive/queendb": ["queendb/lib"],
+            "@workerhive/parsers": ["parsers/src"],
             "@workerhive/*": ["*/src"],
         }
     }

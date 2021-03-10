@@ -114,8 +114,10 @@ export class  WorkhubFS {
         return content;
     }
 
-    async pinFile(cid: string){
-        return await this.node?.pin.add(new CID(cid))
+    async pinFile(cid: string, timeout_ms?: number){
+        return await this.node?.pin.add(new CID(cid), {
+            timeout: timeout_ms
+        })
     }
 
     async addFile(file: File){

@@ -1,7 +1,7 @@
 import React from 'react';
-import { List,ListItem,ListItemIcon, ListItemText, Paper } from '@material-ui/core'
+import { IconButton, List,ListItem,ListItemIcon, ListItemText, Paper, Typography } from '@material-ui/core'
 import styled from 'styled-components'
-import { Sync, ChevronLeft, Description, ChevronRight, CreateNewFolder, Delete, Edit, GetApp, Publish, CloudUpload } from '@material-ui/icons';
+import { Sync, ChevronLeft, Description, ChevronRight, CreateNewFolder, Delete, Edit, GetApp, Publish, CloudUpload, ArrowDownward, OfflinePin } from '@material-ui/icons';
 import { StyledFileDrop as FileDrop } from '../file-drop';
 
 
@@ -18,7 +18,13 @@ export interface FileBrowserProps {
     title?: string;
     className?: string;
     loading?: boolean;
+
+    selected?: Array<any>;
+    onSelect?: (args: {selected: Array<any>}) => void;
+
     onConvertFiles?: (args: {files: Array<any>}) => void;
+
+  uploading?: Array<{filename: string, status: string}>;
   onUploadFiles?: () => void;
   onFileOpen?: (args: {target: object}) => void;
   onFileUpload?: (args: {files: File[]}) => void;
@@ -29,22 +35,56 @@ export interface FileBrowserProps {
 
 
 export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
+    selected = [],
+    onSelect = ({selected}) => console.log("Selection", selected),
     files = [],
     className,
+    uploading = [{filename: 'Test file', status: 'uploading'}, {filename: "Tester", status: 'uploading'}],
     onFileUpload = ({files}) => console.log("Dropped files", files)
 }) => {
 
-    const [ selected, setSelected ] = React.useState<any>([])
+    const [ lastSelect, setLastSelect ] = React.useState<number>(-1)
 
-    const selectItem = (item: any) => {
+
+    //TODO rethink
+    const selectItem = (item: any, item_ix: number, event: React.MouseEvent) => {
+        let shift = event.shiftKey;
+        let ctrl = event.ctrlKey;
         const ix = selected.map((x: any) => x.id).indexOf(item.id) 
         let s = selected.slice()
-        if(ix > -1){
-            s.splice(ix, 1)
+        
+        if(ctrl){
+            //Ctrl selection
+
+            if(ix > -1){
+                s.splice(ix, 1)
+            }else{
+                setLastSelect(item_ix)
+                s.push(item)
+            }
+        }else if(shift){
+            //Shift click selection
+            if(lastSelect < 0){
+                setLastSelect(item_ix)
+                s = [item]
+            }else{
+                if(item_ix < lastSelect){
+                    s = files.slice(item_ix, lastSelect + 1)
+                }else{
+                    s = files.slice(lastSelect, item_ix + 1)
+                }
+            }
         }else{
-            s.push(item)
+            //Click selection
+            
+            if(s.length > 1 || ix < 0){
+                s = [item]
+                setLastSelect(item_ix)
+            }else{
+                s.splice(ix, 1)
+            }
         }
-        setSelected(s)
+        onSelect({selected:s})
     }
 
     const dropFiles = ({files}: {files: File[]}) => {
@@ -67,7 +107,7 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                     <Delete />
                 </div>
             </div>
-            <FileDrop onDrop={dropFiles}>
+            <FileDrop noClick onDrop={dropFiles}>
                 {(dragActive : boolean) => (
                     <>
                     {dragActive && <div className="ipfs-loader">
@@ -75,8 +115,10 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                         <span>Drop files to upload</span>    
                     </div>}
                     <List className="file-browser__list">
-                        {files.map((x) => (
-                            <ListItem className={selected.map((x: any) => x.id).indexOf(x.id) > -1 ? 'selected': ''} button dense onClick={() => selectItem(x)}>
+                        {files.map((x, ix) => (
+                            <ListItem className={selected.map((x: any) => x.id).indexOf(x.id) > -1 ? 'selected': ''} button dense onClick={(e) => {
+                                selectItem(x, ix, e)
+                            }}>
                                 <ListItemIcon style={{color: x.pinned ? 'green' : 'blue'}}>
                                     {x.pinned ? <Description /> : <Sync />}
                                 </ListItemIcon>
@@ -89,6 +131,27 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                     </>
                 )}
             </FileDrop>
+            {uploading.length > 0 &&
+
+            <Paper elevation={4} className="file-upload">
+                <div className="file-upload__header">
+                    <Typography variant="subtitle1" style={{fontWeight: 'bold', color: 'white'}}>Uploading</Typography>
+                    <IconButton size="small">
+                        <ArrowDownward style={{color: 'white'}} />
+                    </IconButton>
+                </div>
+                <List>
+                    {uploading.map((upload) => (
+                    <ListItem>
+                        <ListItemIcon>
+                            {upload.status == 'uploading' && <Sync />}
+                            {upload.status == 'uploaded' && <OfflinePin />}
+                        </ListItemIcon>
+                        {upload.filename}
+                    </ListItem>
+                    ))}
+                </List>
+            </Paper>}
         </Paper>
     )
 }
@@ -97,6 +160,23 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative;
+
+  .file-upload{
+      position: absolute;
+      min-width: 200px;
+      max-height: 250px;
+      right: 4px;
+      bottom: 4px;
+  }
+
+  .file-upload__header{
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      justify-content: space-between;
+      background: rgb(44, 152, 240);
+  }
 
   .file-browser__list {
       flex: 1;
