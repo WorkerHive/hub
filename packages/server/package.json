@@ -1,5 +1,5 @@
 {
-  "name": "workhub-server",
+  "name": "@workerhive/server",
   "version": "2.1.16",
   "main": "index.js",
   "license": "MIT",

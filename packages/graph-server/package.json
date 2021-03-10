@@ -9,7 +9,6 @@
   "scripts": {
     "build": "tsc",
     "build:docs": "typedoc src/index.ts --out docs/",
-    "prepublish": "npm run build && npm run build:docs",
     "example": "ts-node example",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,8 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "@graphql-tools/schema": "^7.1.2",
-    "@workerhive/ipfs": "file:../fs-layer",
-    "@workerhive/mq": "file:../message-queue",
+    "@workerhive/ipfs": "2.1.16",
+    "@workerhive/mq": "2.1.16",
     "@workerhive/pipelines": "^1.0.0",
     "amqplib": "^0.6.0",
     "camel-case": "^4.1.2",

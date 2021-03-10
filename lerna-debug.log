@@ -1,0 +1,542 @@
+0 silly argv {
+0 silly argv   _: [ 'version' ],
+0 silly argv   lernaVersion: '3.22.1',
+0 silly argv   '$0': 'node_modules/.bin/lerna'
+0 silly argv }
+1 notice cli v3.22.1
+2 verbose rootPath /home/workhub/work/hub
+3 info current version 2.1.1
+4 silly isAnythingCommitted
+5 verbose isAnythingCommitted 1
+6 silly currentBranch
+7 verbose currentBranch master
+8 silly remoteBranchExists
+9 silly isBehindUpstream
+10 silly isBehindUpstream master is behind origin/master by 0 commit(s) and ahead by 1
+11 silly hasTags
+12 verbose hasTags true
+13 silly git-describe.sync "v2.0.3-alpha.0-81-gb17808e" => {"lastTagName":"v2.0.3-alpha.0","lastVersion":"v2.0.3-alpha.0","refCount":"81","sha":"b17808e","isDirty":false}
+14 info Looking for changed packages since v2.0.3-alpha.0
+15 info ignoring diff in paths matching [ 'server/**', 'web-ui/**', '*.md' ]
+16 silly checking diff packages/flow-provider
+17 silly found diff in packages/flow-provider/example/index.js
+17 silly found diff in packages/flow-provider/example/package.json
+17 silly found diff in packages/flow-provider/example/yarn-error.log
+17 silly found diff in packages/flow-provider/example/yarn.lock
+17 silly found diff in packages/flow-provider/package-lock.json
+17 silly found diff in packages/flow-provider/package.json
+17 silly found diff in packages/flow-provider/src/adapters/index.ts
+17 silly found diff in packages/flow-provider/src/adapters/mongo/index.ts
+17 silly found diff in packages/flow-provider/src/adapters/mssql/index.ts
+17 silly found diff in packages/flow-provider/src/connectors/flow.ts
+17 silly found diff in packages/flow-provider/src/flow-path/hydration.ts
+17 silly found diff in packages/flow-provider/src/flow-path/index.ts
+17 silly found diff in packages/flow-provider/src/index.ts
+17 silly found diff in packages/flow-provider/src/stores/base.ts
+17 silly found diff in packages/flow-provider/src/stores/index.ts
+17 silly found diff in packages/flow-provider/src/stores/mongo.ts
+17 silly found diff in packages/flow-provider/src/stores/mssql.ts
+17 silly found diff in packages/flow-provider/src/transforms/integration.ts
+17 silly found diff in packages/flow-provider/yarn-error.log
+17 silly found diff in packages/flow-provider/yarn.lock
+18 verbose filtered diff [
+18 verbose filtered diff   'packages/flow-provider/example/index.js',
+18 verbose filtered diff   'packages/flow-provider/example/package.json',
+18 verbose filtered diff   'packages/flow-provider/example/yarn-error.log',
+18 verbose filtered diff   'packages/flow-provider/example/yarn.lock',
+18 verbose filtered diff   'packages/flow-provider/package-lock.json',
+18 verbose filtered diff   'packages/flow-provider/package.json',
+18 verbose filtered diff   'packages/flow-provider/src/adapters/index.ts',
+18 verbose filtered diff   'packages/flow-provider/src/adapters/mongo/index.ts',
+18 verbose filtered diff   'packages/flow-provider/src/adapters/mssql/index.ts',
+18 verbose filtered diff   'packages/flow-provider/src/connectors/flow.ts',
+18 verbose filtered diff   'packages/flow-provider/src/flow-path/hydration.ts',
+18 verbose filtered diff   'packages/flow-provider/src/flow-path/index.ts',
+18 verbose filtered diff   'packages/flow-provider/src/index.ts',
+18 verbose filtered diff   'packages/flow-provider/src/stores/base.ts',
+18 verbose filtered diff   'packages/flow-provider/src/stores/index.ts',
+18 verbose filtered diff   'packages/flow-provider/src/stores/mongo.ts',
+18 verbose filtered diff   'packages/flow-provider/src/stores/mssql.ts',
+18 verbose filtered diff   'packages/flow-provider/src/transforms/integration.ts',
+18 verbose filtered diff   'packages/flow-provider/yarn-error.log',
+18 verbose filtered diff   'packages/flow-provider/yarn.lock'
+18 verbose filtered diff ]
+19 silly checking diff packages/fs-layer
+20 silly found diff in packages/fs-layer/.DS_Store
+20 silly found diff in packages/fs-layer/lib/fs.js
+20 silly found diff in packages/fs-layer/lib/index.ts
+20 silly found diff in packages/fs-layer/lib/p2p-stack.js
+20 silly found diff in packages/fs-layer/lib/queue.ts
+20 silly found diff in packages/fs-layer/package-lock.json
+20 silly found diff in packages/fs-layer/package.json
+20 silly found diff in packages/fs-layer/tsconfig.json
+20 silly found diff in packages/fs-layer/yarn.lock
+21 verbose filtered diff [
+21 verbose filtered diff   'packages/fs-layer/.DS_Store',
+21 verbose filtered diff   'packages/fs-layer/lib/fs.js',
+21 verbose filtered diff   'packages/fs-layer/lib/index.ts',
+21 verbose filtered diff   'packages/fs-layer/lib/p2p-stack.js',
+21 verbose filtered diff   'packages/fs-layer/lib/queue.ts',
+21 verbose filtered diff   'packages/fs-layer/package-lock.json',
+21 verbose filtered diff   'packages/fs-layer/package.json',
+21 verbose filtered diff   'packages/fs-layer/tsconfig.json',
+21 verbose filtered diff   'packages/fs-layer/yarn.lock'
+21 verbose filtered diff ]
+22 silly checking diff packages/graph-client
+23 silly found diff in packages/graph-client/example/.eslintcache
+23 silly found diff in packages/graph-client/example/.gitignore
+23 silly found diff in packages/graph-client/example/README.md
+23 silly found diff in packages/graph-client/example/index.ts
+23 silly found diff in packages/graph-client/example/package.json
+23 silly found diff in packages/graph-client/example/public/favicon.ico
+23 silly found diff in packages/graph-client/example/public/index.html
+23 silly found diff in packages/graph-client/example/public/logo192.png
+23 silly found diff in packages/graph-client/example/public/logo512.png
+23 silly found diff in packages/graph-client/example/public/manifest.json
+23 silly found diff in packages/graph-client/example/public/robots.txt
+23 silly found diff in packages/graph-client/example/src/App.css
+23 silly found diff in packages/graph-client/example/src/App.js
+23 silly found diff in packages/graph-client/example/src/App.test.js
+23 silly found diff in packages/graph-client/example/src/components/test/index.js
+23 silly found diff in packages/graph-client/example/src/index.css
+23 silly found diff in packages/graph-client/example/src/index.js
+23 silly found diff in packages/graph-client/example/src/logo.svg
+23 silly found diff in packages/graph-client/example/src/reportWebVitals.js
+23 silly found diff in packages/graph-client/example/src/setupTests.js
+23 silly found diff in packages/graph-client/example/yarn.lock
+23 silly found diff in packages/graph-client/package-lock.json
+23 silly found diff in packages/graph-client/package.json
+23 silly found diff in packages/graph-client/src/index.tsx
+23 silly found diff in packages/graph-client/src/react.tsx
+23 silly found diff in packages/graph-client/src/store.ts
+23 silly found diff in packages/graph-client/src/upload.ts
+23 silly found diff in packages/graph-client/src/yjs.ts
+23 silly found diff in packages/graph-client/tsconfig.json
+23 silly found diff in packages/graph-client/yarn.lock
+24 verbose filtered diff [
+24 verbose filtered diff   'packages/graph-client/example/.eslintcache',
+24 verbose filtered diff   'packages/graph-client/example/.gitignore',
+24 verbose filtered diff   'packages/graph-client/example/index.ts',
+24 verbose filtered diff   'packages/graph-client/example/package.json',
+24 verbose filtered diff   'packages/graph-client/example/public/favicon.ico',
+24 verbose filtered diff   'packages/graph-client/example/public/index.html',
+24 verbose filtered diff   'packages/graph-client/example/public/logo192.png',
+24 verbose filtered diff   'packages/graph-client/example/public/logo512.png',
+24 verbose filtered diff   'packages/graph-client/example/public/manifest.json',
+24 verbose filtered diff   'packages/graph-client/example/public/robots.txt',
+24 verbose filtered diff   'packages/graph-client/example/src/App.css',
+24 verbose filtered diff   'packages/graph-client/example/src/App.js',
+24 verbose filtered diff   'packages/graph-client/example/src/App.test.js',
+24 verbose filtered diff   'packages/graph-client/example/src/components/test/index.js',
+24 verbose filtered diff   'packages/graph-client/example/src/index.css',
+24 verbose filtered diff   'packages/graph-client/example/src/index.js',
+24 verbose filtered diff   'packages/graph-client/example/src/logo.svg',
+24 verbose filtered diff   'packages/graph-client/example/src/reportWebVitals.js',
+24 verbose filtered diff   'packages/graph-client/example/src/setupTests.js',
+24 verbose filtered diff   'packages/graph-client/example/yarn.lock',
+24 verbose filtered diff   'packages/graph-client/package-lock.json',
+24 verbose filtered diff   'packages/graph-client/package.json',
+24 verbose filtered diff   'packages/graph-client/src/index.tsx',
+24 verbose filtered diff   'packages/graph-client/src/react.tsx',
+24 verbose filtered diff   'packages/graph-client/src/store.ts',
+24 verbose filtered diff   'packages/graph-client/src/upload.ts',
+24 verbose filtered diff   'packages/graph-client/src/yjs.ts',
+24 verbose filtered diff   'packages/graph-client/tsconfig.json',
+24 verbose filtered diff   'packages/graph-client/yarn.lock'
+24 verbose filtered diff ]
+25 silly checking diff packages/graph-server
+26 silly found diff in packages/graph-server/example/index.html
+26 silly found diff in packages/graph-server/example/index.ts
+26 silly found diff in packages/graph-server/example/package.json
+26 silly found diff in packages/graph-server/example/types/calendar.ts
+26 silly found diff in packages/graph-server/example/types/contact.ts
+26 silly found diff in packages/graph-server/example/types/equipment.ts
+26 silly found diff in packages/graph-server/example/types/file.ts
+26 silly found diff in packages/graph-server/example/types/index.ts
+26 silly found diff in packages/graph-server/example/types/integrations.ts
+26 silly found diff in packages/graph-server/example/types/knowledge.ts
+26 silly found diff in packages/graph-server/example/types/project.ts
+26 silly found diff in packages/graph-server/example/types/team.ts
+26 silly found diff in packages/graph-server/example/types/user.ts
+26 silly found diff in packages/graph-server/example/yarn-error.log
+26 silly found diff in packages/graph-server/example/yarn.lock
+26 silly found diff in packages/graph-server/package-lock.json
+26 silly found diff in packages/graph-server/package.json
+26 silly found diff in packages/graph-server/src/directives/crud.ts
+26 silly found diff in packages/graph-server/src/directives/input.ts
+26 silly found diff in packages/graph-server/src/directives/upload.ts
+26 silly found diff in packages/graph-server/src/index.ts
+26 silly found diff in packages/graph-server/src/interfaces/GraphConnector.ts
+26 silly found diff in packages/graph-server/src/interfaces/GraphContext.ts
+26 silly found diff in packages/graph-server/src/registry/type.ts
+26 silly found diff in packages/graph-server/src/utils/index.ts
+27 verbose filtered diff [
+27 verbose filtered diff   'packages/graph-server/example/index.html',
+27 verbose filtered diff   'packages/graph-server/example/index.ts',
+27 verbose filtered diff   'packages/graph-server/example/package.json',
+27 verbose filtered diff   'packages/graph-server/example/types/calendar.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/contact.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/equipment.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/file.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/index.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/integrations.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/knowledge.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/project.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/team.ts',
+27 verbose filtered diff   'packages/graph-server/example/types/user.ts',
+27 verbose filtered diff   'packages/graph-server/example/yarn-error.log',
+27 verbose filtered diff   'packages/graph-server/example/yarn.lock',
+27 verbose filtered diff   'packages/graph-server/package-lock.json',
+27 verbose filtered diff   'packages/graph-server/package.json',
+27 verbose filtered diff   'packages/graph-server/src/directives/crud.ts',
+27 verbose filtered diff   'packages/graph-server/src/directives/input.ts',
+27 verbose filtered diff   'packages/graph-server/src/directives/upload.ts',
+27 verbose filtered diff   'packages/graph-server/src/index.ts',
+27 verbose filtered diff   'packages/graph-server/src/interfaces/GraphConnector.ts',
+27 verbose filtered diff   'packages/graph-server/src/interfaces/GraphContext.ts',
+27 verbose filtered diff   'packages/graph-server/src/registry/type.ts',
+27 verbose filtered diff   'packages/graph-server/src/utils/index.ts'
+27 verbose filtered diff ]
+28 silly checking diff packages/message-queue
+29 silly found diff in packages/message-queue/package-lock.json
+29 silly found diff in packages/message-queue/package.json
+29 silly found diff in packages/message-queue/src/index.ts
+29 silly found diff in packages/message-queue/tsconfig.json
+30 verbose filtered diff [
+30 verbose filtered diff   'packages/message-queue/package-lock.json',
+30 verbose filtered diff   'packages/message-queue/package.json',
+30 verbose filtered diff   'packages/message-queue/src/index.ts',
+30 verbose filtered diff   'packages/message-queue/tsconfig.json'
+30 verbose filtered diff ]
+31 silly checking diff packages/parsers
+32 silly found diff in packages/parsers/package-lock.json
+32 silly found diff in packages/parsers/package.json
+32 silly found diff in packages/parsers/src/index.ts
+32 silly found diff in packages/parsers/src/ms-contact/index.ts
+32 silly found diff in packages/parsers/testz/index.ts
+32 silly found diff in packages/parsers/tsconfig.json
+33 verbose filtered diff [
+33 verbose filtered diff   'packages/parsers/package-lock.json',
+33 verbose filtered diff   'packages/parsers/package.json',
+33 verbose filtered diff   'packages/parsers/src/index.ts',
+33 verbose filtered diff   'packages/parsers/src/ms-contact/index.ts',
+33 verbose filtered diff   'packages/parsers/testz/index.ts',
+33 verbose filtered diff   'packages/parsers/tsconfig.json'
+33 verbose filtered diff ]
+34 silly checking diff packages/queendb
+35 silly found diff in packages/queendb/README.md
+35 silly found diff in packages/queendb/__tests__/queendb.test.js
+35 silly found diff in packages/queendb/lib/cell.ts
+35 silly found diff in packages/queendb/lib/fdw/mssql.ts
+35 silly found diff in packages/queendb/lib/graph2sql.ts
+35 silly found diff in packages/queendb/lib/index.ts
+35 silly found diff in packages/queendb/lib/nectar.ts
+35 silly found diff in packages/queendb/lib/pollen.ts
+35 silly found diff in packages/queendb/package-lock.json
+35 silly found diff in packages/queendb/package.json
+35 silly found diff in packages/queendb/tsconfig.json
+35 silly found diff in packages/queendb/yarn.lock
+36 verbose filtered diff [
+36 verbose filtered diff   'packages/queendb/__tests__/queendb.test.js',
+36 verbose filtered diff   'packages/queendb/lib/cell.ts',
+36 verbose filtered diff   'packages/queendb/lib/fdw/mssql.ts',
+36 verbose filtered diff   'packages/queendb/lib/graph2sql.ts',
+36 verbose filtered diff   'packages/queendb/lib/index.ts',
+36 verbose filtered diff   'packages/queendb/lib/nectar.ts',
+36 verbose filtered diff   'packages/queendb/lib/pollen.ts',
+36 verbose filtered diff   'packages/queendb/package-lock.json',
+36 verbose filtered diff   'packages/queendb/package.json',
+36 verbose filtered diff   'packages/queendb/tsconfig.json',
+36 verbose filtered diff   'packages/queendb/yarn.lock'
+36 verbose filtered diff ]
+37 silly checking diff packages/react-components
+38 silly found diff in packages/react-components/example/README.md
+38 silly found diff in packages/react-components/example/package.json
+38 silly found diff in packages/react-components/example/public/favicon.ico
+38 silly found diff in packages/react-components/example/public/index.html
+38 silly found diff in packages/react-components/example/public/manifest.json
+38 silly found diff in packages/react-components/example/src/App.test.tsx
+38 silly found diff in packages/react-components/example/src/App.tsx
+38 silly found diff in packages/react-components/example/src/index.css
+38 silly found diff in packages/react-components/example/src/index.tsx
+38 silly found diff in packages/react-components/example/src/react-app-env.d.ts
+38 silly found diff in packages/react-components/example/src/setupTests.ts
+38 silly found diff in packages/react-components/example/tsconfig.json
+38 silly found diff in packages/react-components/example/yarn.lock
+38 silly found diff in packages/react-components/package-lock.json
+38 silly found diff in packages/react-components/package.json
+38 silly found diff in packages/react-components/src/components/3d-card/index.tsx
+38 silly found diff in packages/react-components/src/components/accordion-list/index.tsx
+38 silly found diff in packages/react-components/src/components/calendar/TimeGrid.tsx
+38 silly found diff in packages/react-components/src/components/calendar/index.tsx
+38 silly found diff in packages/react-components/src/components/calendar/schedule-week.tsx
+38 silly found diff in packages/react-components/src/components/crud-list/index.tsx
+38 silly found diff in packages/react-components/src/components/crud-tree/branch.tsx
+38 silly found diff in packages/react-components/src/components/crud-tree/index.tsx
+38 silly found diff in packages/react-components/src/components/document-editor/index.tsx
+38 silly found diff in packages/react-components/src/components/file-browser/index.tsx
+38 silly found diff in packages/react-components/src/components/file-browser/old-index.tsx
+38 silly found diff in packages/react-components/src/components/file-drop/index.tsx
+38 silly found diff in packages/react-components/src/components/header/index.tsx
+38 silly found diff in packages/react-components/src/components/kanban/add-card.tsx
+38 silly found diff in packages/react-components/src/components/kanban/index.tsx
+38 silly found diff in packages/react-components/src/components/more-menu/index.tsx
+38 silly found diff in packages/react-components/src/components/mutable-dialog/index.tsx
+38 silly found diff in packages/react-components/src/components/permission-form/index.tsx
+38 silly found diff in packages/react-components/src/components/search-table/index.tsx
+38 silly found diff in packages/react-components/src/components/team-circles/index.tsx
+38 silly found diff in packages/react-components/src/stories/ShortcutLinks.stories.tsx
+38 silly found diff in packages/react-components/yarn-error.log
+38 silly found diff in packages/react-components/yarn.lock
+39 verbose filtered diff [
+39 verbose filtered diff   'packages/react-components/example/package.json',
+39 verbose filtered diff   'packages/react-components/example/public/favicon.ico',
+39 verbose filtered diff   'packages/react-components/example/public/index.html',
+39 verbose filtered diff   'packages/react-components/example/public/manifest.json',
+39 verbose filtered diff   'packages/react-components/example/src/App.test.tsx',
+39 verbose filtered diff   'packages/react-components/example/src/App.tsx',
+39 verbose filtered diff   'packages/react-components/example/src/index.css',
+39 verbose filtered diff   'packages/react-components/example/src/index.tsx',
+39 verbose filtered diff   'packages/react-components/example/src/react-app-env.d.ts',
+39 verbose filtered diff   'packages/react-components/example/src/setupTests.ts',
+39 verbose filtered diff   'packages/react-components/example/tsconfig.json',
+39 verbose filtered diff   'packages/react-components/example/yarn.lock',
+39 verbose filtered diff   'packages/react-components/package-lock.json',
+39 verbose filtered diff   'packages/react-components/package.json',
+39 verbose filtered diff   'packages/react-components/src/components/3d-card/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/accordion-list/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/calendar/TimeGrid.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/calendar/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/calendar/schedule-week.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/crud-list/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/crud-tree/branch.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/crud-tree/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/document-editor/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/file-browser/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/file-browser/old-index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/file-drop/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/header/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/kanban/add-card.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/kanban/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/more-menu/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/mutable-dialog/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/permission-form/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/search-table/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/components/team-circles/index.tsx',
+39 verbose filtered diff   'packages/react-components/src/stories/ShortcutLinks.stories.tsx',
+39 verbose filtered diff   'packages/react-components/yarn-error.log',
+39 verbose filtered diff   'packages/react-components/yarn.lock'
+39 verbose filtered diff ]
+40 silly checking diff packages/server
+41 silly found diff in packages/server/package.json
+41 silly found diff in packages/server/src/index.ts
+41 silly found diff in packages/server/src/types/calendar.ts
+41 silly found diff in packages/server/src/types/contact.ts
+41 silly found diff in packages/server/src/types/file.ts
+41 silly found diff in packages/server/src/types/index.ts
+41 silly found diff in packages/server/src/types/knowledge.ts
+41 silly found diff in packages/server/src/types/project.ts
+41 silly found diff in packages/server/src/types/team.ts
+41 silly found diff in packages/server/src/types/user.ts
+41 silly found diff in packages/server/tsconfig.json
+41 silly found diff in packages/server/yarn.lock
+42 verbose filtered diff [
+42 verbose filtered diff   'packages/server/package.json',
+42 verbose filtered diff   'packages/server/src/index.ts',
+42 verbose filtered diff   'packages/server/src/types/calendar.ts',
+42 verbose filtered diff   'packages/server/src/types/contact.ts',
+42 verbose filtered diff   'packages/server/src/types/file.ts',
+42 verbose filtered diff   'packages/server/src/types/index.ts',
+42 verbose filtered diff   'packages/server/src/types/knowledge.ts',
+42 verbose filtered diff   'packages/server/src/types/project.ts',
+42 verbose filtered diff   'packages/server/src/types/team.ts',
+42 verbose filtered diff   'packages/server/src/types/user.ts',
+42 verbose filtered diff   'packages/server/tsconfig.json',
+42 verbose filtered diff   'packages/server/yarn.lock'
+42 verbose filtered diff ]
+43 silly checking diff packages/web-ui
+44 silly found diff in packages/web-ui/.DS_Store
+44 silly found diff in packages/web-ui/.babelrc.js
+44 silly found diff in packages/web-ui/.eslintcache
+44 silly found diff in packages/web-ui/config-overrides.js
+44 silly found diff in packages/web-ui/package-lock.json
+44 silly found diff in packages/web-ui/package.json
+44 silly found diff in packages/web-ui/public/.DS_Store
+44 silly found diff in packages/web-ui/public/assets/calendar1.svg
+44 silly found diff in packages/web-ui/public/assets/calendar2.svg
+44 silly found diff in packages/web-ui/public/assets/document1.svg
+44 silly found diff in packages/web-ui/public/assets/document2.svg
+44 silly found diff in packages/web-ui/public/assets/files1.svg
+44 silly found diff in packages/web-ui/public/assets/files2.svg
+44 silly found diff in packages/web-ui/public/assets/project1.svg
+44 silly found diff in packages/web-ui/public/assets/project2.svg
+44 silly found diff in packages/web-ui/public/assets/resources1.svg
+44 silly found diff in packages/web-ui/public/assets/resources2.svg
+44 silly found diff in packages/web-ui/public/assets/team.svg
+44 silly found diff in packages/web-ui/public/assets/team2.svg
+44 silly found diff in packages/web-ui/src/App.tsx
+44 silly found diff in packages/web-ui/src/actions/auth.ts
+44 silly found diff in packages/web-ui/src/components/calendar-dialog/equipment-card.tsx
+44 silly found diff in packages/web-ui/src/components/calendar-dialog/index.tsx
+44 silly found diff in packages/web-ui/src/components/calendar-dialog/info-card.tsx
+44 silly found diff in packages/web-ui/src/components/calendar-dialog/notes-card.tsx
+44 silly found diff in packages/web-ui/src/components/calendar-dialog/team-card.tsx
+44 silly found diff in packages/web-ui/src/components/kanban-dialog/index.tsx
+44 silly found diff in packages/web-ui/src/components/layout-editor/data-modal.tsx
+44 silly found diff in packages/web-ui/src/components/layout-editor/editor-modal.tsx
+44 silly found diff in packages/web-ui/src/components/layout-editor/index.tsx
+44 silly found diff in packages/web-ui/src/components/layout/index.tsx
+44 silly found diff in packages/web-ui/src/components/page-loader/index.tsx
+44 silly found diff in packages/web-ui/src/components/sidebar/index.css
+44 silly found diff in packages/web-ui/src/components/sidebar/index.tsx
+44 silly found diff in packages/web-ui/src/index.tsx
+44 silly found diff in packages/web-ui/src/typings.d.ts
+44 silly found diff in packages/web-ui/src/views/Admin/editor.tsx
+44 silly found diff in packages/web-ui/src/views/Admin/index.tsx
+44 silly found diff in packages/web-ui/src/views/Admin/nodes/ext-adapter.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/index.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/type-map.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/admin.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/calendar.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/contacts.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/equipment.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/file.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/home.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/knowledgebase.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/project.tsx
+44 silly found diff in packages/web-ui/src/views/Dashboard/types/team.tsx
+44 silly found diff in packages/web-ui/src/views/Login/index.tsx
+44 silly found diff in packages/web-ui/src/views/PageEditor/index.tsx
+44 silly found diff in packages/web-ui/src/views/Settings/index.tsx
+44 silly found diff in packages/web-ui/src/views/Settings/settings-map.tsx
+44 silly found diff in packages/web-ui/src/views/TypeEditor/index.tsx
+44 silly found diff in packages/web-ui/src/views/Workflows/index.tsx
+44 silly found diff in packages/web-ui/tsconfig.json
+44 silly found diff in packages/web-ui/yarn.lock
+45 verbose filtered diff [
+45 verbose filtered diff   'packages/web-ui/.DS_Store',
+45 verbose filtered diff   'packages/web-ui/.babelrc.js',
+45 verbose filtered diff   'packages/web-ui/.eslintcache',
+45 verbose filtered diff   'packages/web-ui/config-overrides.js',
+45 verbose filtered diff   'packages/web-ui/package-lock.json',
+45 verbose filtered diff   'packages/web-ui/package.json',
+45 verbose filtered diff   'packages/web-ui/public/.DS_Store',
+45 verbose filtered diff   'packages/web-ui/public/assets/calendar1.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/calendar2.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/document1.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/document2.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/files1.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/files2.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/project1.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/project2.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/resources1.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/resources2.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/team.svg',
+45 verbose filtered diff   'packages/web-ui/public/assets/team2.svg',
+45 verbose filtered diff   'packages/web-ui/src/App.tsx',
+45 verbose filtered diff   'packages/web-ui/src/actions/auth.ts',
+45 verbose filtered diff   'packages/web-ui/src/components/calendar-dialog/equipment-card.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/calendar-dialog/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/calendar-dialog/info-card.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/calendar-dialog/notes-card.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/calendar-dialog/team-card.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/kanban-dialog/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/layout-editor/data-modal.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/layout-editor/editor-modal.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/layout-editor/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/layout/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/page-loader/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/components/sidebar/index.css',
+45 verbose filtered diff   'packages/web-ui/src/components/sidebar/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/typings.d.ts',
+45 verbose filtered diff   'packages/web-ui/src/views/Admin/editor.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Admin/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Admin/nodes/ext-adapter.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/type-map.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/admin.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/calendar.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/contacts.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/equipment.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/file.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/home.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/knowledgebase.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/project.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Dashboard/types/team.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Login/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/PageEditor/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Settings/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Settings/settings-map.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/TypeEditor/index.tsx',
+45 verbose filtered diff   'packages/web-ui/src/views/Workflows/index.tsx',
+45 verbose filtered diff   'packages/web-ui/tsconfig.json',
+45 verbose filtered diff   'packages/web-ui/yarn.lock'
+45 verbose filtered diff ]
+46 verbose updated @workerhive/flow-provider
+47 verbose updated @workerhive/ipfs
+48 verbose updated @workerhive/client
+49 verbose updated @workerhive/graph
+50 verbose updated @workerhive/mq
+51 verbose updated @workerhive/parsers
+52 verbose updated @workerhive/queendb
+53 verbose updated @workerhive/react-ui
+54 verbose updated workhub-server
+55 verbose updated react-workerhub
+56 verbose git-describe undefined => "v2.0.3-alpha.0-81-gb17808e"
+57 silly git-describe parsed => {"lastTagName":"v2.0.3-alpha.0","lastVersion":"v2.0.3-alpha.0","refCount":"81","sha":"b17808e","isDirty":false}
+58 info execute Skipping releases
+59 silly lifecycle No script for "preversion" in "root", continuing
+60 silly lifecycle No script for "preversion" in "@workerhive/ipfs", continuing
+61 silly lifecycle No script for "preversion" in "@workerhive/client", continuing
+62 silly lifecycle No script for "preversion" in "@workerhive/mq", continuing
+63 silly lifecycle No script for "preversion" in "@workerhive/parsers", continuing
+64 silly lifecycle No script for "preversion" in "@workerhive/queendb", continuing
+65 silly lifecycle No script for "preversion" in "@workerhive/react-ui", continuing
+66 silly lifecycle No script for "version" in "@workerhive/mq", continuing
+67 silly lifecycle No script for "version" in "@workerhive/queendb", continuing
+68 silly lifecycle No script for "preversion" in "@workerhive/flow-provider", continuing
+69 silly lifecycle No script for "version" in "@workerhive/ipfs", continuing
+70 silly lifecycle No script for "preversion" in "@workerhive/graph", continuing
+71 silly lifecycle No script for "version" in "@workerhive/parsers", continuing
+72 silly lifecycle No script for "version" in "@workerhive/client", continuing
+73 silly lifecycle No script for "version" in "@workerhive/react-ui", continuing
+74 silly lifecycle No script for "preversion" in "react-workerhub", continuing
+75 silly lifecycle No script for "version" in "@workerhive/flow-provider", continuing
+76 silly lifecycle No script for "version" in "@workerhive/graph", continuing
+77 silly lifecycle No script for "preversion" in "workhub-server", continuing
+78 silly lifecycle No script for "version" in "react-workerhub", continuing
+79 silly lifecycle No script for "version" in "workhub-server", continuing
+80 silly lifecycle No script for "version" in "root", continuing
+81 silly gitAdd [
+81 silly gitAdd   'packages/message-queue/package.json',
+81 silly gitAdd   'packages/message-queue/package-lock.json',
+81 silly gitAdd   'packages/queendb/package.json',
+81 silly gitAdd   'packages/queendb/package-lock.json',
+81 silly gitAdd   'packages/fs-layer/package.json',
+81 silly gitAdd   'packages/fs-layer/package-lock.json',
+81 silly gitAdd   'packages/parsers/package.json',
+81 silly gitAdd   'packages/parsers/package-lock.json',
+81 silly gitAdd   'packages/graph-client/package.json',
+81 silly gitAdd   'packages/graph-client/package-lock.json',
+81 silly gitAdd   'packages/react-components/package.json',
+81 silly gitAdd   'packages/react-components/package-lock.json',
+81 silly gitAdd   'packages/flow-provider/package.json',
+81 silly gitAdd   'packages/flow-provider/package-lock.json',
+81 silly gitAdd   'packages/graph-server/package.json',
+81 silly gitAdd   'packages/graph-server/package-lock.json',
+81 silly gitAdd   'packages/web-ui/package.json',
+81 silly gitAdd   'packages/web-ui/package-lock.json',
+81 silly gitAdd   'packages/server/package.json',
+81 silly gitAdd   'lerna.json'
+81 silly gitAdd ]
+82 silly gitCommit chore(release): Publish
+83 verbose git [ 'commit', '-m', 'chore(release): Publish' ]
+84 silly gitTag v2.1.16
+85 verbose git [ 'tag', 'v2.1.16', '-m', 'v2.1.16' ]
+86 error Error: Command failed: git tag v2.1.16 -m v2.1.16
+86 error fatal: tag 'v2.1.16' already exists
+86 error
+86 error     at makeError (/home/workhub/work/hub/node_modules/execa/index.js:174:9)
+86 error     at /home/workhub/work/hub/node_modules/execa/index.js:278:16
+86 error     at processTicksAndRejections (internal/process/task_queues.js:97:5)
