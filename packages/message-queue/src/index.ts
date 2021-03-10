@@ -11,7 +11,6 @@ export default class MessageQueue {
     private channel? : amqplib.Channel
 
     constructor(opts : MessageQueueOpts){
-        console.log("Setting up MQ", opts)
         amqplib.connect(opts.host).then((connection) => {
             console.log("Connected to MQ")
             this.connection = connection

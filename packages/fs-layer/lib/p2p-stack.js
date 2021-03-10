@@ -17,7 +17,6 @@ const Protector = require('libp2p/src/pnet');
 const WebRTCStar = require('libp2p-webrtc-star')
 
 const transportKey = WebRTCStar.prototype[Symbol.toStringTag]
-console.log(transportKey, WebRTCStar.tag)
 
 const wrtcTransport = {
     enabled: true,
@@ -29,8 +28,6 @@ const peerDiscovery = {
         enabled: true
     }
 }
-
-console.log("peer discovery", peerDiscovery)
 
 if(ENVIRONMENT == "NODE") {
     peerDiscovery[MDNS.tag] = {

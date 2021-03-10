@@ -6,7 +6,7 @@ import { convertInput, getTypesWithFieldDirective, objectValues } from "../utils
 
 export const directiveName = "input";
 
-export const directive = new GraphQLDirective({
+export const directive : GraphQLDirective = new GraphQLDirective({
     name: directiveName,
     description: "Field is a component of it's sibling input type",
     locations: [DirectiveLocation.FIELD_DEFINITION],

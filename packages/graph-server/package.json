@@ -1,13 +1,13 @@
 {
   "name": "@workerhive/graph",
-  "version": "2.1.16",
+  "version": "2.1.18",
   "description": "",
   "main": "dist/index.js",
   "files": [
     "dist/**/*"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "build:docs": "typedoc src/index.ts --out docs/",
     "example": "ts-node example",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,26 +16,21 @@
   "license": "ISC",
   "dependencies": {
     "@graphql-tools/schema": "^7.1.2",
-    "@workerhive/ipfs": "2.1.16",
-    "@workerhive/mq": "2.1.16",
+    "@workerhive/ipfs": "^2.1.16",
+    "@workerhive/mq": "^2.1.16",
     "@workerhive/pipelines": "^1.0.0",
     "amqplib": "^0.6.0",
     "camel-case": "^4.1.2",
     "express": "^4.17.1",
     "file-extension": "^4.0.5",
     "fs-capacitor": "^6.2.0",
-    "graphql": "^15.4.0",
     "graphql-upload": "^11.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "uint8-to-base64": "^0.2.0",
     "uuid": "^8.3.2",
-    "wrtc": "^0.4.6",
-    "y-indexeddb": "^9.0.6",
-    "y-leveldb": "^0.1.0",
-    "y-websocket": "^1.3.8",
-    "yjs": "^13.4.7"
+    "wrtc": "^0.4.6"
   },
   "resolutions": {
     "fs-capacitor": "^6.2.0",

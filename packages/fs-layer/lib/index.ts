@@ -68,7 +68,6 @@ export class  WorkhubFS {
         if(ENVIRONMENT == "NODE" && !swarmKey){
             generate(this.key)
             this.swarmKey = encode(this.key)
-            console.info('=> Swarm Key: ', this.swarmKey)
         }
 
         this.init().then(() => {
@@ -84,9 +83,7 @@ export class  WorkhubFS {
     }
 
     async init(){
-        console.log("Starting IPFS with Bootstrap list", this.config.Bootstrap)
         this.repo = new Repo(this.config.repo || 'workhub')
-        console.log("IPFS Key", this.key);
         const {node, libp2p} = await FSNode(this.config, this.repo, this.key)
         this.node = node;
         this.libp2p = libp2p;
@@ -94,21 +91,18 @@ export class  WorkhubFS {
         let boot = await this.node.bootstrap.list();
        // let swarm = await this.node.swarm.peers()
 
+       /*
        this.libp2p?.peerStore.peers.forEach((peer) => {
            this.libp2p?.peerStore.delete(peer.id)
-       })
-
-       console.log("PeerStore", this.libp2p?.peerStore.peers)
+       })*/
     
         this.libp2p?.on('peer:discovery', (info) => {
-            console.log("Peer found", info)
+            console.log("Peer found", info._idB58String)
         });
 
         setInterval(async () => {
             console.log(await this.node?.swarm.peers())
         }, 10* 1000);
-
-        console.log("Bootstrap nodes", boot)
 
     }
 
