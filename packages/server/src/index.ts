@@ -208,13 +208,6 @@ app.listen(4002)
 
 console.log(`
 
-8   8  8                                             8""""8                                
-8   8  8 eeeee eeeee  e   e  e   e e  ee   e eeee    8      eeee eeeee  ee   e eeee eeeee  
-8e  8  8 8  88 8   8  8   8  8   8 8  88   8 8       8eeeee 8    8   8  88   8 8    8   8  
-88  8  8 8   8 8eee8e 8eee8e 8eee8 8e 88  e8 8eee        88 8eee 8eee8e 88  e8 8eee 8eee8e 
-88  8  8 8   8 88   8 88   8 88  8 88  8  8  88      e   88 88   88   8  8  8  88   88   8 
-88ee8ee8 8eee8 88   8 88   8 88  8 88  8ee8  88ee    8eee88 88ee 88   8  8ee8  88ee 88   8
-
 Domain: ${process.env.WORKHUB_DOMAIN}
 
 IPFS Key: ${fsLayer.swarmKey}
