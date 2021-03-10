@@ -5,7 +5,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "build": "tsc -b tsconfig.json"
   },
   "dependencies": {
     "@workerhive/flow-provider": "file:../flow-provider",

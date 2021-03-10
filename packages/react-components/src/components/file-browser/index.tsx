@@ -40,7 +40,8 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
     files = [],
     className,
     uploading = [{filename: 'Test file', status: 'uploading'}, {filename: "Tester", status: 'uploading'}],
-    onFileUpload = ({files}) => console.log("Dropped files", files)
+    onFileUpload = ({files}) => console.log("Dropped files", files),
+    onFileDownload
 }) => {
 
     const [ lastSelect, setLastSelect ] = React.useState<number>(-1)
@@ -91,6 +92,11 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
         console.log(files)
         onFileUpload({files});
     }
+
+    const downloadSelected = () => {
+        if(onFileDownload) onFileDownload({files: selected});
+    }
+
     return (
         <Paper className={className}>
             <div className={"file-browser__header"}>
@@ -103,7 +109,7 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                     <Publish />
                     <div className="vert-divider" />
                     <Edit className={selected.length == 1 ? '': 'disabled'} />
-                    <GetApp className={selected.length > 0 ? '':'disabled'} />
+                    <GetApp onClick={downloadSelected} className={selected.length > 0 ? '':'disabled'} />
                     <Delete />
                 </div>
             </div>
@@ -181,6 +187,7 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   .file-browser__list {
       flex: 1;
       position: relative;
+      overflow-y: auto;
   }
 
   .file-browser__list .selected{

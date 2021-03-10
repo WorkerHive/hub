@@ -86,6 +86,7 @@ export class  WorkhubFS {
     async init(){
         console.log("Starting IPFS with Bootstrap list", this.config.Bootstrap)
         this.repo = new Repo(this.config.repo || 'workhub')
+        console.log("IPFS Key", this.key);
         const {node, libp2p} = await FSNode(this.config, this.repo, this.key)
         this.node = node;
         this.libp2p = libp2p;
@@ -93,24 +94,33 @@ export class  WorkhubFS {
         let boot = await this.node.bootstrap.list();
        // let swarm = await this.node.swarm.peers()
 
+       this.libp2p?.peerStore.peers.forEach((peer) => {
+           this.libp2p?.peerStore.delete(peer.id)
+       })
 
-       console.log(this.libp2p?.peerStore.peers)
+       console.log("PeerStore", this.libp2p?.peerStore.peers)
     
         this.libp2p?.on('peer:discovery', (info) => {
             console.log("Peer found", info)
         });
 
+        setInterval(async () => {
+            console.log(await this.node?.swarm.peers())
+        }, 10* 1000);
+
         console.log("Bootstrap nodes", boot)
 
     }
 
-    async getFile(cid: string, tmpPath: string){
+    async getFile(cid: string, tmpPath?: string){
+        console.log("Fetching data for", cid);
         let content = Buffer.from('')
         for await (const chunk of this.node!.cat(cid)){
+            console.log("Got chunk")
             content = Buffer.concat([content, chunk])
         }
         
-        if(ENVIRONMENT == "NODE") fs.writeFileSync(tmpPath, content)
+        if(ENVIRONMENT == "NODE" && tmpPath) fs.writeFileSync(tmpPath, content)
         return content;
     }
 

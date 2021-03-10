@@ -6,8 +6,6 @@ export const typeDef = `
     attachFileToProject(projectId: ID, fileId: ID): Project
   }
 
-
-
   type Project @crud @configurable {
     "A series of work"
     id: ID

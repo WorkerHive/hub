@@ -57,9 +57,10 @@ export const FILE_VIEW = {
                     const uploadFile = async (file: File, id: string) => {
                         dispatch({type: 'UPLOAD_FILE', id: id, file: file})
                         let cid = await client?.fsLayer?.addFile(file)
+                        console.log("Added", cid)
                         dispatch({type: 'UPLOADED_FILE', id: id, cid: cid})
-                        let uploadResult = await client?.actions.addFile(file.name, cid)
-                        console.log("Sync with hub", uploadResult)
+                        //let uploadResult = await client?.actions.addFile(file.name, cid)
+                       // console.log("Sync with hub", uploadResult)
                     }
 
                     const uploadFiles = (files: File[]) => {
@@ -75,6 +76,12 @@ export const FILE_VIEW = {
                                 setSelectedFiles(selected);
                             }}
                             files={data.files} 
+                            onFileDownload={({files}) => {
+                                console.log("Download files", files)
+                                client?.fsLayer?.getFile(files[0].cid).then((result : any) => {
+                                    console.log("Files download?", result)
+                                })
+                            }}
                             onUploadFiles={() => {
                                 console.log("Upload files")
                             }}

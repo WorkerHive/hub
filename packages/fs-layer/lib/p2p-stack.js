@@ -17,6 +17,7 @@ const Protector = require('libp2p/src/pnet');
 const WebRTCStar = require('libp2p-webrtc-star')
 
 const transportKey = WebRTCStar.prototype[Symbol.toStringTag]
+console.log(transportKey, WebRTCStar.tag)
 
 const wrtcTransport = {
     enabled: true,
@@ -24,11 +25,7 @@ const wrtcTransport = {
 
 const peerDiscovery = {
     autoDial: true,
-    [Bootstrap.tag]: {
-        enabled: false,
-        list: []
-    },
-    [WebRTCStar.tag]:{
+    [transportKey]: {
         enabled: true
     }
 }

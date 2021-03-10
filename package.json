@@ -74,6 +74,7 @@
     "build:web-deps": "npm run build:react-components && npm run build:web-client",
     "build:server-deps": "npm run build:queendb && npm run build:fs && npm install --force && npm run build:graph",
     "build:web": "cd packages/web-ui && npm run-script build",
+    "build:server": "cd packages/server && npm run build",
     "start:server": "cd packages/server && npm start",
     "start:dev-web": "cd packages/web-ui && npm start",
     "start:storybook": "cd packages/react-components && npm storybook",
