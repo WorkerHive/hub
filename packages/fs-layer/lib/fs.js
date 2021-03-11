@@ -1,4 +1,4 @@
-const IPFS = require('ipfs');
+const IPFS = require('ipfs-core');
 const {P2PStack} = require('./p2p-stack')
 
 const FSNode = async (config, repo, key) => {

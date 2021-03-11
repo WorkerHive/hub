@@ -1,4 +1,4 @@
-import { WorkhubClient } from "@workerhive/client";
+import { useRealtime, WorkhubClient } from "@workerhive/client";
 import { WorkhubFS } from "@workerhive/ipfs";
 import { CID } from 'ipfs-core';
 import { FileDrop, FileBrowser, Header } from "@workerhive/react-ui";
@@ -34,6 +34,16 @@ export const FILE_VIEW = {
                 h: (sizes.height / rowHeight) - 1,
                 component: (data: any, params: any, types: any, client: any) => {
                     console.log(data)
+
+                    const pins = client?.realtimeSync?.doc.getMap('file-pins')
+                    console.log("PINS", pins.toJSON(), pins.observeDeep)
+
+                    const [ pinState, dispatchPins ] = useRealtime(pins, (state, action) => {
+                        
+                        return state;
+                    })
+
+
                     const [ selectedFiles, setSelectedFiles ] = React.useState<Array<any>>([]);
                     const [ uploadingState, setUploadingState ] = React.useState<Array<any>>([])
 
@@ -55,11 +65,13 @@ export const FILE_VIEW = {
                     }, {uploading: []})
 
                     const uploadFile = async (file: File, id: string) => {
+                        console.log("Upload File", file, id);
                         dispatch({type: 'UPLOAD_FILE', id: id, file: file})
-                        let cid = await client?.fsLayer?.addFile(file)
-                        console.log("Added", cid)
-                        dispatch({type: 'UPLOADED_FILE', id: id, cid: cid})
-                        //let uploadResult = await client?.actions.addFile(file.name, cid)
+                        let {cid} = await client?.fsLayer?.node?.add({path: file.name, content: file})
+                        // addFile(file)
+                        console.log("Added", cid.toString())
+                        dispatch({type: 'UPLOADED_FILE', id: id, cid: cid.toString()})
+                        let uploadResult = await client?.actions.addFile(file.name, cid.toString())
                        // console.log("Sync with hub", uploadResult)
                     }
 
@@ -75,7 +87,10 @@ export const FILE_VIEW = {
                             onSelect={({selected}) => {
                                 setSelectedFiles(selected);
                             }}
-                            files={data.files} 
+                            files={data.files.map((file : any) => ({
+                                ...file,
+                                pinned: Object.keys(pinState).indexOf(file.cid) > -1 ? true : file.pinned
+                            }))} 
                             onFileDownload={({files}) => {
                                 console.log("Download files", files)
                                 client?.fsLayer?.getFile(files[0].cid).then((result : any) => {

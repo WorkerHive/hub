@@ -1,6 +1,7 @@
 node_modules/
 y-server/
 dist/
+config/
 docs/
 workhub/
 build/

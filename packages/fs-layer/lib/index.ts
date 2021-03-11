@@ -28,20 +28,23 @@ const decode = (chars : string) => Uint8Array.from(global.atob(chars), asCharCod
 
 const fs = require('fs')
 const { generate } = require('libp2p/src/pnet')
-const { v4 } = require('uuid')
 
 const Repo = require('ipfs-repo'); //keep an eye on PR might be included within the week https://github.com/ipfs/js-ipfs-repo/pull/275
-const {P2PStack} = require('./p2p-stack')
 
 import LibP2P from 'libp2p'
 import IPFS, { CID } from 'ipfs-core'
-import { MessageQueue } from './queue'
 import { FSNode } from './fs'
 
 interface IPFSInterface {
     repo: string;
     Swarm: Array<any>;
     Bootstrap: Array<any>;
+}
+
+export const generateKey = () => {
+    let key : Uint8Array = new Uint8Array(95);
+    generate(key)
+    return encode(key)
 }
 
 export class  WorkhubFS {
@@ -60,9 +63,8 @@ export class  WorkhubFS {
     constructor(config: any = {}, swarmKey?: string){
         this.config = config;
         if(swarmKey){
-          //  this.key =  .toString();
-          this.swarmKey = swarmKey
-            this.key = decode(swarmKey)
+            this.swarmKey = swarmKey
+            this.key = decode(swarmKey).slice(0, 95)
         }
 
         if(ENVIRONMENT == "NODE" && !swarmKey){
@@ -125,6 +127,7 @@ export class  WorkhubFS {
     }
 
     async addFile(file: File){
+        console.log("Add file")
         console.log("Add ", file)
 
         const result = await this.node!.add({path: file.name, content: file})

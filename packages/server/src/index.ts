@@ -1,217 +1,185 @@
-import Graph, { LoggerConnector } from '@workerhive/graph' 
+import Graph, { LoggerConnector } from '@workerhive/graph'
 import { typeDefs, resolvers as typeResolvers } from './types';
 import express from 'express';
-import bodyParser from 'body-parser'
-import cors from 'cors';
-import crypto from 'crypto';
+
 import { merge } from 'lodash'
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import multer from 'multer';
 import nodemailer from "nodemailer"
 
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
-
+import { Router } from './router'
 import MQ from '@workerhive/mq';
 import { WorkhubFS } from "@workerhive/ipfs"
 
 import { FlowConnector } from '@workerhive/flow-provider'
+import HiveGraph from '@workerhive/graph';
+import Mail from 'nodemailer/lib/mailer';
+import { Mailer } from './mailer';
+import { Realtime } from './realtime';
 
-const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'secret',
-    //issuer: process.env.WORKHUB_DOMAIN ? process.env.WORKHUB_DOMAIN : 'workhub.services',
-   // audience: process.env.WORKHUB_DOMAIN ? process.env.WORKHUB_DOMAIN : 'workhub.services'
-}
 
-passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
-    let user = await connector.read("TeamMember", {id: jwt_payload.sub})
-    if(user){
-        done(null, user)
-    }else{
-        done(null, false)
-    }
-}))
-  
+
 const app = express();
 
-const fsLayer = new WorkhubFS({
-    Swarm: [
-        `/dns4/${process.env.WORKHUB_DOMAIN ? process.env.WORKHUB_DOMAIN : 'thetechcompany.workhub.services'}/tcp/443/wss/p2p-webrtc-star`
-    ]
-}, null, )
+export interface WorkhiveServerOpts {
+    swarmKey?: string;
+    workhubDomain?: string;
+    mqUrl?: string;
+    jwtSecret: string;
+}
 
-const mqLayer = new MQ({
-    host: process.env.MQ_URL || 'amqp://rabbitmq:rabbitmq@rabbit1',
-    ready: () => {
-        mqLayer.watch('ipfs-pinning', async (blob: any) => {
+export class WorkhiveServer {
+    private fsLayer: WorkhubFS;
+    private mqLayer: MQ;
 
-            console.log("Pinning in background", blob)
+    //private realtimeSync: Realtim
+    private connector: FlowConnector;
+    private graph: HiveGraph;
+    private mailer: Mailer;
+    private router: Router;
 
-            let {cid, filename, id} = blob;
+    private realtime: Realtime;
 
-            console.log("Pinning", cid)
+    private opts: WorkhiveServerOpts;
 
-            let cid2 = await fsLayer.pinFile(cid, 15 * 60 * 1000)
+    constructor(opts: WorkhiveServerOpts) {
+        this.opts = opts;
+
+        this.initFS();
+
+        if (opts.mqUrl) this.initMQ();
+        if (!opts.mqUrl) console.log("Hub: Starting without a message queue MQ_URL not provided")
+
+        this.initFlow();
+        this.initMail();
+        this.initRealtime();
+
+        this.initRouter();
+
+    }
+
+    initRealtime(){
+        this.realtime = new Realtime(this.opts.workhubDomain)
+    }
+
+    initRouter() {
+        this.router = new Router({
+            jwtSecret: this.opts.jwtSecret
+        }, {
+            mq: this.mqLayer,
+            fs: this.fsLayer,
+            mailer: this.mailer,
+            graph: this.graph,
+            connector: this.connector
+        });
+
+        this.router.listen(4002);
+
+        console.log("Router listening")
+    }
+
+    initMail() {
+
+        //TODO add options for smtp
+        let mailOpts: any = {
+            host: process.env.SMTP_SERVER || 'mail',
+            port: process.env.SMTP_PORT || 25,
+            secure: (process.env.SMTP_PORT || 25) == '465'
+        }
+
+        if (process.env.SMTP_USER || process.env.SMTP_PASS) {
+            mailOpts.auth = {};
+            mailOpts.auth.user = process.env.SMTP_USER;
+            mailOpts.auth.pass = process.env.SMTP_PASS;
+        }
+        this.mailer = new Mailer(mailOpts);
+    }
+
+    initFlow() {
+        this.connector = new FlowConnector({}, {})
+        let { types, resolvers } = this.connector.getConfig();
+        const workhubResolvers = merge({
+            Query: {
+                swarmKey: (parent) => {
+                    return this.fsLayer.swarmKey
+                }
+            }
+        }, merge(resolvers, typeResolvers))
+
+        this.initGraph(types, workhubResolvers);
+
+    }
+
+    initGraph(types, resolvers) {
+        this.graph = new Graph(`
+
+            extend type Query {
+                swarmKey: String
+            }
+
+            extend type Mutation{
+                empty: String
+            }
 
             
-            if(cid2){
-                console.log("Pinned", cid2)
-                let res = await connector.update('File', {id: id}, {pinned: true})
-
-                console.log("Pinning result", res)
-        
-                return res;
-            }else{
-                console.log("Couldnt pin, trying again soon")
-                return null;
+            type Workflow @crud @configurable{
+                id: ID
+                name: String @input
+                nodes: [JSON] @input
+                links: [JSON] @input
             }
-        }).then(() => {
-            console.log("Watching ipfs-pinning")
-        })
+
+            ${types}
+            ${typeDefs}
+        `, resolvers, this.connector, true)
     }
-})
 
-let connector = new FlowConnector({}, {})
+    initFS() {
+        let swarmDomain = `/dns4/${this.opts.workhubDomain ? this.opts.workhubDomain : 'thetechcompany.workhub.services'}/tcp/443/wss/p2p-webrtc-star`
+        console.log("IPFS: Swarm Domain", swarmDomain)
+        
+        this.fsLayer = new WorkhubFS({
+            Swarm: [
+                swarmDomain
+            ]
+        }, this.opts.swarmKey)
 
-let { types, resolvers } = connector.getConfig();
-
-const workhubResolvers = merge({
-    Query: {
-        swarmKey: (parent) => { 
-            return fsLayer.swarmKey
+        if (!this.opts.swarmKey) {
+            //Write swarm key
         }
     }
-}, merge(resolvers, typeResolvers))
 
-let hiveGraph = new Graph(`
-
-    extend type Query {
-        swarmKey: String
-    }
-
-    extend type Mutation{
-        empty: String
-    }
-
-    
-    type Workflow @crud @configurable{
-        id: ID
-        name: String @input
-        nodes: [JSON] @input
-        links: [JSON] @input
-    }
-
-    ${types}
-    ${typeDefs}
-`, workhubResolvers, connector, true)
-
-/*connector.stores.initializeAppStore({
-    url: (process.env.WORKHUB_DOMAIN ? 'mongodb://mongo' : 'mongodb://localhost'),
-    dbName: (process.env.WORKHUB_DOMAIN ? 'workhub' : 'workhub')
-})*/
-
-
-app.use(bodyParser.json())
-app.use(cors())
-
-let mailOpts : any = {
-    host: process.env.SMTP_SERVER || 'mail',
-    port: process.env.SMTP_PORT || 25,
-    secure: (process.env.SMTP_PORT || 25) == '465'
-}
-
-if(process.env.SMTP_USER || process.env.SMTP_PASS){
-    mailOpts.auth = {};
-    mailOpts.auth.user = process.env.SMTP_USER;
-    mailOpts.auth.pass = process.env.SMTP_PASS;
-}
-
-const mailTransport = nodemailer.createTransport(mailOpts)
-
-app.post('/forgot', async (req, res) => {
-    const user : any = await connector.read('TeamMember', {email: req.body.email})
-    if(user && user.id){
-        const token = jwt.sign({
-            id: user.id
-        }, 'test-secret')
-
-        const info = await mailTransport.sendMail({
-            from: `"WorkHive" <noreply@workhub.services>`,
-            to: user.email,
-            subject: "Password reset",
-            text: `Kia Ora ${user.name},
-
-A password reset request has been made for your WorkHive account, click the link below to reset your password.
-If this wasn't you please ignore this email.
-
-https://${process.env.WORKHUB_DOMAIN}/reset?token=${token}
-
-Nga Mihi,
-WorkHive
-`,
-        })
-
-        res.send({info})
-    }else{
-        res.send({error: "User not found"})
-    }
-})
-
-app.post('/login', async (req, res) => {
-    let strategy = req.body.strategy;
-
-    let username = req.body.username;
-    let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
-    let user : any = await connector.read("TeamMember", {username: username, password: password})
-    console.log(username, password);
-    if(user.id){
-        console.log("Success user", user)
-        res.send({token: jwt.sign({
-            sub: user.id,
-            name: user.name,
-            email: user.email
-        }, 'secret')})
-    }else{
-        console.log("User result", user)
-        res.status(404).send({error: "No user found"})
-    }
-})
-
-hiveGraph.addTransport((conf:any) => {
-    
-    app.post('/graphql', passport.authenticate('jwt', {session: false}), multer().single('file'), (req : any, res) => {
-        let query = req.body.query;
-        let variables = req.body.variables || {};
-        if(variables && typeof(variables) !== 'object') variables = JSON.parse(variables)
-        if(req.file) variables.file = req.file; 
-        hiveGraph.executeRequest(
-            query,
-            variables,
-            req.body.operationName,
-            {
-                user: req['user'], 
-                fs: fsLayer,
-                mq: mqLayer,
-                mail: mailTransport
+    initMQ() {
+        this.mqLayer = new MQ({
+            host: this.opts.mqUrl,
+            ready: () => {
+                this.mqLayer.watch('ipfs-pinning', this.ipfsPinService.bind(this)).then(() => {
+                    console.log("Watching ipfs-pinning")
+                })
             }
-        ).then((r) => res.send(r))
-    })
+        })
+    }
 
-    app.get('/graphql', (req, res) => {
-        res.sendFile(__dirname + '/index.html')
-    })
-    
-})
+    async ipfsPinService(blob: any) {
+        let { cid, filename, id } = blob;
+        let timeout = 15;
+        console.log(`FS-Pin: Started ${cid}`)
 
-app.listen(4002)
+        let cid2 = await this.fsLayer.pinFile(cid, timeout * 60 * 1000)
 
-console.log(`
+        if (cid2) {
+            console.log(`FS-Pin: Pinned ${cid2}`)
+            //Add file pin notice to YJS
+            console.log(`FS-Pin: Added file pin to "file-pins" yjs map ${cid}`)
+            const filePins = this.realtime.doc.getMap('file-pins')
+            
+            filePins.set(cid, {date: new Date().getTime()})
 
-Domain: ${process.env.WORKHUB_DOMAIN}
+            let res = await this.connector.update('File', { id: id }, { pinned: true })
+            return res;
+        } else {
+            console.log(`FS-Pin: Couldnt pin in ${timeout}mins, trying again soon`)
+            return null;
+        }
 
-IPFS Key: ${fsLayer.swarmKey}
+    }
 
-MQ : ${process.env.MQ_URL}
-
-`)
+}

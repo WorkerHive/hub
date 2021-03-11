@@ -1,4 +1,12 @@
+#!/usr/local/bin/node
+import { access, mkdir, readFile, writeFile } from 'fs/promises'
+import { constants } from 'fs';
 import * as commandpost from 'commandpost';
+import { WorkhiveServer } from '.';
+import path from 'path';
+import crypto from 'crypto'
+import { config } from 'process';
+import { generateKey } from '@workerhive/ipfs'
 const pjson = require('../package.json');
 
 console.log(`
@@ -13,16 +21,58 @@ Version: v${pjson.version}
 
 `)
 
-let create = commandpost
-    .create<{}, {service: string}>("start [service]")
+let root = commandpost
+    .create<{}, {}>("workhub")
     .version(pjson.version, "-v", "--version")
     .option('-v', '--version', "Version")
-    .option("-r", "--restart", "Restart service(s)")
-    .action((opts, args, rest) => {
-        console.log(opts, args, rest)
+
+
+let start = root
+    .subCommand<{}, {}>("start [service]")
+    .option("-c, --config <config_dir>", "config directory")
+    .option("-r, --restart", "Restart service(s)")
+    .action(async (opts : {config: string[], restart: boolean}, args, rest) => {
+        let configDir = opts.config.length > 0 ? opts.config[0] : './config'
+
+        await mkdir(path.join(configDir, '/keys'), {recursive: true})
+
+        const jwtKey = path.join(configDir, '/keys/jwt')
+        const ipfsKey = path.join(configDir, '/keys/ipfs')
+
+        let jwtSecret, ipfsSecret;
+
+        try{
+            await access(jwtKey, constants.F_OK)
+            jwtSecret = await readFile(jwtKey, {encoding: 'utf-8'})
+        }catch(e){
+            jwtSecret = crypto.randomBytes(256).toString('base64')
+            await writeFile(jwtKey, jwtSecret)
+        }
+
+        try{
+            await access(ipfsKey, constants.F_OK)
+            ipfsSecret = await readFile(ipfsKey, {encoding: 'utf-8'})
+        }catch(e){
+            ipfsSecret = generateKey();
+            await writeFile(ipfsKey, ipfsSecret)
+        }
+
+        console.log(`IPFS: ${ipfsSecret}`)
+        console.log(`JWT: ${jwtSecret}`)
+        console.log(`MQ: ${process.env.MQ_URL}`)
+        console.log(`Domain: ${process.env.WORKHUB_DOMAIN}`)
+        
+        let server = new WorkhiveServer({
+            workhubDomain: process.env.WORKHUB_DOMAIN,
+            jwtSecret: jwtSecret,
+            swarmKey: ipfsSecret,
+            mqUrl: process.env.MQ_URL
+        })
     })
 
-commandpost.exec(create, process.argv)
+
+
+commandpost.exec(root, process.argv)
     .catch(err => {
         if(err instanceof Error){
             console.error(err.stack)

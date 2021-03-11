@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/ipfs",
-  "version": "2.1.17",
+  "version": "2.1.21",
   "main": "dist/index.js",
   "files": [
     "dist/"

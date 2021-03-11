@@ -6,7 +6,6 @@ const Bootstrap = require('libp2p-bootstrap')
 let TCP, wrtc;
 
 if(ENVIRONMENT == "NODE") {
-    console.log("ENV", ENVIRONMENT)
     TCP = require('libp2p-tcp')
     wrtc = require('wrtc')
 }
@@ -24,7 +23,7 @@ const wrtcTransport = {
 
 const peerDiscovery = {
     autoDial: true,
-    [transportKey]: {
+    [WebRTCStar.tag]: {
         enabled: true
     }
 }
