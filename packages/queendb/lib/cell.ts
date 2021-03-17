@@ -13,6 +13,7 @@ import { Nectar } from "./nectar";
 import { Pollen } from "./pollen";
 import { v4 } from 'uuid';
 import { query } from "express";
+import { Table } from "./table";
 export interface CellContent{
     name: string; //table name
     foreign: boolean; //updatable
@@ -51,12 +52,17 @@ export class Cell {
         this.client = client;
     }
 
+    static async fromTable(table: Table, client: Client){
+
+    }
+
     static async create(typeDef: string, client: Client){
         const cell = new Cell(typeDef, client);
         await cell.createPollinator();
         await cell.createCell();
         return cell;
     }
+    
     async createPollinator(){
         this.pollinator = await Pollen.create(this.typeDef,this.client)
         this.normalizeSources();

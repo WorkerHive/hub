@@ -60,11 +60,15 @@ export class FlowConnector extends BaseConnector{
                 configurable.push(val.toSDL())
             }
         })
-
-        await this.db.setupTypeStore(configurable)
-        const flowMap = await this.db.readCell('IntegrationMap', {id: 'root-map'})
-        await this.db.rehydrate(flowMap);
-        console.log("Flow Map", flowMap)
+        
+        this.db.on('ready', async () => {
+            console.log("QueenDB is ready for flow-provider hydration")
+            await this.db.setupTypeStore(configurable)
+            const flowMap = await this.db.readCell('IntegrationMap', {id: 'root-map'})
+            await this.db.rehydrate(flowMap);
+            console.log("Flow Map", flowMap)
+        })
+        
         /*
         if(this.stores.isReady){
             let flowMap : any = await this.read('IntegrationMap', {id: 'root-map'})

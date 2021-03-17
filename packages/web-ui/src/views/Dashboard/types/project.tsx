@@ -259,19 +259,29 @@ export const PROJECT_VIEW = {
 
                                         <Typography style={{flex: 1}}>{item.name}</Typography>
                                         <MoreMenu menu={[
-                                            {label: "Edit", icon: <Edit />, action: () => {
-                                                setSelected(item)
-                                                modalOpen(true)
-                                            }},
-                                            {label: "Delete", icon: <Delete />, color: 'red'}
-                                        ]} />
+                                            {
+                                                perm: 'update',
+                                                label: "Edit", 
+                                                icon: <Edit />, 
+                                                action: () => {
+                                                    setSelected(item)
+                                                    modalOpen(true)
+                                                }
+                                            },
+                                            {
+                                                perm: 'delete',
+                                                label: "Delete", 
+                                                icon: <Delete />, 
+                                                color: 'red'
+                                            }
+                                        ].filter((a) => client.canAccess("Project", a.perm))} />
                                        
                                        </div> 
                                     )}
                                     data={data.projects.filter((a : any) => a.name && a.name.length > 0) || []} />
-                                <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
+                                {client.canAccess("Project", "create") &&  <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
-                                </Fab>
+                                </Fab>}
                             </div>
                         )
                     })({client})

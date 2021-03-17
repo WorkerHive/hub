@@ -26,6 +26,7 @@ export default class TypeRegistry extends EventEmitter<any>{
 
     setupScalars(){
         this.composer.createScalarTC(HashScalar)
+        this.composer.createScalarTC(MonikerScalar)
     }
 
     setupMutable(){
@@ -37,6 +38,23 @@ export default class TypeRegistry extends EventEmitter<any>{
             } 
         `)
         this.composer.Query.addFields({
+            types: {
+                type: 'JSON',
+                args: {
+                    hasDirective: "[String]"
+                },
+                resolve: (parent, {hasDirective}, context: GraphContext) => {
+                    return hasDirective.map((directive) => {
+                        //Get types with directives requested, filter out any types not allowed by the context permissions
+                        return getTypesWithDirective(this.composer, directive).map((x) => ({
+                            name: x.name,
+                            directives: x.directives,
+                            def: x.def
+                        })) //.filter((a) => context.user.permissions.indexOf(`${a.name}:read`) > -1)
+                    })
+                    
+                }
+            },
             uploadTypes: {
                 type: '[MutableType]',
                 resolve: () => {
@@ -260,7 +278,9 @@ export default class TypeRegistry extends EventEmitter<any>{
 import { camelCase } from 'camel-case'; //For future reference this is what being a hippocrit (fuck spelling) is all about
 import { merge } from 'lodash';
 import { HashScalar } from '../scalars/hash';
+import { MonikerScalar } from '../scalars/moniker';
 import { directives } from '../directives';
+import { GraphContext } from '..';
 
 export class Type {
 

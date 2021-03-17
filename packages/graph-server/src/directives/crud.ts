@@ -48,6 +48,10 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
         })
     }
 
+    const hasPermission = (context : {permissions: string[]}, type: string, perm: string) => {
+        return context.permissions.indexOf(`${type}:${perm}`) > -1
+    }
+
     types.map((item) => {
     
             let args = {
@@ -70,7 +74,11 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         ...args
                     },
                     resolve: async (parent, args, context : GraphContext) => {
-                        return await context.connector.create(item.name, args[item.camelName])
+                        if(hasPermission(context.user, item.name, 'create')){
+                            return await context.connector.create(item.name, args[item.camelName])
+                        }else{
+                            throw new Error(`${item.name}:create permission not found`)
+                        }
                     }
                 },
                 [updateKey]:{
@@ -80,8 +88,11 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         ...args,
                     },
                     resolve: async (parent, args, context : GraphContext) => {
-                      
-                        return await context.connector.update(item.name, {id: args['id']}, args[item.camelName])
+                        if(hasPermission(context.user, item.name, 'update')){
+                            return await context.connector.update(item.name, {id: args['id']}, args[item.camelName])
+                        }else{
+                            throw new Error(`${item.name}:update permission not found`)
+                        }
                     }
                 },
                 [deleteKey]:{
@@ -90,7 +101,11 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         id: 'ID'
                     },
                     resolve: async (parent, args, context : GraphContext) => {
-                        return await context.connector.delete(item.name, {id: args['id']})
+                        if(hasPermission(context.user, item.name, 'delete')){
+                            return await context.connector.delete(item.name, {id: args['id']})
+                        }else{
+                            throw new Error(`${item.name}:delete permission not found`)
+                        }
                     }
                 }
             })
@@ -102,7 +117,11 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         id: 'ID'
                     },
                     resolve: async (parent, args, context : GraphContext) => {
-                        return await context.connector.read(item.name, {id: args['id']})
+                        if(hasPermission(context.user, item.name, 'read')){
+                            return await context.connector.read(item.name, {id: args['id']})
+                        }else{
+                            throw new Error(`${item.name}:read permission not found`)
+                        }
                     }
                 },
                 [queryAllKey]: {
@@ -112,10 +131,12 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                     },
                     resolve: async (parent, args, context : GraphContext) => {
                        // const refs = item.def.filter((a) => a.directives.filter((x) => x.name == 'input' && x.args.ref).length > 0)
-              
-                        let result = await context.connector.readAll(item.name)
-
-                        return result;
+                        if(hasPermission(context.user, item.name, 'read')){
+                            let result = await context.connector.readAll(item.name)
+                            return result;
+                        }else{
+                            throw new Error(`${item.name}:read permission not found`)
+                        }
                         /*return await Promise.all(result.map(async (x: any) => {
                             if(refs.length > 0){
                                 //We have foreign references to check for

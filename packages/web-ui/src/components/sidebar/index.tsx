@@ -25,6 +25,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import { withRouter } from 'react-router-dom'
 
 import './index.css';
+import { useHub } from '@workerhive/client';
 
 export interface SidebarProps {
     history: any;
@@ -32,6 +33,8 @@ export interface SidebarProps {
 }
 
 export function Sidebar(props : SidebarProps){
+      const [client, store, isReady, err] = useHub();
+
   const [ minimized, setMinimized ] = React.useState(true);
     const menu = [
       /*  {
@@ -40,26 +43,31 @@ export function Sidebar(props : SidebarProps){
           path: ""
         },*/
         {
+          mainType: 'Schedule',
           icon: <img src="/assets/calendar1.svg" />, 
           label: "Calendar",
           path: ""
         },
         {
+          mainType: 'Project',
           icon: <img src="/assets/project1.svg" />,
           label: "Projects",
           path: "/projects"
         },
         {
+          mainType: 'TeamMember',
           icon: <img src="/assets/team.svg" />,
           label: "Team",
           path: "/team"
         },
         {
+          mainType: 'Equipment',
           icon: <img src="/assets/resources1.svg" />,
           label: "Equipment",
           path: "/equipment"
         },
         {
+          mainType: 'File',
           icon: <img src="/assets/files1.svg" />, 
           label: "Files",
           path: "/files"
@@ -70,6 +78,7 @@ export function Sidebar(props : SidebarProps){
           path: '/kb'
         },*/
         {
+          mainType: 'Contact',
           icon: <Contacts />,
           label: "Contacts",
           path: "/contacts"
@@ -95,7 +104,7 @@ export function Sidebar(props : SidebarProps){
           
         </ListItem>
         <Divider />
-        {menu.map((x, ix) => (
+        {menu.filter((a) => client?.canAccess(a.mainType, "read")).map((x, ix) => (
             <ListItem 
               key={ix}
               className={menu.map((x) => x.path).indexOf(window.location.pathname.split(props.match.url)[1]) == ix ? 'selected menu-item': 'menu-item'}

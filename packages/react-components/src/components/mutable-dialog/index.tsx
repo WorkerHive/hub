@@ -51,16 +51,16 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
     if (props.data && props.data != data) {
       setData(props.data)
     }
-  }, [props.data])
+  }, [props.data, props.open])
 
   const onClose = () => {
-    setData({})
     if (props.onClose) props.onClose()
+    setData({})
   }
 
   const onSave = () => {
-    setData({})
     if (props.onSave) props.onSave({item: data})
+    setData({})
   }
 
   const onChange = (key : string, value : any) => {
@@ -73,6 +73,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   const renderItem = (key: string, type: any) : any => {
     let typeName = type.type ? type.type : type;
 
+    console.log(props.models)
     if(props.models && props.models.length > 0){
       if(props.models.map((x: any) => x.name).indexOf(typeName) > -1){
         type = {};

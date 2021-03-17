@@ -4,6 +4,10 @@ import { CREATE_SERVER, CREATE_USER, IMPORT_SERVER } from './fdw/mssql';
 import { Nectar } from './nectar';
 import async from 'async';
 import { Pollen } from './pollen';
+import { QType, sqlToGraph } from './graph2sql';
+import EventEmitter from 'events';
+import { Table } from './table';
+import * as utils from './utils'
 
 export interface QueenConfig {
     user?: string;
@@ -19,38 +23,66 @@ export {
     Nectar,
     Pollen
 };
+/*
+export interface Table {
+    name: string;
+    columns: Array<{
+        column_name: string,
+        data_type: string,
+        is_identity: "YES" | "NO"
+    }>
+}*/
 
-export default class QueenDb {
+export default class QueenDb extends EventEmitter{
     // TODO
 
     public client: Client;
 
+    private state : Table[] = [];
+    private pollinators: Array<Pollen> = [];
+
     private cells: Array<Cell | undefined> = [];
 
     constructor(config: QueenConfig){
+        super();
         this.client = new Client(config);
         this.startClient()
+    }
+
+    //Lookup pollinator tables and map field properties
+    async inspect(){
+        let tables = await utils.getTables(this.client);
+
+        this.state = await Promise.all(tables.map(async (table) => {
+            return await Table.from(table.table_name, this.client)
+        }))
+        console.log(this.state.map((x) => sqlToGraph(x)));
+        return this.state;
+    }
+
+    async loadState(state: Table[]){
+        let cells : Pollen[] = [];
+        state.forEach((table) => {
+            cells.push(new Pollen(sqlToGraph(table), this.client))
+        })
+        this.pollinators = cells;
+        console.log(this.pollinators)
     }
 
     async startClient(){
         await this.client.connect();
         await this.client.query(`SET DATESTYLE to 'ISO, DMY';`)
+
+        await this.inspect();
+        await this.loadState(this.state)
+        this.emit('ready')
+
     }
 
     async stopClient(){
         await this.client.end();
     }
 
-    async createTable(name: string, fields: Array<any>){
-        let fieldMap = fields.map((x) => {
-            return `${x.key} ${x.type}`
-        }).join(',\n')
-        let query = `create table ${name} (
-            ${fieldMap}
-        )`
-        let result = await this.client.query(query)
-        console.log(result)
-    }
 
     
     async createViewUpdater(view_name: string, tables: Array<any>, update_name?: string){
@@ -101,21 +133,12 @@ export default class QueenDb {
         console.log(result)
     }
 
-    async createForeignTable(name : string, fields: Array<any>, server : string, options: string){
-        let fieldMap = fields.map((x) => {
-            return `${x.key} ${x.type}`
-        }).join(',\n')
-        let query = `create foreign table ${name} (
-            ${fieldMap}
-        ) server ${server} options (${options});`
-        let result = await this.client.query(query)
-
-        console.log(result)
-    }
 
     async setupTypeStore(types: Array<string>){
         const cells = await Promise.all(types.map(async (item) => {
             const cell = new Cell(item, this.client);
+            await this.assertType(item)
+
             await cell.createPollinator();
             await cell.createCell();
             return cell;
@@ -171,6 +194,47 @@ export default class QueenDb {
         `
         let results = await this.client.query(query);
         return results.rows;
+    }
+
+    async assertType(typeDef: string){
+        console.log("Assert Type", typeDef)
+        let check = await this.checkCell(typeDef)
+        if(check && Object.keys(check?.changes).length > 0 && check?.table){
+            let pollen = this.pollinators.find((a) => a.name == check?.table.name)
+            console.log("Apply diff", pollen, check?.changes)
+            if(pollen) pollen.applyDiff(check?.changes)
+        }
+
+
+    }
+
+    async checkCell(typeDef: string){
+        let type = new QType(typeDef);
+
+        let table = this.state.find((a) => a.name == type.name.toLowerCase())
+        if(table != undefined){
+            let changes : any = {};
+
+            table.columns.forEach((col) => { 
+                let old_ix = type.fields.map((x) => x.name.toLowerCase()).indexOf(col.column_name.toLowerCase())
+                if(old_ix < 0){
+                    changes[col.column_name] = {action: 'delete'}
+                }
+            })
+
+            type.fields.forEach((field) => {
+                let new_ix = table!.columns.map((x) => x.column_name.toLowerCase()).indexOf(field.name.toLowerCase());
+                if(new_ix < 0){
+                    changes[field.name] = {action: 'create', type: field.type};
+                }else{
+                    if(field.type != table!.columns[new_ix].data_type){
+                        changes[field.name] = {action: 'update', type: field.type}
+                    }
+                }
+            })
+            
+            return {table, changes}
+        }
     }
 
     async newCell(typeDef: string){

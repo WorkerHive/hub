@@ -79,17 +79,28 @@ export class WorkhiveServer {
     initMail() {
 
         //TODO add options for smtp
-        let mailOpts: any = {
+        let mailOpts : any = {};
+        if(process.env.O365_USER && process.env.O365_PASS){
+            mailOpts = {
+                service: 'Outlook365',
+                auth: {
+                    user: process.env.O365_USER,
+                    pass: process.env.O365_PASS
+                }
+            }
+        }else{
+           mailOpts = {
             host: process.env.SMTP_SERVER || 'mail',
             port: process.env.SMTP_PORT || 25,
             secure: (process.env.SMTP_PORT || 25) == '465'
-        }
+            }
 
         if (process.env.SMTP_USER || process.env.SMTP_PASS) {
             mailOpts.auth = {};
             mailOpts.auth.user = process.env.SMTP_USER;
             mailOpts.auth.pass = process.env.SMTP_PASS;
         }
+    }
         this.mailer = new Mailer(mailOpts);
     }
 

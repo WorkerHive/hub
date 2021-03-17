@@ -7,11 +7,32 @@ export const typeDef = `
     changePassword(current: Hash, next: Hash): Boolean
   }
 
+  type Role {
+    id: ID
+    name: String
+    permissions: JSON
+  }
+
+  type SiteFeedback @crud @configurable {
+      id: ID
+      from: String @input
+      message: String @input
+   }
+
+  type TeamHub @crud @configurable {
+    id: ID
+    name: String @input
+    slug: Moniker @input
+    location: String @input
+    active: Boolean @input
+  }
+
   type TeamMember @crud @configurable {
     "A member of your WorkHub Team"
     id: ID
     username: String @input
     password: Hash @input 
+    roles: [Role] @input(ref: true)
     status: String @input
     admin: Boolean @input
     name: String @input
@@ -27,7 +48,12 @@ export const resolvers =  {
       let user: any = await context.connector.read('TeamMember', {id: id})
       if(user.email){
         const token = jwt.sign({
-          id: user.id,
+          sub: user.id,
+          name: user.name,
+          email: user.email,
+          phone_number: user.phone_number,
+          username: user.username,
+          type: 'signup',
           inviter: context.user.id
         }, 'test-secret')
 

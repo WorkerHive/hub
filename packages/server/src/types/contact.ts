@@ -6,7 +6,7 @@ export const typeDef = `
         phone_number: String @input
         email: String @input
         notes: String @input
-        history: [ContactOrganisation] @input
+        history: [ContactOrganisation] @input(ref: true)
     }
 
     type ContactOrganisation @crud @configurable{
@@ -15,5 +15,6 @@ export const typeDef = `
         location: String @input
         contacts: [Contact] @input
     }
+
 
 `

@@ -21,6 +21,8 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
       setModels(models.crud)
     });
 
+    client?.actions.getTeamHubs();
+
     client?.actions.getRoles().then((roles: any) => {
       setRoles(roles)
     })
@@ -75,16 +77,76 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
         </div>
       </div>
       )
-    },
+    }].concat(client?.canAccess("TeamHub", "create") ? [
+      {
+        title: <Typography variant="h6" style={{display: 'flex'}}>Hubs</Typography>,
+        body: (
+          <CRUDList
+            title={"Hubs"}
+            type={{
+              name: "String",
+              slug: "String",
+              location: "String",
+              active: "Boolean"
+            }}
+            onSave={({item} : any) => {
+              let obj = Object.assign({}, item)
+              if(!obj.id){
+                client?.actions.addTeamHub(obj)
+              }else{
+                const id = obj.id;
+                delete obj.id;
+                client?.actions.updateTeamHub(id, obj)
+              }
+            }}
+            data={store.TeamHub} />
+        )
+      }
+    ]: [])
+    .concat(client?.canAccess("Role", "update") ? [
+        /* Site Roles: Admin only */
+   {
+      title: <Typography variant="h6" style={{display: 'flex'}}>Roles</Typography>,
+      body: (
+        <CRUDList 
+          title={"Roles"} 
+          onDelete={({item}: any) => {
+            client?.actions.deleteRole(item.id)
+          }}
+          onSave={({item}: any) => {
+            console.log(client?.actions, item)
+            let obj = Object.assign({}, item);
+            if(!obj.id){
+              client?.actions.addRole(obj)
+            }else{
+              const id = obj.id;
+              delete obj.id;
+              client?.actions.updateRole(id,obj)
+            }
+          }}
+          type={{
+            name: 'String', 
+            permissions: {
+              type: 'Table', 
+              items: [{name: "Site Settings"}].concat(models.filter((a: any) => a.directives.indexOf('configurable') > -1))
+            }
+          }} 
+          data={store.Role} />
+      )
+    }
+    ] : [])
+    .concat(client?.canAccess("Site Settings", "update") ? [
+    /* Add ons: Admin only currently 
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Add-ons</Typography>,
       body: <CRUDList title={"Add-ons"} data={converters} />
-    },
+    }, */
+    /* Database connections: Admin only */
     {
-      title: <Typography variant="h6" style={{display: 'flex'}}>Connections</Typography>,
+      title: <Typography variant="h6" style={{display: 'flex'}}>Databases</Typography>,
       body: (
         <CRUDList 
-          title={"Connections"} 
+          title={"Databases"} 
           onDelete={({item}: any) => {
             if(item && item.id){
               client?.actions.deleteStore(item.id)
@@ -107,34 +169,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
           data={store.IntegrationStore} />
       )
     },
-    {
-      title: <Typography variant="h6" style={{display: 'flex'}}>Roles</Typography>,
-      body: (
-        <CRUDList 
-          title={"Roles"} 
-          onDelete={({item}: any) => {
-            client?.actions.deleteRole(item.id)
-          }}
-          onSave={({item}: any) => {
-            let obj = Object.assign({}, item);
-            if(!obj.id){
-              client?.actions.addRole(obj)
-            }else{
-              const id = obj.id;
-              delete obj.id;
-              client?.actions.updateRole(id,obj)
-            }
-          }}
-          type={{
-            name: 'String', 
-            permissions: {
-              type: 'Table', 
-              items: models.filter((a: any) => a.directives.indexOf('configurable') > -1)
-            }
-          }} 
-          data={store.Role} />
-      )
-    },
+    /* Data flow : Admin only */
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Data Flow</Typography>,
       body: (
@@ -144,6 +179,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
         </div>
       )
     },
+    /* Data types: Admin only */
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Data types</Typography>,
       body: (
@@ -156,5 +192,5 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
           }} />   
       )
     }
-  ]
+  ] : [])
 }

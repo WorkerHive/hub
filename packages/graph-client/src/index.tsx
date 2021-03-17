@@ -107,6 +107,10 @@ export class WorkhubClient {
         return jwt_decode(this.accessToken!)
     }
 
+    canAccess(type: string, action: string){
+        return this.user.permissions.indexOf(`${type}:${action}`) > -1
+    }
+
     setAccessToken(token: string){
         this.accessToken = token
     }
@@ -219,25 +223,19 @@ export class WorkhubClient {
 
     async getModels(){
         this.lastUpdate = new Date();
-        let result = await this.client!.query({
-            query: gql`
-                query GetTypes { 
-                    crudTypes { 
-                        name
-                        directives
-                        def
-                    }
-                    uploadTypes {
-                        name
-                        directives
-                        def
-                    }
-                }
+        let result = await this.query(
             `
-        })
+                query GetTypes ($directives: [String]){
+                    types(hasDirective: $directives)
+                }
+            `,
+            {
+                directives: ["crud", "upload"]
+            }
+        )
         
     
-        return {crud: result.data.crudTypes, upload: result.data.uploadTypes}
+        return {crud: result.data.types[0], upload: result.data.types[1]}
     }
 
     setupFileActions(dispatch: any){

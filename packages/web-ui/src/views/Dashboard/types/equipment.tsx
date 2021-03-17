@@ -68,20 +68,31 @@ export const EQUIPMENT_VIEW = {
                                         <>
                                             <Typography style={{flex: 1}}>{item.name}</Typography>
                                             <MoreMenu menu={[
-                                                {label:"Edit", icon: <Edit />, action: () => {
-                                                    setSelected(item)
-                                                    modalOpen(true)
-                                                }},
-                                                {label: "Delete", color: 'red', icon: <Delete />, action: () => {
-                                                    props.client.actions.deleteEquipment(item.id)
-                                                }}
-                                            ]} />
+                                                {
+                                                    perm: 'update',
+                                                    label:"Edit", 
+                                                    icon: <Edit />, 
+                                                    action: () => {
+                                                        setSelected(item)
+                                                        modalOpen(true)
+                                                    }
+                                                },
+                                                {
+                                                    perm: 'delete',
+                                                    label: "Delete", 
+                                                    color: 'red', 
+                                                    icon: <Delete />, 
+                                                    action: () => {
+                                                        props.client.actions.deleteEquipment(item.id)
+                                                    }
+                                                }
+                                            ].filter((a) => client.canAccess("Equipment", a.perm))} />
                                         </>
                                     )} 
                                     data={data.equipment || []} />
-                                <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
+                                {client.canAccess("Equipment", "create") && <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
-                                </Fab>
+                                </Fab>}
                             </div>
                         )
                     })({client})

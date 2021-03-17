@@ -52,7 +52,7 @@ export const CONTACT_VIEW = {
                                         if(item.id){
                                             const id = item.id;
                                             delete item.id;
-                                            props.client.action.updateContact(id, item).then(() => {
+                                            props.client.actions.updateContact(id, item).then(() => {
                                                 modalOpen(false);
                                             })
                                         }else{
@@ -102,9 +102,9 @@ export const CONTACT_VIEW = {
                                 )} data={data.contacts || []} />
                                 )}
                             </FileDrop>
-                                <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
+                              {client.canAccess("Contact", "create") &&   <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
-                                </Fab>
+                                </Fab>}
                             </div>
                         )
                     })({client})

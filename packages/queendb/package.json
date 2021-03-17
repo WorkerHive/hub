@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/queendb",
-  "version": "2.1.16",
+  "version": "2.1.19",
   "private": false,
   "description": "Command and connect all your databases",
   "keywords": [
@@ -37,6 +37,7 @@
   },
   "gitHead": "f01c39add4e46b0dd56bec116a609e8ac135ef3e",
   "devDependencies": {
-    "@types/node-cron": "^2.0.3"
+    "@types/node-cron": "^2.0.3",
+    "ts-node": "^9.1.1"
   }
 }

@@ -3,6 +3,8 @@ import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
 import {Login} from './views/Login';
+import { Signup } from './views/Signup';
+
 import { PageLoader } from './components/page-loader';
 
 import './App.css';
@@ -19,11 +21,12 @@ if(isElectron()){
 
 function App() {
 
-  const [ hubUrl, setHubUrl ] = React.useState<string | null>(isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://thetechcompany.workhub.services' || 'http://localhost:4002' : window.location.origin));
+  const [ hubUrl, setHubUrl ] = React.useState<string | null>(isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin));
   return (
         <Router>
           <div className="App">
             <Route path="/" exact component={Login} />
+            <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/dashboard" render={(props) => {
               const token = localStorage.getItem('token')

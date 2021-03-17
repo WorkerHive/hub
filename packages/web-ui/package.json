@@ -16,6 +16,7 @@
     "is-electron": "^2.2.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
+    "qs": "^6.9.6",
     "react-grid-layout": "^1.2.0",
     "react-json-view": "^1.20.4",
     "react-resize-aware": "^3.1.0",
