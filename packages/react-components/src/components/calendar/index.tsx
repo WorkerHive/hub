@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 
 import {Calendar as BigCalendar, momentLocalizer, stringOrDate} from 'react-big-calendar';
 
@@ -7,6 +7,7 @@ import moment, { Moment } from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { ScheduleWeek } from './schedule-week';
 import { Paper } from '@material-ui/core';
+import { DispatchWithoutAction } from 'react';
 
 const localizer = momentLocalizer(moment)
 
@@ -17,6 +18,7 @@ export enum CALENDAR_VIEWS {
 }
 
 export interface CalendarEvent{
+  id: string;
   start: Date | Moment ;
   end: Date | Moment;
   title: string;
@@ -35,22 +37,44 @@ export interface CalendarProps{
     slots: Array<Date | string>,
     action: "select" | "click" | "doubleClick"
   }) => void
+  actions?: Array<string>;
+  onDeleteEvent?: (event: object) => void;
   onSelectEvent?: (event: object, syntheticEvent?: any) => void
   onDoubleClickEvent?: (event: object, syntheticEvent?: any) => void
 }
 
+export const CalendarContext = React.createContext<{actions: string[], dispatch: any | null}>({dispatch: null, actions: []});
+
+
 export const WorkhubCalendar : React.FC<CalendarProps> = ({
   className,
   events = [],
+  actions = ["create", "read", "update", "delete"],
   defaultView = CALENDAR_VIEWS.SCHEDULE,
   viewDate = new Date(),
   onSelectSlot,
   onSelectEvent,
+  onDeleteEvent,
   onDoubleClickEvent
 }) => {
 
+  const dispatch = (action : {type: string, id: string}) => {
+    let e = events.find((a) => a.id == action.id)
+
+    switch(action.type){
+      case 'DELETE_CARD':
+        if(e && onDeleteEvent && (actions.indexOf("delete") > -1)) onDeleteEvent(e)
+        console.log("Delete", action, e)
+        break;
+      case 'EDIT_CARD':
+        if(e && onDoubleClickEvent && (actions.indexOf("read") > -1 || actions.indexOf("update") > -1)  ) onDoubleClickEvent(e)
+        console.log("Edit", action, e)
+        break;
+    }
+  }
 
   return (
+    <CalendarContext.Provider value={{actions, dispatch}}>
     <Paper className={className}>
       <BigCalendar
         views={{
@@ -59,11 +83,11 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
           work_week: ScheduleWeek
         }}
         onSelectEvent={onSelectEvent}
-        onDoubleClickEvent={onDoubleClickEvent}
+        onDoubleClickEvent={(actions.indexOf("read") > -1 || actions.indexOf("update") > -1) ? onDoubleClickEvent : undefined}
         onSelectSlot={(slotInfo: {start: stringOrDate, end:stringOrDate, slots: Array<Date | string>, action: "select" | "click" | "doubleClick"}) => {
           slotInfo.start = moment(slotInfo.start).add(12, 'hours').toDate()
           slotInfo.end = moment(slotInfo.end).add(1, 'day').toDate();
-          if(onSelectSlot) onSelectSlot(slotInfo)
+          if(onSelectSlot && actions.indexOf("create") > -1) onSelectSlot(slotInfo)
         }}
         selectable={true}
         defaultDate={viewDate}
@@ -75,6 +99,7 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
         endAccessor={(event : any) => event.end}
          />
     </Paper>
+    </CalendarContext.Provider>
   )
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "react-workerhub",
-  "version": "2.1.17",
+  "version": "2.1.18",
   "private": true,
   "dependencies": {
     "@date-io/moment": "1.x",

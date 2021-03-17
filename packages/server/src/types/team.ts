@@ -31,10 +31,9 @@ export const typeDef = `
     "A member of your WorkHub Team"
     id: ID
     username: String @input
-    password: Hash @input 
+    password: Hash 
     roles: [Role] @input(ref: true)
-    status: String @input
-    admin: Boolean @input
+    status: String 
     name: String @input
     email: String @input
     phone_number: String @input

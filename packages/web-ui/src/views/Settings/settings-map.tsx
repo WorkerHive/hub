@@ -18,7 +18,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
 
   React.useEffect(() => {
     client?.getModels().then(models => {
-      setModels(models.crud)
+      setModels(models.configurable)
     });
 
     client?.actions.getTeamHubs();

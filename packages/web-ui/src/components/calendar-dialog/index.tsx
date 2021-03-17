@@ -13,9 +13,11 @@ import { ExitToApp } from '@material-ui/icons';
 
 
 export interface CalendarDialogProps extends RouteComponentProps{
+    actions?: string[];
     open?: boolean;
     onClose?: any | undefined;
     onSave?: any | undefined;
+    onDelete?: any;
     data?: {
         project?: {id: string},
         people?: {id: Array<string>},
@@ -34,9 +36,11 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     data = {}, 
     onClose = () => {}, 
     onSave = () => {},
+    onDelete = () => {},
     open = false,
     projects = [],
     equipment = [],
+    actions = ["create", "read", "update", "delete"],
     team = [],
     history
 }) => {
@@ -178,12 +182,13 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
   
             </DialogContent>
             <DialogActions>
+                {actions.indexOf('delete') > -1 && <Button onClick={onDelete} color="secondary">Delete</Button>}
                 <Button onClick={onClose}>
-                    Cancel
+                    Close
                 </Button>
-                <Button onClick={() => onSave(_data)} color="primary" variant="contained">
+                {actions.indexOf('update') > -1 || actions.indexOf('create') > -1 && <Button onClick={() => onSave(_data)} color="primary" variant="contained">
                     Save
-                </Button>
+                </Button>}
             </DialogActions>
         </Dialog>
     )

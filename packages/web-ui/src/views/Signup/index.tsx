@@ -51,6 +51,7 @@ const SignupView : FC<SignupProps> = (props) => {
         if(user && token){
             trySignup(user, token).then((r) => {
                 if(r.token){
+                    localStorage.setItem('token', r.token)
                     props.history.push('/dashboard')
                 }else{
                     setErr(r.error)

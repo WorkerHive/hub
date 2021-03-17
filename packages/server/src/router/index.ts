@@ -241,7 +241,7 @@ export class Router {
                     phone_number: req.body.phone_number
                 }
                 let exists = await this.connector.read("TeamMember", {username: user.username})
-                if(exists && req['user'].id != exists.id){
+                if(exists && Object.keys(exists).length > 0 && req['user'].id != exists.id){
                     console.log("Signup", req['user'], exists)
                     res.send({error: "Username already taken"})
                 }else{

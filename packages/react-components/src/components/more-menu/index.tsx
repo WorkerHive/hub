@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 
 export interface MoreMenuItem {
+  type?: string;
   icon?: any;
   label?: string;
   color?: string;

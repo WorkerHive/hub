@@ -230,12 +230,12 @@ export class WorkhubClient {
                 }
             `,
             {
-                directives: ["crud", "upload"]
+                directives: ["crud", "upload", "configurable"]
             }
         )
         
     
-        return {crud: result.data.types[0], upload: result.data.types[1]}
+        return {crud: result.data.types[0], upload: result.data.types[1], configurable: result.data.types[2]}
     }
 
     setupFileActions(dispatch: any){

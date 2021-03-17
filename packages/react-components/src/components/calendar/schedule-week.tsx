@@ -6,10 +6,14 @@ import Edit from '@material-ui/icons/Edit';
 
 import { MoreMenu } from '../more-menu';
 import { Popover } from '@material-ui/core';
+import { useContext } from 'react';
+import { CalendarContext } from '.';
 
 const invert = require('invert-color');
 
 export const ScheduleEvent = (props : any) => {
+
+  const { actions, dispatch } = useContext(CalendarContext)
   
   console.log(props);
 
@@ -29,7 +33,7 @@ export const ScheduleEvent = (props : any) => {
       return "00000".substring(0, 6 - c.length) + c;
   }
 
-  const fullName = props.event.project && `${props.event.project.id}-${props.event.project.name}`;
+  const fullName = props.event.project ? `${props.event.project.id}-${props.event.project.name}` : '';
   const color = intToRGB(hashCode(fullName))
 
   const [ popper, setPopper ] = React.useState<any>(null)
@@ -93,16 +97,31 @@ export const ScheduleEvent = (props : any) => {
           position: 'relative'
       }}>
         <div>
-          {props.event.project.id.length < 8 ? `${props.event.project.id} - ` : ''}
+          {props.event.project && props.event.project.id.length < 8 ? `${props.event.project.id} - ` : ''}
          {props.event.project && props.event.project.name}
 
         </div>
 
         <div style={{position: 'absolute', right: 0, top: 0 }}>
           <MoreMenu size="small" horizontal menu={[
-            {icon: <Edit />, label: "Edit"},
-            {icon: <Delete />, label: "Delete", color: 'red'},
-          ]} />
+            {
+              type: 'update',
+              icon: <Edit />, 
+              label: "Edit", 
+              action: () => {
+                dispatch({type: 'EDIT_CARD', id: props.event.id})
+              }
+            },
+            {
+              type: 'delete',
+              icon: <Delete />, 
+              label: "Delete", 
+              color: 'red', 
+              action: () => {
+                dispatch({type: 'DELETE_CARD', id: props.event.id})
+              }
+            },
+          ].filter((a) => actions.indexOf(a.type) > -1)} />
         </div>
 
       </div>

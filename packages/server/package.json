@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/server",
-  "version": "2.1.59",
+  "version": "2.1.62",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
