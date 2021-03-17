@@ -243,9 +243,6 @@ export default class TypeRegistry extends EventEmitter<any>{
 
     get resolvers(){
         
-        
-//        this.composer.addResolveMethods(this._resolvers);
-
         let resolvers = this.composer.getResolveMethods();
         return merge(this._resolvers, resolvers);
         //return r;
@@ -312,7 +309,7 @@ export class Type {
             fields = this.object.getType().getFields(); 
         }
         return objectValues(fields).map((x: GraphQLField<any, any>) => {
-            const directives = x.extensions.directives.map((x: any) => ({
+            const directives = this.object.getFieldDirectives(x.name).map((x: any) => ({
                 name: x.name,
                 args: x.args
             }));

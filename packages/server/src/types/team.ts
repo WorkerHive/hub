@@ -7,10 +7,10 @@ export const typeDef = `
     changePassword(current: Hash, next: Hash): Boolean
   }
 
-  type Role {
+  type Role @crud @configurable{
     id: ID
-    name: String
-    permissions: JSON
+    name: String @input
+    permissions: JSON @input
   }
 
   type SiteFeedback @crud @configurable {

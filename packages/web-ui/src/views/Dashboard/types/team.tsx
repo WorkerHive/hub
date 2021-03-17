@@ -36,7 +36,8 @@ export const TEAM_VIEW = {
                 component: (data: any, params: any, type: any, client: any) => {
                     const t: any = {};
                     if (type["TeamMember"]) type["TeamMember"].def.forEach((_type: any) => {
-                        t[_type.name] = _type.type;
+                        console.log(_type)
+                        if(_type.directives.map((x: {name: string}) => x.name).indexOf('input') > -1) t[_type.name] = _type.type;
                     })
 
                     let models = [client.models.find((a : any) => a.name == "Role")]

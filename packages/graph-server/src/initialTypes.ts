@@ -12,9 +12,4 @@ type Subscription {
 }
 ${initialTypes}
 
-type Role @crud @configurable {
-    id: ID
-    name: String @input
-    permissions: JSON @input
-}
 `

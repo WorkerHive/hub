@@ -46,7 +46,7 @@ export interface MutableDialogProps {
 
 export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   const [data, setData] = React.useState<any>({})
-
+  console.log(props.structure)
   React.useEffect(() => {
     if (props.data && props.data != data) {
       setData(props.data)

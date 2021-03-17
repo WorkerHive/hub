@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 
 import {Calendar as BigCalendar, momentLocalizer, stringOrDate} from 'react-big-calendar';
 
@@ -7,7 +7,7 @@ import moment, { Moment } from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { ScheduleWeek } from './schedule-week';
 import { Paper } from '@material-ui/core';
-import { DispatchWithoutAction } from 'react';
+
 
 const localizer = momentLocalizer(moment)
 
