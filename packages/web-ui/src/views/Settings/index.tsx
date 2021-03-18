@@ -54,7 +54,8 @@ export default function Settings (props: SettingsProps){
 
     return (
         <div className="settings-view">
-            <AccordionList items={SettingsMap(props, stores, storeTypes, converters, roles)} />
+            <AccordionList 
+              items={SettingsMap(props, stores, storeTypes, converters, roles)} />
         </div>
     )
 }

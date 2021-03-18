@@ -123,6 +123,7 @@ export const StyledCRUDList = styled(CRUDList)`
   display: flex;
   flex-direction: column;
   flex: 1;
+  align-items: inherit;
 
   .crud-list__actions {
     display: flex;
