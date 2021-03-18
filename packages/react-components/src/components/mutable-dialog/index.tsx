@@ -46,10 +46,13 @@ export interface MutableDialogProps {
 
 export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   const [data, setData] = React.useState<any>({})
-  console.log(props.structure)
+
+  console.log(props.data)
   React.useEffect(() => {
     if (props.data && props.data != data) {
       setData(props.data)
+    }else{
+      setData({})
     }
   }, [props.data, props.open])
 
@@ -60,7 +63,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
 
   const onSave = () => {
     if (props.onSave) props.onSave({item: data})
-    setData({})
+   // setData({})
   }
 
   const onChange = (key : string, value : any) => {
@@ -73,7 +76,6 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   const renderItem = (key: string, type: any) : any => {
     let typeName = type.type ? type.type : type;
 
-    console.log(props.models)
     if(props.models && props.models.length > 0){
       if(props.models.map((x: any) => x.name).indexOf(typeName) > -1){
         type = {};

@@ -51,7 +51,6 @@ export const CONTACT_VIEW = {
                                     onSave={({item} : any) => {
                                         if(item.id){
                                             const id = item.id;
-                                            delete item.id;
                                             props.client.actions.updateContact(id, item).then(() => {
                                                 modalOpen(false);
                                             })

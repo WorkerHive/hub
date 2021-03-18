@@ -73,7 +73,8 @@ export default (models: any, client?: any, dispatch?: any) => {
          actions[`update${model.name}`] = (id: string, update: any) => {
             
             const updateObject = cleanObject(update, model.def)
-
+            delete updateObject.id;
+            
             return client!.mutate({
                 mutation: gql`
             mutation Update${model.name}($id: ID, $update: ${model.name}Input){

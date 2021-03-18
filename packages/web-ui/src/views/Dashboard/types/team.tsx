@@ -56,7 +56,7 @@ export const TEAM_VIEW = {
                                     onSave={({item} : any) => {
                                         if(item.id){
                                             const id = item.id;
-                                            delete item.id;
+                                           // delete item.id;
                                             props.client.actions.updateTeamMember(id, item).then(() => {
                                                 modalOpen(false)
                                                 setSelected(null)

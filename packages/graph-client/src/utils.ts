@@ -7,11 +7,11 @@ export const isNativeType = (typeName : string) => {
 
     export const cleanObject = (object: any, definition: any) => {
         let returnObject : any = {};
-        if(object.id) delete object.id;
         definition.forEach((field : any) => {
-            if(object[field.name]) returnObject[field.name] = object[field.name];
+            console.log("Clean field", field, object[field.name])
+            if(object[field.name] && field.directives.map((x: {name: string}) => x.name).indexOf('input') > -1) returnObject[field.name] = object[field.name];
         })
-        return returnObject;
+        return Object.assign({}, returnObject);
     }
 
 

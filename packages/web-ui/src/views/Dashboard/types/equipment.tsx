@@ -47,7 +47,7 @@ export const EQUIPMENT_VIEW = {
                                     onSave={({item} : any) => {
                                         if(item.id){
                                             const id = item.id;
-                                            delete item.id;
+                                         
                                             props.client.actions.updateEquipment(id, item).then(() => {
                                                 modalOpen(false)
                                             })

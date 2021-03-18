@@ -18,7 +18,7 @@ export function clientReducer(state : State, action : Action): State {
     if(!store[actionParts[1]]) store[actionParts[1]] = [];
     let ix = action.id != null ? store[actionParts[1]].map((x: any) => x.id).indexOf(action.id) : null;
 
-    console.log(actionParts[0], actionParts[1])
+    console.log("Client Reducer", actionParts[0], actionParts[1])
 
     switch(actionParts[0]){
         case 'ADD':
@@ -36,6 +36,7 @@ export function clientReducer(state : State, action : Action): State {
             store[actionParts[1]] = action.data;       
             return {store: store}
         case 'UPDATE':
+            console.log("Updating", ix, store[actionParts[1]])
             if(ix > -1){
                 let _part = store[actionParts[1]].slice()
                 _part[ix] = {

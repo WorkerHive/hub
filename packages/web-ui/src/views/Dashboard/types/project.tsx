@@ -240,7 +240,7 @@ export const PROJECT_VIEW = {
                                     onSave={({item} : any) => {
                                         if(item.id){
                                             const id = item.id;
-                                            delete item.id;
+                                          
                                             props.client.actions.updateProject(id, item).then(() => modalOpen(false))
                                         }else{
                                             props.client.actions.addProject(item).then(() => modalOpen(false))
