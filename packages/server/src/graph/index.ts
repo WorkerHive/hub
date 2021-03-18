@@ -1,13 +1,11 @@
 import GraphTransport from "./interfaces/GraphTransport";
 import RoleRegistry from "./registry/role";
 import TypeRegistry from "./registry/type";
-import EventEmitter from "./interfaces/Emitter"
 import { graphql, execute, GraphQLSchema, parse, Source } from "graphql";
 import { schemaComposer } from "graphql-compose";
 import { GraphConnector, GraphBase, BaseGraph } from "./interfaces/GraphConnector";
 import GraphContext from "./interfaces/GraphContext";
 import { getTypesWithDirective } from "./utils";
-import LoggerConnector from "./connectors/logger";
 import BaseConnector from "./interfaces/GraphConnector";
 import { merge } from "lodash";
 import { directives, directiveTransforms } from './directives';
@@ -17,7 +15,6 @@ export {
     GraphContext,
     BaseGraph,
     BaseConnector,
-    LoggerConnector
 }
 
 export default class HiveGraph extends BaseGraph{
@@ -43,7 +40,7 @@ export default class HiveGraph extends BaseGraph{
         this.connector = connector;
 
         this.typeRegistry = new TypeRegistry(this.initialTypes, resolvers);
-
+        //console.log(this.typeRegistry.sdl)
         this.schema = this.getSchema()
 
         this.schemaUpdate = this.schemaUpdate.bind(this);
@@ -73,9 +70,7 @@ export default class HiveGraph extends BaseGraph{
         })
 
         outputSchema.merge(typeSchema);
-
         let schema = outputSchema.buildSchema();
-        console.log("Built schema", schema.toConfig().types['Schedule'])
         return schema
     }
 

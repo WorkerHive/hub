@@ -32,7 +32,7 @@ let start = root
     .option("-c, --config <config_dir>", "config directory")
     .option("-r, --restart", "Restart service(s)")
     .action(async (opts : {config: string[], restart: boolean}, args, rest) => {
-        let configDir = opts.config.length > 0 ? opts.config[0] : './config'
+        let configDir = opts.config && opts.config.length > 0 ? opts.config[0] : './config'
 
         await mkdir(path.join(configDir, '/keys'), {recursive: true})
 
@@ -59,6 +59,7 @@ let start = root
 
         console.log(`IPFS: ${ipfsSecret}`)
         console.log(`JWT: ${jwtSecret}`)
+        console.log(`QueenDB: ${process.env.QUEENDB_HOST}`)
         console.log(`MQ: ${process.env.MQ_URL}`)
         console.log(`Domain: ${process.env.WORKHUB_DOMAIN}`)
         

@@ -6,8 +6,8 @@ type Schedule @crud @configurable{
   project: Project @input(ref: true)
   start: Date @input
   end: Date @input
-  people: [TeamMember] @input(ref: true)
-  resources: [Equipment] @input(ref: true)
+  people: [TeamMember] @input(ref: true, required: false)
+  resources: [Equipment] @input(ref: true, required: false)
 }
 
 `

@@ -14,6 +14,7 @@
     "@workerhive/parsers": "file:../parsers",
     "@workerhive/react-ui": "file:../react-components",
     "is-electron": "^2.2.0",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "qs": "^6.9.6",

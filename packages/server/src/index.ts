@@ -1,4 +1,3 @@
-import Graph, { LoggerConnector } from '@workerhive/graph'
 import { typeDefs, resolvers as typeResolvers } from './types';
 import express from 'express';
 
@@ -9,8 +8,8 @@ import { Router } from './router'
 import MQ from '@workerhive/mq';
 import { WorkhubFS } from "@workerhive/ipfs"
 
-import { FlowConnector } from '@workerhive/flow-provider'
-import HiveGraph from '@workerhive/graph';
+import { FlowConnector } from './connectors/flow'
+import HiveGraph from './graph';
 import Mail from 'nodemailer/lib/mailer';
 import { Mailer } from './mailer';
 import { Realtime } from './realtime';
@@ -48,10 +47,16 @@ export class WorkhiveServer {
         if (opts.mqUrl) this.initMQ();
         if (!opts.mqUrl) console.log("Hub: Starting without a message queue MQ_URL not provided")
 
+        console.log("Init flow");
+
         this.initFlow();
+        
+        console.log("Init mail")
         this.initMail();
+        console.log("Init realtime")
         this.initRealtime();
 
+        console.log("Init router")
         this.initRouter();
 
     }
@@ -101,7 +106,8 @@ export class WorkhiveServer {
             mailOpts.auth.pass = process.env.SMTP_PASS;
         }
     }
-        this.mailer = new Mailer(mailOpts);
+
+     if(mailOpts && Object.keys(mailOpts).length > 0)   this.mailer = new Mailer(mailOpts);
     }
 
     initFlow() {
@@ -120,7 +126,7 @@ export class WorkhiveServer {
     }
 
     initGraph(types, resolvers) {
-        this.graph = new Graph(`
+        this.graph = new HiveGraph(`
 
             extend type Query {
                 swarmKey: String

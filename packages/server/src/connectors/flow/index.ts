@@ -2,13 +2,11 @@ import { GraphQLSchema } from 'graphql'
 import { ObjectTypeComposer, SchemaComposer, schemaComposer } from 'graphql-compose';
 
 import { v4 } from 'uuid'
-import { BaseConnector, BaseGraph } from '@workerhive/graph';
+import { BaseConnector, BaseGraph } from '../../graph';
 //Replace below
-import { transform as setupConfig } from './transforms/integration'
+import { transform as setupConfig } from './integrationTransform'
 import {merge} from 'lodash';
 import resolvers from './resolver-base'
-import FlowPath from './flow-path';
-import { hydrate } from './flow-path/hydration';
 
 import QueenDB from '@workerhive/queendb';
 
@@ -42,14 +40,10 @@ export class FlowConnector extends BaseConnector{
             password: process.env.QUEENDB_PASS || 'defaultpassword'
         })
 
- //       this.db.rehydrate();
-
         this.flowDefs = flowDefs;
         this.userResolvers = userResolvers;
         this.flowResolvers = merge(resolvers, userResolvers)
 
-      //  this.config = setupConfig(this.schemaFactory)
-       // this.rehydrateFlow();
     }
 
     async rehydrateFlow(){
@@ -57,7 +51,6 @@ export class FlowConnector extends BaseConnector{
         let configurable = [];
         this.schemaFactory.types.forEach((val, key, map) => {
             if(typeof(key) === 'string' && val instanceof ObjectTypeComposer && val.getDirectiveNames().indexOf('configurable') > -1){
-                console.log("Configurable", val.toSDL())
                 configurable.push(val.toSDL())
             }
         })
@@ -69,20 +62,7 @@ export class FlowConnector extends BaseConnector{
             await this.db.rehydrate(flowMap);
             console.log("Flow Map", flowMap)
         })
-        
-        /*
-        if(this.stores.isReady){
-            let flowMap : any = await this.read('IntegrationMap', {id: 'root-map'})
-            this.flowDefs = hydrate(flowMap.nodes, flowMap.links);
-            console.log("Rehydrated", Object.keys(this.flowDefs).length);
-        }else{
-            clearTimeout(this.timer)
-            this.timer = setTimeout(async () => {
-                //Retry rehydrateStores every 2 seconds until we can try it with the app store
-                await this.rehydrateFlow()
-            }, 2 * 1000)
-        }
-        */
+    
     }
 
     getConfig(){
@@ -100,11 +80,6 @@ export class FlowConnector extends BaseConnector{
          this.schemaFactory.addTypeDefs(parent.typeRegistry.sdl);
         })
 
-//        console.log("Key type registry", this.schemaFactory.typeMapper)
-
-
-
-        
         this.rehydrateFlow()
     }
 

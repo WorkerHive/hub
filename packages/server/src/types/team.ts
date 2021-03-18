@@ -1,4 +1,4 @@
-import { GraphContext } from "@workerhive/graph";
+import { GraphContext } from "../graph";
 import jwt from 'jsonwebtoken'
 
 export const typeDef = `

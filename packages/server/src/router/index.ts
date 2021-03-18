@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors';
-import { FlowConnector } from '@workerhive/flow-provider';
-import HiveGraph from '@workerhive/graph';
+import { FlowConnector } from '../connectors/flow';
+import HiveGraph from '../graph';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken'
 import passport from 'passport';

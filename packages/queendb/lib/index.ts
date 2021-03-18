@@ -56,7 +56,6 @@ export default class QueenDb extends EventEmitter{
         this.state = await Promise.all(tables.map(async (table) => {
             return await Table.from(table.table_name, this.client)
         }))
-        console.log(this.state.map((x) => sqlToGraph(x)));
         return this.state;
     }
 
@@ -66,7 +65,6 @@ export default class QueenDb extends EventEmitter{
             cells.push(new Pollen(sqlToGraph(table), this.client))
         })
         this.pollinators = cells;
-        console.log(this.pollinators)
     }
 
     async startClient(){

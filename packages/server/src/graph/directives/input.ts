@@ -1,7 +1,7 @@
 import { DirectiveLocation, GraphQLBoolean, GraphQLDirective, GraphQLSchema } from "graphql";
 import { SchemaComposer, schemaComposer } from "graphql-compose";
 import { Schema } from "inspector";
-import TypeRegistry from "../registry/type";
+import TypeRegistry, { Type } from "../registry/type";
 import { convertInput, getTypesWithFieldDirective, objectValues } from "../utils";
 
 export const directiveName = "input";
@@ -26,11 +26,9 @@ export const directive : GraphQLDirective = new GraphQLDirective({
 
 export function transform(composer: SchemaComposer<any>, typeRegistry: TypeRegistry) : GraphQLSchema {
 
-    console.log("Input transformer")
     schemaComposer.merge(composer)
 
  
-
     const types = getTypesWithFieldDirective(schemaComposer, directiveName)
 
     let outputTypes = types.map(inputType => {
@@ -71,8 +69,9 @@ export function transform(composer: SchemaComposer<any>, typeRegistry: TypeRegis
 //        typeRegistry.registerInputType(`${inputType.name}Input`, {id: 'ID'})
     })
    
-
     //schemaComposer.buildSchema()
+
+    console.log("INPUT", new Type(schemaComposer.getOTC('Contact')).def.map((x) => x.directives))
     return schemaComposer.buildSchema();
 }
 
