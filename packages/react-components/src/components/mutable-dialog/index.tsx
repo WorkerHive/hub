@@ -20,15 +20,9 @@ import {
   FormControl
 } from '@material-ui/core'
 
-/*
-    Mutable Dialog
+import { isEqual } from 'lodash';
 
-    title: String
 
-    structure: {
-        key: type
-    }
-*/
 import { CRUDKV } from '../crud-kv'
 import { RWTable } from '../rw-table'
 import moment from 'moment'
@@ -47,11 +41,11 @@ export interface MutableDialogProps {
 export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   const [data, setData] = React.useState<any>({})
 
-  console.log(props.data)
   React.useEffect(() => {
-    if (props.data && props.data != data) {
+
+    if (props.data && !isEqual(props.data, data)) {
       setData(props.data)
-    }else{
+    }else if(!props.open){
       setData({})
     }
   }, [props.data, props.open])
@@ -70,7 +64,6 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
     let d : any = Object.assign({}, data)
     d[key] = value;
     setData(d)
-
   }
 
   const renderItem = (key: string, type: any) : any => {

@@ -37,7 +37,8 @@ export const Header : React.FC<HeaderProps> = ({
           </div>
         <div className="header__tabs">
             <Tabs value={tabs!.map((x) => x.toLowerCase()).indexOf((selected || '').toLowerCase())} onChange={(_e : any, newVal) => {
-                if(onTabSelect) onTabSelect(tabs![newVal])
+                console.log("Tab Select", tabs![newVal])
+                if(onTabSelect) onTabSelect({tab: tabs![newVal]})
             }}>
             {(tabs).map((x) => (
                 <Tab label={x} />

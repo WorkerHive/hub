@@ -6,31 +6,33 @@ import { StyledFileDrop as FileDrop } from '../file-drop';
 
 
 export interface FileBrowserProps {
-    files?: Array<{
-        id: string,
-        filename: string,
-        cid: string,
-        pinned: boolean,
-        size?: number,
-        modified?: Date
-    }>;
+    files?: Array<WorkhubFile>;
 
     title?: string;
     className?: string;
     loading?: boolean;
 
-    selected?: Array<any>;
-    onSelect?: (args: {selected: Array<any>}) => void;
+    selected?: Array<WorkhubFile>;
+    onSelect?: (args: {selected: Array<WorkhubFile>}) => void;
 
-    onConvertFiles?: (args: {files: Array<any>}) => void;
+    onConvertFiles?: (args: {files: Array<WorkhubFile>}) => void;
 
   uploading?: Array<{filename: string, status: string}>;
   onUploadFiles?: () => void;
   onFileOpen?: (args: {target: object}) => void;
   onFileUpload?: (args: {files: File[]}) => void;
-  onFileDownload?: (args: {files: Array<any>}) => void;
+  onFileDownload?: (args: {files: Array<WorkhubFile>}) => void;
   onDownloadProgress?: () => void;
   onDownloadEnd?: () => void;
+}
+
+export interface WorkhubFile {
+    filename: string;
+    cid: string;
+    id: string;
+    pinned: boolean;
+    size?: number;
+    modified?: Date;
 }
 
 
@@ -97,8 +99,14 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
         if(onFileDownload) onFileDownload({files: selected});
     }
 
+    const containerKey = (e : React.KeyboardEvent) => {
+        if(e.code === "Escape"){
+            onSelect({selected: []})
+        }
+    }
+
     return (
-        <Paper className={className}>
+        <Paper className={className} onKeyDown={containerKey}>
             <div className={"file-browser__header"}>
                 <div className="header-info">
                     <ChevronLeft />

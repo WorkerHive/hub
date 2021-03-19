@@ -108,7 +108,7 @@ export class  WorkhubFS {
 
     }
 
-    async getFile(cid: string, tmpPath?: string){
+    async getFile(cid: string, tmpPath?: string) : Promise<Buffer>{
         console.log("Fetching data for", cid);
         let content = Buffer.from('')
         for await (const chunk of this.node!.cat(cid)){

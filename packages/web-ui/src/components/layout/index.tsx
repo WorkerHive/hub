@@ -22,7 +22,7 @@ export interface LayoutItem {
 
 export interface LayoutProps {
     schema: {
-        layout: (sizes: any, rowHeight: number) => Array<LayoutItem>,
+        layout: (sizes: any, rowHeight: number, store?: {state: any, dispatch: any}) => Array<LayoutItem>,
         data: any,
         label: string,
         path: string
@@ -202,6 +202,16 @@ export const Layout: React.FC<LayoutProps> = (props) => {
 
     const _data = getData();
 
+    const [ state, setState ]  = React.useState<any>({})
+    const dispatch = (values: any) => {
+       setState({
+           ...state,
+           ...values
+       }) 
+    }
+
+    const layout = props.schema.layout(sizes, 64, {state, dispatch})
+
     return (
         <Suspense fallback={<div>loading</div>}>
             {resizeListener}
@@ -210,10 +220,10 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                 {...defaultProps}
                 isDraggable={false}
                 isResizable={false}
-                layout={props.schema.layout(sizes, 64)}
+                layout={layout}
                 onLayoutChange={(layout) => { }}
                 isBounded={true}>
-                {props.schema.layout(sizes, 64).map((x) => (
+                {layout.map((x) => (
                     <div key={x.i} style={{ display: 'flex', flexDirection: 'column' }}>
                         {x.component instanceof Function ? x.component({
                             ..._data,

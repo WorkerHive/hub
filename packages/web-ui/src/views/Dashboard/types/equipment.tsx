@@ -13,14 +13,31 @@ export const EQUIPMENT_VIEW = {
                 type: '[Equipment]'
             }
         },
-        layout: (sizes : any, rowHeight : number) => [
+        layout: (sizes : any, rowHeight : number, store: any) => [
             {
                 i: 'header',
                 x: 0,
                 y: 0,
                 w: 12,
                 h: 1,
-                component: (data : any) => (<Header title={data.label} tabs={[...new Set(data.equipment.map((x:any) => x.type))]}/>)
+                component: (data : any) => {
+                    return ((props) => {
+                        const selectTab = ({tab}: {tab: string}) => {
+                            if(store.state.selectedTab == tab){
+                                store.dispatch({selectedTab: null})
+                            }else{
+                                store.dispatch({selectedTab: tab})
+                            }
+                        }
+                        return (
+                            <Header 
+                                title={data.label} 
+                                selected={store.state.selectedTab}
+                                onTabSelect={selectTab}
+                                tabs={[...new Set(data.equipment.filter((a: any) => a.type && a.type.length > 0).map((x:any) => x.type))]}/>
+                        )
+                    })()
+                }
             },
             {
                 i: 'data',
@@ -30,13 +47,20 @@ export const EQUIPMENT_VIEW = {
                 h: (sizes.height / rowHeight) - (sizes.width < 600 ? 2 : 1),
                 component: (data: any, params: any, type: any, client: any) => {
                     const t: any = {};
-                    console.log(type)
                     if (type["Equipment"]) type["Equipment"].def.forEach((_type: any) => {
                         t[_type.name] = _type.type;
                     })
+
                     return ((props) => {
                         const [open, modalOpen] = React.useState<boolean>(false);
                         const [ selected, setSelected] = React.useState<any>();
+
+                        const filterSelected = (item: any) => {
+                            if(store.state.selectedTab){
+                                return item.type == store.state.selectedTab;
+                            }
+                            return true;
+                        }
 
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
@@ -89,7 +113,7 @@ export const EQUIPMENT_VIEW = {
                                             ].filter((a) => client.canAccess("Equipment", a.perm))} />
                                         </>
                                     )} 
-                                    data={data.equipment || []} />
+                                    data={(data.equipment || []).filter(filterSelected)} />
                                 {client.canAccess("Equipment", "create") && <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
                                 </Fab>}

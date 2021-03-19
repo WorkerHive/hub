@@ -4,13 +4,15 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { isEqual } from 'lodash';
 import React, {lazy, Suspense} from 'react';
+import { TeamCircles } from '@workerhive/react-ui'
 
 import NotesCard from './notes-card';
 import InfoCard from './info-card';
 import EquipmentCard from './equipment-card'
 import TeamCard from './team-card';
-import { ExitToApp } from '@material-ui/icons';
-
+import { ExitToApp, PersonAdd } from '@material-ui/icons';
+import { useHub } from '@workerhive/client';
+import PersonRemove from './person_remove.svg';
 
 export interface CalendarDialogProps extends RouteComponentProps{
     actions?: string[];
@@ -45,6 +47,8 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     history
 }) => {
 
+    console.log(actions)
+    const [ client ] = useHub();
     const [tab, setTab] = React.useState<number>(1)
 
     const [ _data, setData ] = React.useState<any>(data)
@@ -102,8 +106,28 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         }
     }
 
+    const amManager = (live: boolean = false) => {
+        return ((live ? data: _data).managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
+    }
+
+    const addSelfManager = () => {
+
+        //TODO make manager list search through Team from ID key
+        let m = (_data.managers || []).slice();
+        let ix = m.map((x : any) => x.id).indexOf(client?.user.sub)
+        if(ix > -1){
+            m.splice(ix, 1)
+        }else{
+            m.push({id: client?.user.sub, name: client?.user.name})
+        }
+        setData({
+            ..._data,
+            managers: m
+        })
+    }
+
     return (
-        <Dialog fullWidth open={open} onClose={onClose}>
+        <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
             <DialogTitle style={{
                 paddingBottom: 8,
                 paddingTop: 12,
@@ -130,7 +154,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         </IconButton>}
                     </div>
       
-                <div style={{display: 'flex', marginTop: 8, marginRight: '30%'}}>
+                <div style={{display: 'flex', marginTop: 8}}>
                     <KeyboardDatePicker 
                         margin="dense"
                         fullWidth
@@ -157,6 +181,13 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                                 end: d ? new Date(d) : _data.end
                             })
                         }}/>
+                    
+                    <div className="manager-list" style={{minWidth: 100, maxWidth: 200, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <TeamCircles size={30} members={(_data.id ? _data.managers : [{id: client?.user.sub, name: client?.user.name}]) || []} />
+                        {client?.canAccess("Schedule", "update") && <IconButton size="small" onClick={addSelfManager}>
+                            {amManager() ? <img src={PersonRemove} /> : <PersonAdd />}
+                        </IconButton>}
+                    </div>
                 </div>
             </DialogTitle>
             <DialogContent style={{paddingLeft: 0, display: 'flex'}}>
@@ -182,12 +213,12 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
   
             </DialogContent>
             <DialogActions>
-                {actions.indexOf('delete') > -1 && <Button onClick={onDelete} color="secondary">Delete</Button>}
+                {_data.id && actions.indexOf('delete') > -1 && amManager() && <Button onClick={onDelete} color="secondary">Delete</Button>}
                 <Button onClick={onClose}>
                     Close
                 </Button>
-                {actions.indexOf('update') > -1 || actions.indexOf('create') > -1 && <Button onClick={() => onSave(_data)} color="primary" variant="contained">
-                    Save
+                {(actions.indexOf('update') > -1 || actions.indexOf('create') > -1) && <Button onClick={() => onSave(_data)} color="primary" variant="contained">
+                    {_data.id ? "Save" : "Create"}
                 </Button>}
             </DialogActions>
         </Dialog>

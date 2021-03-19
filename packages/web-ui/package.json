@@ -13,7 +13,9 @@
     "@workerhive/hive-flow": "^1.1.5",
     "@workerhive/parsers": "file:../parsers",
     "@workerhive/react-ui": "file:../react-components",
+    "file-saver": "^2.0.5",
     "is-electron": "^2.2.0",
+    "jszip": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
@@ -46,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.1",
     "babel-plugin-transform-imports": "^2.0.0",
     "customize-cra": "^1.0.0",
     "react-app-rewire-uglifyjs": "^0.1.1",

@@ -23,6 +23,7 @@ function intToRGB(i: number){
 
 export interface TeamCirclesProps{
   className?: string;
+  size?: number;
   members: Array<{id: string, name: string}>;
   options?: Array<{id: string, name: string}>
   onChange?: Function;
@@ -88,7 +89,13 @@ export const StyledCircles = styled(TeamCircles)`
   display: flex;
 
   .MuiAvatar-root:not(:first-child){
-    margin-left: -18px;
+    margin-left: ${props => (props.size || 40) / 40 * -18}px;
+  }
+
+  .MuiAvatar-root{
+    width: ${props => props.size || 40}px;
+    height: ${props => props.size || 40}px;
+    font-size: ${props => ((props.size || 40) / 40) * 1.25}rem;
   }
 
 `

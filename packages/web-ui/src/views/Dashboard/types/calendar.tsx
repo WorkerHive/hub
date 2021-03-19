@@ -37,6 +37,7 @@ export const CALENDAR_VIEW = {
             h: sizes.height / rowHeight - 1,
             component: (data: any, params: any, type: any, client: any) => {
 
+                console.log(client.user)
                 const calendar: Y.Array<Y.Map<any>> = client.realtimeSync?.doc.getArray(`schedule-calendar`)
 
                 const [state, dispatch] = useRealtime(calendar, (state, action) => {
@@ -47,6 +48,7 @@ export const CALENDAR_VIEW = {
                         case 'ADD_SCHEDULE':
                             let schedule = {
                                 ...action.item,
+                                managers: [{id: client.user.sub, name: client.user.name}],
                                 start: action.item.start.getTime(),
                                 end: action.item.end.getTime()
                             }
