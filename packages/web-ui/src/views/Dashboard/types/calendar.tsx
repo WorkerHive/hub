@@ -37,12 +37,12 @@ export const CALENDAR_VIEW = {
             h: sizes.height / rowHeight - 1,
             component: (data: any, params: any, type: any, client: any) => {
 
-                console.log(client.user)
+
                 const calendar: Y.Array<Y.Map<any>> = client.realtimeSync?.doc.getArray(`schedule-calendar`)
 
                 const [state, dispatch] = useRealtime(calendar, (state, action) => {
                     //  let p = project.toJSON();
-                    console.log(calendar.toJSON(), state, action)
+
 
                     switch (action.type) {
                         case 'ADD_SCHEDULE':
@@ -62,10 +62,14 @@ export const CALENDAR_VIEW = {
                             let ix = calendar.toJSON().map((x: any) => x.id).indexOf(action.item.id);
                             let item = calendar.get(ix)
 
+                            let start_date = typeof(action.item.start) === 'number' ? action.item.start : action.item.start.getTime(); 
+                            let end_date = typeof(action.item.end) === 'number' ? action.item.end : action.item.end.getTime();
+
+                            console.log(action.item)
                             let sc = {
                                 ...action.item,
-                                start: action.item.start.getTime(),
-                                end: action.item.end.getTime()
+                                start: start_date,
+                                end: end_date 
                             }
                             Object.keys(sc).forEach((x) => {
                                 item.set(x, sc[x])
@@ -84,13 +88,12 @@ export const CALENDAR_VIEW = {
                 })
 
                 const t: any = {};
-                console.log(type)
+
                 if (type["Schedule"]) type["Schedule"].def.forEach((_type: any) => {
                     t[_type.name] = _type.type;
                 })
 
                 const calendarParse = (item: any) => {
-                    console.log(item.project)
                     if (item.project && Object.keys(item.project).length == 1) {
                         let p = data.projects.find((a: any) => a.id == item.project.id)
                         item.project = p || item.project
@@ -104,7 +107,6 @@ export const CALENDAR_VIEW = {
                         let eqpt = item.resources.id.map((x: string) => data.equipment.find((a: any) => a.id == x))
                         item.resources = eqpt.filter((a: any) => a != undefined).length > 0 ? eqpt : item.resources;
                     }
-                    console.log(item.project)
                     return {
                         ...item,
                         start: typeof (item.start) === 'string' || typeof (item.start) === 'number' ? new Date(item.start) : item.start,
@@ -116,7 +118,9 @@ export const CALENDAR_VIEW = {
                     const [c, stores] = useHub()
                     const [modalOpen, openModal] = React.useState<boolean>(false);
 
-                    const [userData, setData] = React.useState<{id?: string, start: Date, end: Date }>();
+                    const [ selectedSlots, setSelectedSlots ] = React.useState<{start: Date, end: Date}>();
+
+                    const [userData, setData] = React.useState<Y.Map<any>>();
 
                     const actions = [
                                     "create", 
@@ -127,13 +131,15 @@ export const CALENDAR_VIEW = {
                     return <>
                         <CalendarDialog
                             actions={actions}
+                            slots={selectedSlots}
+                            
                             data={userData}
                             projects={data.projects}
                             team={data.people}
                             equipment={data.equipment}
                             open={modalOpen}
                             onDelete={() => {
-                                dispatch({type: 'REMOVE_SCHEDULE_ITEM', id: userData?.id})
+                                dispatch({type: 'REMOVE_SCHEDULE_ITEM', id: userData?.get('id')})
                                 openModal(false);
                                 setData(undefined)
                             }}
@@ -147,7 +153,11 @@ export const CALENDAR_VIEW = {
                                 openModal(false)
                                 setData(undefined)
                             }}
-                            onClose={() => { openModal(false); setData(undefined) }}
+                            onClose={() => { 
+                                openModal(false); 
+                                setSelectedSlots(undefined)
+                                setData(undefined)
+                            }}
                         />
 
                         <Calendar
@@ -157,12 +167,14 @@ export const CALENDAR_VIEW = {
                                 dispatch({ type: 'REMOVE_SCHEDULE_ITEM', id: event.id })
                             }}
                             onDoubleClickEvent={(event: any) => {
-                                setData(event)
+                                let ix = calendar.toJSON().map((x: any) => x.id).indexOf(event.id);
+                                setData(calendar.get(ix))
+                                console.log(calendar.get(ix).toJSON())
                                 openModal(true)
                             }}
                             onSelectSlot={(slotInfo: any) => {
+                                setSelectedSlots(slotInfo)
                                 openModal(true)
-                                setData(slotInfo)
                             }} />
                     </>
                 })(data)

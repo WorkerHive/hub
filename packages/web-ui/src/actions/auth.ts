@@ -1,9 +1,10 @@
 import isElectron from "is-electron";
 import fetch from "node-fetch";
-import { UserInfo } from "../views/Signup";
+import { UserInfo } from "../views/Auth/Signup";
+    
+const hubUrl = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin))
 
 export const authenticate = (username : string, password : string) => {
-    const hubUrl = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin))
 
     return fetch(`${hubUrl}/api/login`, {
         method: "POST",
@@ -19,7 +20,6 @@ export const authenticate = (username : string, password : string) => {
 }
 
 export const trySignup = (signup_info: UserInfo, token: string) => {
-    const hubUrl = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin))
     return fetch(`${hubUrl}/api/signup`, {
         method: "POST",
         headers: {
@@ -33,7 +33,6 @@ export const trySignup = (signup_info: UserInfo, token: string) => {
 }
 
 export const forgotPassword = (email: string) => {
-    const hubUrl = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin))
 
     return fetch(`${hubUrl}/api/forgot`, {
         method: "POST",
@@ -42,6 +41,19 @@ export const forgotPassword = (email: string) => {
         },
         body: JSON.stringify({
             email
+        })
+    }).then((r) => r.json())
+}
+
+export const resetPassword = (password: string, token: string) => {
+    return fetch(`${hubUrl}/api/reset`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+            password
         })
     }).then((r) => r.json())
 }

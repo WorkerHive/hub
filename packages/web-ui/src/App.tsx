@@ -2,9 +2,7 @@ import React, {Suspense, lazy} from 'react';
 import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
-import {Login} from './views/Login';
-import { Signup } from './views/Signup';
-
+import { AuthBase } from './views/Auth'
 import { PageLoader } from './components/page-loader';
 
 import './App.css';
@@ -25,9 +23,6 @@ function App() {
   return (
         <Router>
           <div className="App">
-            <Route path="/" exact component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
             <Route path="/dashboard" render={(props) => {
               const token = localStorage.getItem('token')
               if(token && token.length > 0){
@@ -46,6 +41,7 @@ function App() {
                 )
               }
             }} />
+            <Route path={["/", "/login", "/reset", "/forgot"]} exact component={AuthBase} />
           </div>
         </Router>
   );

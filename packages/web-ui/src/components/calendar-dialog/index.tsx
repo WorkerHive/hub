@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { isEqual } from 'lodash';
 import React, {lazy, Suspense} from 'react';
 import { TeamCircles } from '@workerhive/react-ui'
+import *  as Y from 'yjs';
 
 import NotesCard from './notes-card';
 import InfoCard from './info-card';
@@ -16,11 +17,18 @@ import PersonRemove from './person_remove.svg';
 
 export interface CalendarDialogProps extends RouteComponentProps{
     actions?: string[];
+    slots?: {start: Date, end: Date};
     open?: boolean;
     onClose?: any | undefined;
     onSave?: any | undefined;
     onDelete?: any;
-    data?: {
+    data?: Y.Map<any>;
+    projects?: Array<{id: string, name: string}>;
+    team?: Array<{id: string, name: string}>;
+    equipment?: Array<{id: string, name: string}>;
+}
+
+export interface CalendarItem {
         project?: {id: string},
         people?: {id: Array<string>},
         resources?: {id: Array<string>},
@@ -28,14 +36,16 @@ export interface CalendarDialogProps extends RouteComponentProps{
         description?: string,
         start?: Date,
         end?: Date
-    } | undefined;
-    projects?: Array<{id: string, name: string}>;
-    team?: Array<{id: string, name: string}>;
-    equipment?: Array<{id: string, name: string}>;
+}
+
+export interface Manager {
+    id: string;
+    name: string;
 }
 
 export const CalendarDialog : React.FC<CalendarDialogProps> = ({
-    data = {}, 
+    data = new Y.Map(), 
+    slots,
     onClose = () => {}, 
     onSave = () => {},
     onDelete = () => {},
@@ -47,17 +57,23 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     history
 }) => {
 
-    console.log(actions)
     const [ client ] = useHub();
     const [tab, setTab] = React.useState<number>(1)
 
-    const [ _data, setData ] = React.useState<any>(data)
+    const [ _data, setData ] = React.useState<any>({})
+
+    const [ managers, setManagers ] = React.useState<Manager[]>([])
 
     React.useEffect(() => {
-        if(!isEqual(_data, data)){
-            setData(data)
+        if(open && !isEqual(_data, data?.toJSON())){
+            console.log("Set data")
+            let d = data?.toJSON();
+            if(slots?.start) d.start = slots?.start;
+            if(slots?.end) d.end = slots?.end;
+            setData(d)
+            setManagers(d.managers)
         }
-    }, [data])
+    }, [open])
 
     const tabs = ["Info", "Team", "Equipment", "Notes"]
     const renderTab = () => {
@@ -85,10 +101,12 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                     })
                    }}/>)
             case 'equipment':
-                return (<EquipmentCard 
+                return (
+                <EquipmentCard 
                     equipment={equipment} 
                     selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} 
                     onChange={(equipment: any) => {
+                        console.log(_data)
                         setData({
                             ..._data,
                             resources: {id: equipment}
@@ -107,23 +125,27 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     }
 
     const amManager = (live: boolean = false) => {
-        return ((live ? data: _data).managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
+        return (data?.toJSON().managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
     }
 
     const addSelfManager = () => {
 
         //TODO make manager list search through Team from ID key
-        let m = (_data.managers || []).slice();
+        let m = (data?.toJSON().managers || []).slice();
         let ix = m.map((x : any) => x.id).indexOf(client?.user.sub)
         if(ix > -1){
             m.splice(ix, 1)
         }else{
             m.push({id: client?.user.sub, name: client?.user.name})
         }
-        setData({
+
+        data?.set('managers', m)
+        setManagers(data?.get('managers'))
+        console.log("Set managers", m, data)
+        /*setData({
             ..._data,
             managers: m
-        })
+        })*/
     }
 
     return (
@@ -160,7 +182,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         fullWidth
                         label="Start"
                         format={"DD/MM/YYYY"}
-                        value={_data.start} 
+                        value={_data.start || slots?.start} 
                         onChange={(date) => {
                             let d = date?.valueOf()
                             setData({
@@ -173,7 +195,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         margin="dense"
                         label="End"
                         format={"DD/MM/YYYY"}
-                        value={_data.end} 
+                        value={_data.end || slots?.end} 
                         onChange={(date) => {
                             let d = date?.valueOf()
                             setData({
@@ -183,8 +205,8 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         }}/>
                     
                     <div className="manager-list" style={{minWidth: 100, maxWidth: 200, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <TeamCircles size={30} members={(_data.id ? _data.managers : [{id: client?.user.sub, name: client?.user.name}]) || []} />
-                        {client?.canAccess("Schedule", "update") && <IconButton size="small" onClick={addSelfManager}>
+                        <TeamCircles size={30} members={(_data.id ? managers : [{id: client?.user.sub, name: client?.user.name}]) || []} />
+                        {client?.canAccess("Schedule", "update") && _data.id && <IconButton size="small" onClick={addSelfManager}>
                             {amManager() ? <img src={PersonRemove} /> : <PersonAdd />}
                         </IconButton>}
                     </div>
@@ -217,7 +239,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                 <Button onClick={onClose}>
                     Close
                 </Button>
-                {(actions.indexOf('update') > -1 || actions.indexOf('create') > -1) && <Button onClick={() => onSave(_data)} color="primary" variant="contained">
+                {(actions.indexOf('update') > -1 || actions.indexOf('create') > -1) && (!_data.id || (_data.id && amManager())) && <Button onClick={() => onSave(_data)} color="primary" variant="contained">
                     {_data.id ? "Save" : "Create"}
                 </Button>}
             </DialogActions>

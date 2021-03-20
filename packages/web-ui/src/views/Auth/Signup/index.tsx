@@ -62,19 +62,7 @@ const SignupView : FC<SignupProps> = (props) => {
         }
     }
 
-    return (
-        <div className="signup-view">
-            <div className="hero-image">
-
-            </div>
-            <Paper className="signup-container">
-                <div className="signup-header">
-                    <img src={'/assets/teal.png'} className="login-header__img" alt="Workhub Logo"/>
-                    <Typography style={{color: 'teal'}} variant="h5">{'Workhub Signup'}</Typography>
-                </div>
-                <Divider />
-
-                {user != null ? (
+    return user != null ? (
                 <>
                 <Typography variant="subtitle1" style={{fontWeight: 'bold', color: 'teal'}}>Login Details</Typography>
                 <TextField 
@@ -159,12 +147,7 @@ const SignupView : FC<SignupProps> = (props) => {
                     <div>
                         Invalid signup token, please ask your system administrator to send another invite
                     </div>
-                )}
-
-                
-            </Paper>
-        </div>
-    )
+                )
 }
 
 export const Signup = withRouter(SignupView)

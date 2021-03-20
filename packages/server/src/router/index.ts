@@ -229,6 +229,25 @@ export class Router {
             }
         })
 
+        this.app.post('/reset',
+            passport.authenticate('jwt', {session: false}),
+            async (req, res) => {
+                let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
+
+                let updated_user = await this.connector.update('TeamMember', {id: req['user'].id}, {password})
+                if(updated_user && Object.keys(updated_user).length > 0){
+                    res.send({
+                        token: this.signToken({
+                            sub: updated_user.id,
+                            name: updated_user.name,
+                            email: updated_user.email
+                        })
+                    })
+                }else{
+                    res.send({error: "There was a problem updating your password"})
+                }
+            })
+
         this.app.post('/signup',                 
             passport.authenticate('jwt', { session: false }),
             async (req, res) => {
