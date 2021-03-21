@@ -5,7 +5,9 @@ const rewireUglifyjs = require('react-app-rewire-uglifyjs')
 const { useBabelRc, override } = require('customize-cra')
 
 module.exports = function (config, env){
-    
+   
+    config = override(useBabelRc())(config)
+
     if(env == 'production'){
         config = rewireUglifyjs(config)
         config = rewireWebpackBundleAnalyzer(config, env, {
