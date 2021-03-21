@@ -8,4 +8,5 @@ export default interface GraphContext {
     mq?: MessageQueue;
     user?: any;
     mail?: any;
+    signToken?: (input: any) => string;
 }

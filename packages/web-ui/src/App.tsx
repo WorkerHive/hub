@@ -41,7 +41,7 @@ function App() {
                 )
               }
             }} />
-            <Route path={["/", "/login", "/reset", "/forgot"]} exact component={AuthBase} />
+            <Route path={["/", "/login", "/reset", "/signup", "/forgot"]} exact component={AuthBase} />
           </div>
         </Router>
   );

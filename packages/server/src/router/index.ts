@@ -146,7 +146,8 @@ export class Router {
                             user: req['user'],
                             fs: this.fs,
                             mq: this.mq,
-                            mail: this.mailer
+                            mail: this.mailer,
+                            signToken: this.signToken.bind(this)
                         }
                     ).then((r) => res.send(r))
                 })

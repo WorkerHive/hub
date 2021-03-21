@@ -6,14 +6,32 @@ import { Enquiry } from '../router';
 export class Mailer {
     private mailer: Mail;
 
+    private fromEmail: string =  process.env.SMTP_FROM || `"Workhive" <noreply@workhub.services>`;
+
     constructor(smtpOpts: TransportOptions){
         this.mailer = nodemailer.createTransport(smtpOpts);
+    }
+
+    async inviteUser(user: {name: string, email: string}, token: string) {
+        return await this.mailer.sendMail({
+          from: this.fromEmail,
+          to: user.email,
+          subject: "Invite to WorkHive",
+          text: `Kia Ora ${user.name},
+
+You've been invited to join a WorkHive organisation, click the link below to set up your account.
+
+https://${process.env.WORKHUB_DOMAIN}/signup?token=${token}
+
+Nga Mihi,
+WorkHive`
+        })
     }
 
     async contactMessage(contact_info: Enquiry){
         let received = new Date().getTime();
         return await this.mailer.sendMail({
-            from: process.env.SMTP_FROM || `"Workhive" <noreply@workhub.services>`,
+            from: this.fromEmail,
             to: process.env.SMTP_CONTACT || 'professional.balbatross@gmail.com',
             replyTo: `"${contact_info.name}" <${contact_info.email}>`,
             subject: `Contact Message from ${contact_info.source}`,
@@ -39,7 +57,7 @@ export class Mailer {
             
             Replies to this message will be sent to the contact with the details above.
             
-            Powered by Workhub
+            Powered by Workhive
 
             `
         })
@@ -47,7 +65,7 @@ export class Mailer {
 
     async forgotPassword(user: {email: string, name: string}, token){
         return await this.mailer.sendMail({
-                    from: process.env.SMTP_FROM || `"WorkHive" <noreply@workhub.services>`,
+                    from: this.fromEmail,
                     to: user.email,
                     subject: "Password reset",
                     text: `Kia Ora ${user.name},

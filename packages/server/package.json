@@ -1,7 +1,10 @@
 {
   "name": "@workerhive/server",
-  "version": "2.1.66",
+  "version": "2.1.69",
   "main": "index.js",
+  "files": [
+    "dist/*"
+  ],
   "license": "MIT",
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/index.ts",

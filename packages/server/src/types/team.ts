@@ -46,7 +46,7 @@ export const resolvers =  {
     inviteMember: async (parent, {id}, context: GraphContext) => {
       let user: any = await context.connector.read('TeamMember', {id: id})
       if(user.email){
-        const token = jwt.sign({
+        const token = context.signToken({
           sub: user.id,
           name: user.name,
           email: user.email,
@@ -54,21 +54,10 @@ export const resolvers =  {
           username: user.username,
           type: 'signup',
           inviter: context.user.id
-        }, 'test-secret')
-
-        context.mail.sendMail({
-          from: `"WorkHive" <noreply@workhub.services>`,
-          to: user.email,
-          subject: "Invite to WorkHive",
-          text: `Kia Ora ${user.name},
-
-You've been invited to join a WorkHive organisation, click the link below to set up your account.
-
-https://${process.env.WORKHUB_DOMAIN}/signup?token=${token}
-
-Nga Mihi,
-WorkHive`
         })
+
+        await context.mail.inviteUser(user, token);
+
         return true;
       }else{
         return false;
