@@ -26,10 +26,12 @@
     "react-router-dom": "^5.2.0",
     "react-spinners": "^0.10.6",
     "styled-components": "^5.2.1",
+    "tauri": "^0.14.1",
     "ts-transformer-keys": "^0.4.3",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "tauri": "tauri",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
