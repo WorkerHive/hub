@@ -1,5 +1,5 @@
 import React, {Suspense, lazy} from 'react';
-import isElectron from 'is-electron'
+import isElectron from 'is-tauri'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
 import { AuthBase } from './views/Auth'

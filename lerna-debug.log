@@ -1,11 +1,21 @@
 0 silly argv {
-0 silly argv   _: [ 'add' ],
-0 silly argv   globs: [ 'packages/server/' ],
+0 silly argv   _: [ 'create' ],
 0 silly argv   lernaVersion: '3.22.1',
 0 silly argv   '$0': 'node_modules/.bin/lerna',
-0 silly argv   pkg: '@workerhive/flow'
+0 silly argv   name: 'is-tauri'
 0 silly argv }
 1 notice cli v3.22.1
 2 verbose rootPath /home/workhub/work/hub
-3 error Error: 404 Not Found - GET https://registry.npmjs.org/@workerhive%2fflow - Not found
-3 error     at /home/workhub/work/hub/node_modules/@evocateur/npm-registry-fetch/check-response.js:104:15
+3 error Error: canceled
+3 error     at Interface.<anonymous> (/home/workhub/work/hub/node_modules/read/lib/read.js:66:13)
+3 error     at Interface.emit (events.js:315:20)
+3 error     at Interface._ttyWrite (readline.js:873:16)
+3 error     at ReadStream.onkeypress (readline.js:213:10)
+3 error     at ReadStream.emit (events.js:315:20)
+3 error     at emitKeys (internal/readline/utils.js:335:14)
+3 error     at emitKeys.next (<anonymous>)
+3 error     at ReadStream.onData (readline.js:1140:36)
+3 error     at ReadStream.emit (events.js:315:20)
+3 error     at addChunk (_stream_readable.js:296:12)
+3 error     at readableAddChunk (_stream_readable.js:272:9)
+3 error     at ReadStream.Readable.push (_stream_readable.js:213:10)

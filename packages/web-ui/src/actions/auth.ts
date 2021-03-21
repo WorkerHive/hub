@@ -1,4 +1,4 @@
-import isElectron from "is-electron";
+import isElectron from "is-tauri";
 import fetch from "node-fetch";
 import { UserInfo } from "../views/Auth/Signup";
     

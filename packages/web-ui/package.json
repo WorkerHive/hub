@@ -1,6 +1,6 @@
 {
   "name": "react-workerhub",
-  "version": "2.1.22",
+  "version": "2.1.23",
   "private": true,
   "dependencies": {
     "@date-io/moment": "1.x",
@@ -14,7 +14,7 @@
     "@workerhive/parsers": "file:../parsers",
     "@workerhive/react-ui": "file:../react-components",
     "file-saver": "^2.0.5",
-    "is-electron": "^2.2.0",
+    "is-tauri": "file:../is-tauri",
     "jszip": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
