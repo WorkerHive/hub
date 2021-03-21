@@ -6,7 +6,7 @@ import { CRUDTree } from './components/crud-tree';
 
 import { StyledKanban as GraphKanban } from './components/kanban'
 
-import { PDFCard } from './components/pdf-card'
+//import { PDFCard } from './components/pdf-card'
 import { StyledCircles as TeamCircles } from './components/team-circles';
 
 import { GLBCard } from './components/3d-card';
@@ -35,6 +35,8 @@ import { ChonkyIconFA } from 'chonky-icon-fontawesome';
 
 //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
+//PDF Removed
+
 export {
   Calendar,
   ShortcutLinks,
@@ -48,7 +50,6 @@ export {
   MutableDialog,
   RWTable,
   GraphKanban,
-  PDFCard,
   TeamCircles,
   GLBCard,
   Header,
