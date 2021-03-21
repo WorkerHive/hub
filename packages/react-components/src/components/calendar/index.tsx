@@ -26,8 +26,14 @@ export interface CalendarEvent{
   resource?: any
 }
 
+export interface CalendarUser {
+  sub: string;
+  name: string;
+}
+
 export interface CalendarProps{
   className?: string;
+  user?: CalendarUser;
   events?: Array<CalendarEvent>
   viewDate?: Date
   defaultView?: "month" | "week" | "work_week" | "day" | "agenda" | undefined
@@ -43,12 +49,13 @@ export interface CalendarProps{
   onDoubleClickEvent?: (event: object, syntheticEvent?: any) => void
 }
 
-export const CalendarContext = React.createContext<{actions: string[], dispatch: any | null}>({dispatch: null, actions: []});
+export const CalendarContext = React.createContext<{user: CalendarUser | undefined, actions: string[], dispatch: any | null}>({dispatch: null, user: undefined, actions: []});
 
 
 export const WorkhubCalendar : React.FC<CalendarProps> = ({
   className,
   events = [],
+  user,
   actions = ["create", "read", "update", "delete"],
   defaultView = CALENDAR_VIEWS.SCHEDULE,
   viewDate = new Date(),
@@ -74,7 +81,7 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
   }
 
   return (
-    <CalendarContext.Provider value={{actions, dispatch}}>
+    <CalendarContext.Provider value={{user, actions, dispatch}}>
     <Paper className={className}>
       <BigCalendar
         views={{

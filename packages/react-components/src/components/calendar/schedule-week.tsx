@@ -7,34 +7,18 @@ import Edit from '@material-ui/icons/Edit';
 import { MoreMenu } from '../more-menu';
 import { Popover } from '@material-ui/core';
 import { useContext } from 'react';
-import { CalendarContext } from '.';
+import { CalendarContext, CalendarUser } from '.';
+import { StyledCircles as TeamCircles } from '../team-circles';
 
-const invert = require('invert-color');
+import { contrast, textToColor } from '../../utils/color'
 
 export const ScheduleEvent = (props : any) => {
 
-  const { actions, dispatch } = useContext(CalendarContext)
+  const { actions, user, dispatch } = useContext(CalendarContext)
   
-  console.log(props);
 
-  function hashCode(str: string) { // java String#hashCode
-      var hash = 0;
-      for (var i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-      }
-      return hash;
-  } 
-
-  function intToRGB(i: number){
-      var c = (i & 0x00FFFFFF)
-          .toString(16)
-          .toUpperCase();
-
-      return "00000".substring(0, 6 - c.length) + c;
-  }
-
-  const fullName = props.event.project ? `${props.event.project.id}-${props.event.project.name}` : '';
-  const color = intToRGB(hashCode(fullName))
+  const fullName = props.event.project ? `${props.event.project.id}` : '';
+  const color = textToColor(fullName)
 
   const [ popper, setPopper ] = React.useState<any>(null)
 
@@ -42,14 +26,12 @@ export const ScheduleEvent = (props : any) => {
     setPopper(anchor)
   }
 
-  console.log(props.event.project, moment(props.event.end).isoWeekday())
   const popperDirection = moment(props.event.end).isoWeekday() > 4 ? 'left': 'right'
 
   return (
     <div 
       onMouseEnter={(e) => showPopper(e.currentTarget)}
       onMouseLeave={() => {
-        console.log("Mouse LEave")
         showPopper(null)
       }}
       style={{
@@ -58,7 +40,7 @@ export const ScheduleEvent = (props : any) => {
         display: 'flex', 
         flexDirection: 'column'
       }}>
-        {props.event.notes && props.event.notes.length > 0 && (
+        {props.event.notes && props.event.notes.filter((a: string) => a.length > 0).length > 0 && (
         <Popover
           style={{pointerEvents: 'none'}}
           open={Boolean(popper)}
@@ -73,8 +55,8 @@ export const ScheduleEvent = (props : any) => {
           }}
           onClose={() => showPopper(null)}
           >
-            <div style={{padding: 8}}>
-            {(props.event.notes || []).map((x : string) => (
+            <div style={{padding: 8, background: 'black', color: 'white'}}>
+            {(props.event.notes || []).filter((a: string) => a.length > 0).map((x : string) => (
               <>
               {x}
               <br />
@@ -89,7 +71,7 @@ export const ScheduleEvent = (props : any) => {
           flexDirection: 'row', 
           fontSize: 18,
           backgroundColor: `#${color}`,
-          color: invert(`#${color}`),
+          color: contrast(`#${color}`),
           fontWeight: 'bold',
           paddingTop: 4,
           paddingBottom: 4,
@@ -113,7 +95,7 @@ export const ScheduleEvent = (props : any) => {
               }
             },
             {
-              type: 'delete',
+              type: (props.event.managers || []).map((x : any) => x.id).indexOf(user?.sub) > -1 ? 'delete':'',
               icon: <Delete />, 
               label: "Delete", 
               color: 'red', 
@@ -121,7 +103,7 @@ export const ScheduleEvent = (props : any) => {
                 dispatch({type: 'DELETE_CARD', id: props.event.id})
               }
             },
-          ].filter((a) => actions.indexOf(a.type) > -1)} />
+          ].filter((a) => actions.indexOf(a.type) > -1) } />
         </div>
 
       </div>
@@ -133,6 +115,11 @@ export const ScheduleEvent = (props : any) => {
         {Array.isArray(props.event.resources) && props.event.resources.map((x: any) => (
           <div>{x.name}</div>
         ))}
+        <div style={{marginLeft: 8}}>
+        <TeamCircles 
+          members={props.event.managers || []} 
+          size={25} />
+          </div>
       </div>
     </div>
   )

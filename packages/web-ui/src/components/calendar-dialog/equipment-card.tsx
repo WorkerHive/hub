@@ -5,6 +5,7 @@ export interface EquipmentCardProps {
     equipment: Array<{id: string, name: string}>;
     selected: Array<any>;
     onChange: any;
+    readonly?: boolean;
 }
 
 const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
@@ -13,7 +14,7 @@ const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
         <List style={{overflowY: 'auto'}}>
             {props.equipment.map((x, ix) => [
                 <ListItem key={ix} dense>
-                    <Checkbox checked={props.selected.indexOf(x.id) > -1} onChange={(e) => {
+                    <Checkbox disabled={props.readonly} checked={props.selected.indexOf(x.id) > -1} onChange={(e) => {
                         let ix = props.selected.indexOf(x.id);
                         let s = props.selected.slice();
                         if(!e.target.checked){

@@ -60,39 +60,56 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     const [ client ] = useHub();
     const [tab, setTab] = React.useState<number>(1)
 
+    const [ dateRange, setDateRange ] = React.useState<{start: Date, end: Date} | undefined>(slots)
+
     const [ _data, setData ] = React.useState<any>({})
 
     const [ managers, setManagers ] = React.useState<Manager[]>([])
 
     React.useEffect(() => {
-        if(open && !isEqual(_data, data?.toJSON())){
+        console.log(open, slots)
+        if(open){
             console.log("Set data")
             let d = data?.toJSON();
-            if(slots?.start) d.start = slots?.start;
-            if(slots?.end) d.end = slots?.end;
+            if(slots?.start && !d.start) d.start = slots?.start;
+            if(slots?.end && !d.end) d.end = slots?.end;
+            console.log(d)
             setData(d)
             setManagers(d.managers)
+        }else{
+            setData({})
+            setManagers([])
         }
     }, [open])
 
+    const amManager = (live: boolean = false) => {
+        return (data?.toJSON().managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
+    }
+
     const tabs = ["Info", "Team", "Equipment", "Notes"]
+    
+    const readonly = _data.id ? actions.indexOf('update') < 0 || !amManager() : false;
+
     const renderTab = () => {
         let t = tabs[tab] || '';
         switch(t.toLowerCase()){
             case 'notes':
                 return (
-                <NotesCard 
+                <NotesCard
+                    readonly={readonly}
                     notes={_data?.notes}
                     onChange={(notes) => {
-                        setData({
+                        console.log(notes, _data)
+                         setData({
                             ..._data,
                             notes: notes
-                        })   
+                        })
                     }}/>
                 )
             case 'info':
                 return (
                 <InfoCard 
+                    readonly={readonly}
                     description={_data?.description} 
                     onChange={(description) => {
                     setData({
@@ -103,6 +120,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
             case 'equipment':
                 return (
                 <EquipmentCard 
+                    readonly={readonly}
                     equipment={equipment} 
                     selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} 
                     onChange={(equipment: any) => {
@@ -113,20 +131,22 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         })  
                     }}/>)
             case 'team':
-                return <TeamCard team={team} selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} onChange={(people : any) => {
-                    setData({
-                        ..._data,
-                        people: {id: people}
-                    })  
-                }}/>
+                return <TeamCard 
+                    team={team} 
+                    readonly={readonly}
+                    selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} 
+                    onChange={(people : any) => {
+                        setData({
+                            ..._data,
+                            people: {id: people}
+                        })  
+                    }}/>
             default:
                 return null;
         }
     }
 
-    const amManager = (live: boolean = false) => {
-        return (data?.toJSON().managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
-    }
+
 
     const addSelfManager = () => {
 
@@ -142,10 +162,6 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         data?.set('managers', m)
         setManagers(data?.get('managers'))
         console.log("Set managers", m, data)
-        /*setData({
-            ..._data,
-            managers: m
-        })*/
     }
 
     return (

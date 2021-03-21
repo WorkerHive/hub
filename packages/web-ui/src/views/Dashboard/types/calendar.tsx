@@ -46,6 +46,7 @@ export const CALENDAR_VIEW = {
 
                     switch (action.type) {
                         case 'ADD_SCHEDULE':
+                            console.log(action.item)
                             let schedule = {
                                 ...action.item,
                                 managers: [{id: client.user.sub, name: client.user.name}],
@@ -76,12 +77,12 @@ export const CALENDAR_VIEW = {
                             })
                             break;
                         case 'REMOVE_SCHEDULE_ITEM':
-                            console.log("Remove schedule item", action)
-                            let r_ix = calendar.toJSON().map((x: any) => x.id).indexOf(action.id);
+                            console.log("Remove schedule item", calendar.toArray())
+                            let r_ix = calendar.toArray().map((x: any) => x.toJSON().id).indexOf(action.id);
                             console.log("IX", r_ix)
                             calendar.delete(r_ix)
 
-                            break;
+                            return calendar.toArray();
                         default:
                             return state;
                     }
@@ -128,6 +129,13 @@ export const CALENDAR_VIEW = {
                                     "update", 
                                     "delete"
                                 ].filter((a) => client?.canAccess("Schedule", a))
+
+                    const closeModal = () => {
+                        openModal(false);
+                        setData(undefined)
+                        setSelectedSlots(undefined)
+                    }
+
                     return <>
                         <CalendarDialog
                             actions={actions}
@@ -140,8 +148,7 @@ export const CALENDAR_VIEW = {
                             open={modalOpen}
                             onDelete={() => {
                                 dispatch({type: 'REMOVE_SCHEDULE_ITEM', id: userData?.get('id')})
-                                openModal(false);
-                                setData(undefined)
+                                closeModal();
                             }}
                             onSave={(data: any) => {
                                 if (data.id) {
@@ -150,18 +157,15 @@ export const CALENDAR_VIEW = {
                                     data.id = v4()
                                     dispatch({ type: 'ADD_SCHEDULE', item: data })
                                 }
-                                openModal(false)
-                                setData(undefined)
+                              
+                                closeModal();
                             }}
-                            onClose={() => { 
-                                openModal(false); 
-                                setSelectedSlots(undefined)
-                                setData(undefined)
-                            }}
+                            onClose={closeModal}
                         />
 
                         <Calendar
                             actions={actions}
+                            user={client?.user}
                             events={calendar.toJSON().map(calendarParse)}
                             onDeleteEvent={(event: any) => {
                                 dispatch({ type: 'REMOVE_SCHEDULE_ITEM', id: event.id })

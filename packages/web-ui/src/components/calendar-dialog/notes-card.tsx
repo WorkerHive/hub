@@ -5,9 +5,11 @@ import Clear from '@material-ui/icons/Clear';
 export interface NotesCardProps {
     notes?: Array<string>;
     onChange?: (notes: Array<string>) => void;
+    readonly?: boolean;
 }
 const NotesCard : React.FC<NotesCardProps> = ({
     notes = [],
+    readonly = false,
     onChange = () => {}
 }) => {
 
@@ -17,7 +19,7 @@ const NotesCard : React.FC<NotesCardProps> = ({
         let n = notes.slice()
         n.push('')
         onChange(n)
-        setSelected(n.length -1 )
+        setSelected(n.length - 1 )
     }
 
     const removeNote = (ix: number) => {
@@ -32,6 +34,7 @@ const NotesCard : React.FC<NotesCardProps> = ({
                 return (
                 <div key={ix} style={{display: 'flex'}}>
                 <TextField 
+                    disabled={readonly}
                     focused={ix == selected}
                     fullWidth
                     value={note} 
