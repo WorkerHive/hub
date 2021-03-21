@@ -7,7 +7,7 @@ import Edit from '@material-ui/icons/Edit';
 import { MoreMenu } from '../more-menu';
 import { Popover } from '@material-ui/core';
 import { useContext } from 'react';
-import { CalendarContext, CalendarUser } from '.';
+import { CalendarContext } from '.';
 import { StyledCircles as TeamCircles } from '../team-circles';
 
 import { contrast, textToColor } from '../../utils/color'
