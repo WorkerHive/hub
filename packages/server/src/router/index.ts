@@ -70,6 +70,7 @@ export class Router {
     }
 
     listen(port: number) {
+        console.log("Listening ", port)
         this.app.listen(port)
     }
 
@@ -95,7 +96,7 @@ export class Router {
                     roles: roles.map((x) => ({name: x.name, id: x.id})),
                     permissions: permissions
                 }
-                console.log("User", signed_user);
+                //console.log("User", signed_user); //TODO add back in a better way GraphQL studio is polling alot
                 done(null, signed_user)
             } else {
                 done(null, false)
@@ -266,11 +267,19 @@ export class Router {
                     res.send({error: "Username already taken"})
                 }else{
                     let new_user = await this.connector.update("TeamMember", {id: req['user'].id}, user)
+                    if(new_user.roles && new_user.roles.id){
+                        var { permissions, roles } = await this.userPermissions(new_user.roles.id);
+                    }
+
+                    console.log("Signup completed", new_user)
+                    
                     res.send({
                         token: this.signToken({
                             sub: new_user.id,
                             name: new_user.name,
-                            email: new_user.email
+                            email: new_user.email,
+                            permissions: permissions || [],
+                            roles: roles || []
                         })
                     })
                 }

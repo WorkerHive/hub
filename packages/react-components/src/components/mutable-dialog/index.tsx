@@ -160,6 +160,19 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
             label={uppercase(key)}
           />
         )
+      case 'Description':
+        return (
+          <TextField 
+            key={key}
+            value={data[key] || ''}
+            onChange={(e) => {
+              onChange(key, e.target.value)
+            }}
+            rows={3}
+            margin="dense"
+            multiline
+            label={uppercase(key)} />
+        )
       case 'Password':
         return (
           <TextField

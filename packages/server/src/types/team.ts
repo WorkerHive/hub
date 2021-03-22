@@ -16,7 +16,8 @@ export const typeDef = `
   type SiteFeedback @crud @configurable {
       id: ID
       from: String @input
-      message: String @input
+      subject: String @input
+      message: Description @input
    }
 
   type TeamHub @crud @configurable {

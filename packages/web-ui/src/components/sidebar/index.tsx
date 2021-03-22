@@ -26,6 +26,7 @@ import { withRouter } from 'react-router-dom'
 
 import './index.css';
 import { useHub } from '@workerhive/client';
+import { Feedback } from '@material-ui/icons';
 
 export interface SidebarProps {
     history: any;
@@ -83,6 +84,12 @@ export function Sidebar(props : SidebarProps){
           label: "Contacts",
           path: "/contacts"
         },
+        {
+          mainType: 'SiteFeedback',
+          icon: <Feedback />,
+          label: "Feedback",
+          path: '/feedback'
+        }
         /*{
           icon: <EmojiNature />,
           label: "Workflows",

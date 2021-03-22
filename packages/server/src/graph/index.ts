@@ -1,5 +1,4 @@
 import GraphTransport from "./interfaces/GraphTransport";
-import RoleRegistry from "./registry/role";
 import TypeRegistry from "./registry/type";
 import { graphql, execute, GraphQLSchema, parse, Source } from "graphql";
 import { schemaComposer } from "graphql-compose";

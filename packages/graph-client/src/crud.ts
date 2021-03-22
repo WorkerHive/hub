@@ -8,6 +8,7 @@ export default (models: any, client?: any, dispatch?: any) => {
 
     //Takes a type model and iterates over available keys, if key isn't native getFields will be called again to fill out the query fields
     const getFields = (type : any, parent?: any) => {
+        console.log("Get fields", type)
         return type.def.map((x: any) => {
             let raw = rawType(x.type);
 
@@ -132,6 +133,8 @@ export default (models: any, client?: any, dispatch?: any) => {
             })
         }
     }
+
+    console.log(models)
 
     models.forEach((model: any) => {
         console.log("Setting up actions for model")

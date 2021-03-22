@@ -38,6 +38,8 @@ export function getTypesWithFieldDirective(composer: SchemaComposer<any>, name: 
     return types;
 }
 
+import Scalars from '../scalars';
+
 export const isNativeType = (type) => {
     switch (type) {
         case "Hash":
@@ -61,7 +63,12 @@ export const isNativeType = (type) => {
         case "Boolean":
             return "Boolean";
         default:
-            return null;
+            console.log(Scalars.map((x) => x.name), type)
+            if(Scalars.map((x) => x.name).indexOf(type) > -1){
+                return type;
+            }else{
+                return null;
+            }
     }
 }
 

@@ -11,6 +11,7 @@ import { KNOWLEDGE_VIEW } from './types/knowledgebase';
 import { TEAM_VIEW } from './types/team';
 import { HOME_VIEW } from './types/home';
 import { ADMIN_VIEW } from './types/admin';
+import { SITE_FEEDBACK } from './types/site-feedback'
 const Types = [
     ADMIN_VIEW,
     HOME_VIEW,
@@ -21,7 +22,8 @@ const Types = [
     FILE_VIEW,
     CONTACT_VIEW,
     KNOWLEDGE_VIEW,
-    TEAM_VIEW
+    TEAM_VIEW,
+    SITE_FEEDBACK
 ]
 
 export default (props: any) => {

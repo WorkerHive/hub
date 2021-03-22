@@ -78,6 +78,7 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         ...args
                     },
                     resolve: async (parent, args, context : GraphContext) => {
+                        console.log("Create", item.name, args[item.camelName])
                         if(hasPermission(context.user, item.name, 'create')){
                             return await context.connector.create(item.name, args[item.camelName])
                         }else{

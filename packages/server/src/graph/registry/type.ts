@@ -1,9 +1,9 @@
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import { buildSchema, BuildSchemaOptions, DirectiveLocation, GraphQLBoolean, GraphQLDirective, GraphQLField, GraphQLInputObjectType, GraphQLInputType, GraphQLSchema } from 'graphql';
 import { SchemaComposer, ObjectTypeComposer, schemaComposer, InputTypeComposer } from 'graphql-compose';
 import EventEmitter from 'events';
 import { convertInput, getTypesWithDirective, objectValues } from '../utils';
 
+import Scalars from '../scalars';
 
 export default class TypeRegistry extends EventEmitter{
     
@@ -26,8 +26,9 @@ export default class TypeRegistry extends EventEmitter{
     }
 
     setupScalars(){
-        this.composer.createScalarTC(HashScalar)
-        this.composer.createScalarTC(MonikerScalar)
+        Scalars.forEach((scalar) => {
+            this.composer.createScalarTC(scalar)
+        })
     }
 
     setupMutable(){
@@ -275,8 +276,6 @@ export default class TypeRegistry extends EventEmitter{
 
 import { camelCase } from 'camel-case'; //For future reference this is what being a hippocrit (fuck spelling) is all about
 import { merge } from 'lodash';
-import { HashScalar } from '../scalars/hash';
-import { MonikerScalar } from '../scalars/moniker';
 import { directives } from '../directives';
 import { GraphContext } from '..';
 
