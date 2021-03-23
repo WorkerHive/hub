@@ -34,7 +34,7 @@ export const EQUIPMENT_VIEW = {
                                 title={data.label} 
                                 selected={store.state.selectedTab}
                                 onTabSelect={selectTab}
-                                tabs={[...new Set(data.equipment.filter((a: any) => a.type && a.type.length > 0).map((x:any) => x.type))]}/>
+                                tabs={[...new Set(data.equipment.filter((a: any) => a.type && a.type.length > 0).map((x:any) => x.type.toLowerCase()))]}/>
                         )
                     })()
                 }
@@ -57,7 +57,7 @@ export const EQUIPMENT_VIEW = {
 
                         const filterSelected = (item: any) => {
                             if(store.state.selectedTab){
-                                return item.type == store.state.selectedTab;
+                                return item.type.toLowerCase() == store.state.selectedTab;
                             }
                             return true;
                         }

@@ -1,5 +1,6 @@
 import { DirectiveLocation, GraphQLBoolean, GraphQLDirective, GraphQLSchema } from "graphql";
 import { Extensions, schemaComposer, SchemaComposer } from "graphql-compose";
+import { applyGenerators, createGenerators, updateGenerators } from "../generators";
 import GraphContext from "../interfaces/GraphContext";
 import { Type } from "../registry/type";
 import { convertInput, getTypesWithDirective } from "../utils";
@@ -77,14 +78,14 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                     args: {
                         ...args
                     },
-                    resolve: async (parent, args, context : GraphContext) => {
-                        console.log("Create", item.name, args[item.camelName])
+                    resolve: applyGenerators(async (parent, args, context : GraphContext) => {
+                        console.log(args)
                         if(hasPermission(context.user, item.name, 'create')){
                             return await context.connector.create(item.name, args[item.camelName])
                         }else{
                             throw new Error(`${item.name}:create permission not found`)
-                        }
-                    }
+                       }
+                    }, createGenerators)
                 },
                 [updateKey]:{
                     type: item.name, 
@@ -92,22 +93,25 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         id: 'ID',
                         ...args,
                     },
-                    resolve: async (parent, args, context : GraphContext) => {
+                    resolve: applyGenerators(async (parent, args, context : GraphContext) => {
+                        console.log(args)
+                        try{ args.id = parseInt(args.id) }catch(e){throw new Error(e)}
                         if(hasPermission(context.user, item.name, 'update')){
                             return await context.connector.update(item.name, {id: args['id']}, args[item.camelName])
                         }else{
                             throw new Error(`${item.name}:update permission not found`)
                         }
-                    }
+                    }, updateGenerators)
                 },
                 [deleteKey]:{
                     type: 'Boolean',
                     args: {
                         id: 'ID'
                     },
-                    resolve: async (parent, args, context : GraphContext) => {
+                    resolve: async (parent, {id}, context : GraphContext) => {
+                        try{ id = parseInt(id); }catch(e){throw new Error(e)}
                         if(hasPermission(context.user, item.name, 'delete')){
-                            return await context.connector.delete(item.name, {id: args['id']})
+                            return await context.connector.delete(item.name, {id})
                         }else{
                             throw new Error(`${item.name}:delete permission not found`)
                         }
@@ -155,9 +159,6 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
             })
         
     })
-
-        console.log("CRUD", new Type(schemaComposer.getOTC('Contact')).def.map((x) => x.directives))
-
 
    return schemaComposer.buildSchema();
 }

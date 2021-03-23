@@ -2,11 +2,13 @@ import isElectron from "is-tauri";
 import fetch from "node-fetch";
 import { UserInfo } from "../views/Auth/Signup";
     
-const hubUrl = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin))
+let hubUrl: string = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'http://localhost:4002' : window.location.origin)) || ""
+
+if(hubUrl?.indexOf('localhost') < 0) hubUrl += "/api"
 
 export const authenticate = (username : string, password : string) => {
 
-    return fetch(`${hubUrl}/api/login`, {
+    return fetch(`${hubUrl}/login`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -19,8 +21,17 @@ export const authenticate = (username : string, password : string) => {
     }).then((r) => r.json())
 }
 
+export const signupInfo = (token: string) => {
+    return fetch(`${hubUrl}/signup`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then((r) => r.json())
+}
+
 export const trySignup = (signup_info: UserInfo, token: string) => {
-    return fetch(`${hubUrl}/api/signup`, {
+    return fetch(`${hubUrl}/signup`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -34,7 +45,7 @@ export const trySignup = (signup_info: UserInfo, token: string) => {
 
 export const forgotPassword = (email: string) => {
 
-    return fetch(`${hubUrl}/api/forgot`, {
+    return fetch(`${hubUrl}/forgot`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -46,7 +57,7 @@ export const forgotPassword = (email: string) => {
 }
 
 export const resetPassword = (password: string, token: string) => {
-    return fetch(`${hubUrl}/api/reset`, {
+    return fetch(`${hubUrl}/reset`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

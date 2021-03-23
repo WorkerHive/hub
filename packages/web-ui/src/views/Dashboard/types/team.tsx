@@ -74,7 +74,8 @@ export const TEAM_VIEW = {
                                     }}
                                     open={open} />
 
-                                <SearchTable 
+                                <SearchTable
+                                    filter={({item, filterText}) => item.name.indexOf(filterText) > -1}
                                     renderItem={({item} : {item: any}) => [
                                         <>
                                            <Typography style={{flex: 1}}>{item.name || item.username}</Typography>

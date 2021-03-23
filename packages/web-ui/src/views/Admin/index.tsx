@@ -17,6 +17,8 @@ export interface AdminViewProps{
     map: any;
 }
 
+const rootMap = 'root-map';
+
 export const AdminView: React.FC<AdminViewProps> = (props) => {
 
     console.log(props.map)
@@ -92,14 +94,14 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
                     setNode(node)
                 },
                 onNodeAdd: (node: any) => {
-                    client?.actions.updateIntegrationMap('root-map', {nodes: nodes.concat(node), links: links})
+                    client?.actions.updateIntegrationMap(rootMap, {nodes: nodes.concat(node), links: links})
                     setNodes(nodes.concat([node]))
                 },
                 onNodeUpdate: (id: string, updated: any) => {
-                    client?.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links})
+                    client?.actions.updateIntegrationMap(rootMap, {nodes: nodes, links: links})
                 },  
                 onLinkAdd: (link : any) => {
-                    client?.actions.updateIntegrationMap('root-map', {nodes: nodes, links: links.concat([link])})
+                    client?.actions.updateIntegrationMap(rootMap, {nodes: nodes, links: links.concat([link])})
                     console.log("Addd link", link)
                    setLinks(links.concat([link])) 
                 },

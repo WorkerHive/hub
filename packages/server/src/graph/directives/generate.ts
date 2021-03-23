@@ -1,17 +1,10 @@
 import { DirectiveLocation, GraphQLBoolean, GraphQLDirective } from "graphql";
-import { SchemaComposer } from "graphql-compose";
-import TypeRegistry, { Type } from "../registry/type";
+import { generators } from "../generators";
 
-export const directiveName = "generate"
-
-export const directive = new GraphQLDirective({
-    name: 'generate',
-    description: "Generate value for field",
-    locations: [DirectiveLocation.FIELD_DEFINITION]
-})
-
-export const transform = (composer: SchemaComposer<any>, typeRegistry: TypeRegistry) => {
-    //  console.log(new Type(composer.getOTC('Contact')).def.map((x) => x.directives))
-
-  return composer;
-}
+export const directives = generators.map((x) => {
+    return new GraphQLDirective({
+        name: x.directiveName,
+        description: 'Generated directive for generators',
+        locations: [DirectiveLocation.FIELD_DEFINITION]
+    })  
+}) 

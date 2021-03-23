@@ -69,6 +69,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
   const renderItem = (key: string, type: any) : any => {
     let typeName = type.type ? type.type : type;
 
+    console.log(typeName, props.models)
     if(props.models && props.models.length > 0){
       if(props.models.map((x: any) => x.name).indexOf(typeName) > -1){
         type = {};

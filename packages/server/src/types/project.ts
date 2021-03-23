@@ -8,6 +8,7 @@ export const typeDef = `
 
   type Project @crud @configurable {
     "A series of work"
+    uuid: String @uuid
     id: ID
     name: String @input
     description: String @input

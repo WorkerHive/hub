@@ -74,41 +74,62 @@ export class Router {
         this.app.listen(port)
     }
 
+    async passportAuth(jwt_payload, done) {
+        let user = await this.connector.read("TeamMember", { id: jwt_payload.sub })
+        if (user) {
+            switch(jwt_payload.type){
+                case 'signup':
+                    done(null, {id: user.id})
+                    break;
+                case 'forgot':
+                    done(null, {id: user.id})
+                    break;
+                case 'login':
+                    let roles = jwt_payload.roles || []
+                    let permissions = jwt_payload.permissions || []
+
+                    if (!jwt_payload.roles || !jwt_payload.permissions) {
+                        var userPermissions = await this.userPermissions(user.roles.id)
+                        roles = userPermissions.roles
+                        permissions = userPermissions.permissions
+                    }
+                    let signed_user = {
+                        ...user,
+                        roles: roles.map((x) => ({ name: x.name, id: x.id })),
+                        permissions: permissions
+                    }
+                    //console.log("User", signed_user); //TODO add back in a better way GraphQL studio is polling alot
+                    done(null, signed_user)
+                    break;
+                default:
+                   // console.log("Passing passport auth with no type", jwt_payload)
+                    done(null, user);
+                    break;
+            }
+
+        } else {
+            done(null, false)
+        }
+    }
+
     init() {
         passport.use(new JwtStrategy({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: this.opts.jwtSecret,
             //issuer: process.env.WORKHUB_DOMAIN ? process.env.WORKHUB_DOMAIN : 'workhub.services',
             // audience: process.env.WORKHUB_DOMAIN ? process.env.WORKHUB_DOMAIN : 'workhub.services'
-        }, async (jwt_payload, done) => {
-            let user = await this.connector.read("TeamMember", { id: jwt_payload.sub })
-            if (user) {
-                let roles = jwt_payload.roles || []
-                let permissions = jwt_payload.permissions || []
-
-                if(!jwt_payload.roles || !jwt_payload.permissions){
-                    var userPermissions = await this.userPermissions(user.roles.id)
-                    roles = userPermissions.roles
-                    permissions = userPermissions.permissions
-                }
-                let signed_user = {
-                    ...user,
-                    roles: roles.map((x) => ({name: x.name, id: x.id})),
-                    permissions: permissions
-                }
-                //console.log("User", signed_user); //TODO add back in a better way GraphQL studio is polling alot
-                done(null, signed_user)
-            } else {
-                done(null, false)
-            }
-        }))
+        }, this.passportAuth.bind(this)));
 
         this.initAuthRoutes()
         this.initExternalRoutes();
         this.initGraph();
     }
 
-    signToken(info: any) {
+    signToken(info: {
+        type: string,
+        sub: string,
+        [key: string]: any
+    }) {
         return jwt.sign(info, this.opts.jwtSecret);
     }
 
@@ -126,7 +147,7 @@ export class Router {
             })
         })
 
-        return {permissions: Object.keys(perms), roles: roles.map((x) => ({name: x.name, id: x.id}))}
+        return { permissions: Object.keys(perms), roles: roles.map((x) => ({ name: x.name, id: x.id })) }
     }
 
     initGraph() {
@@ -223,7 +244,7 @@ export class Router {
         this.app.post('/forgot', async (req, res) => {
             const user: any = await this.connector.read('TeamMember', { email: req.body.email })
             if (user && user.id) {
-                const token = this.signToken({ id: user.id })
+                const token = this.signToken({ sub: user.id, type: 'forgot' })
                 let mailResult = await this.mailer.forgotPassword(user, token)
                 res.send({ success: true, message: mailResult })
             } else {
@@ -232,25 +253,54 @@ export class Router {
         })
 
         this.app.post('/reset',
-            passport.authenticate('jwt', {session: false}),
+            passport.authenticate('jwt', { session: false }),
             async (req, res) => {
                 let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
 
-                let updated_user = await this.connector.update('TeamMember', {id: req['user'].id}, {password})
-                if(updated_user && Object.keys(updated_user).length > 0){
+                let updated_user = await this.connector.update('TeamMember', { id: req['user'].id }, { password })
+                if (updated_user && Object.keys(updated_user).length > 0) {
+                    if(updated_user.roles && updated_user.roles.id){
+                        var { permissions, roles } = await this.userPermissions(updated_user.roles.id);
+                    }
+
                     res.send({
                         token: this.signToken({
                             sub: updated_user.id,
+                            type: 'login',
                             name: updated_user.name,
-                            email: updated_user.email
+                            email: updated_user.email,
+                            permissions: permissions || [],
+                            roles: roles || [],
                         })
                     })
-                }else{
-                    res.send({error: "There was a problem updating your password"})
+                } else {
+                    res.send({ error: "There was a problem updating your password" })
                 }
             })
 
-        this.app.post('/signup',                 
+        this.app.get('/signup',
+            passport.authenticate('jwt', { session: false }),
+            async (req, res) => {
+                let user = await this.connector.read("TeamMember", { id: req['user'].id })
+                if (user && Object.keys(user).length > 0) {
+                    if (user.status != "active") {
+                        res.send({
+                            signup_info: {
+                                name: user.name,
+                                username: user.username,
+                                email: user.email,
+                                phone_number: user.phone_number
+                            }
+                        })
+                    } else {
+                        res.send({ error: "Already signed up" })
+                    }
+                } else {
+                    res.send({ error: "User not found" })
+                }
+            })
+
+        this.app.post('/signup',
             passport.authenticate('jwt', { session: false }),
             async (req, res) => {
                 let password = crypto.createHash('sha256').update(req.body.password).digest('hex')
@@ -259,23 +309,25 @@ export class Router {
                     password: password,
                     name: req.body.name,
                     email: req.body.email,
+                    status: 'active',
                     phone_number: req.body.phone_number
                 }
-                let exists = await this.connector.read("TeamMember", {username: user.username})
-                if(exists && Object.keys(exists).length > 0 && req['user'].id != exists.id){
+                let exists = await this.connector.read("TeamMember", { username: user.username })
+                if (exists && Object.keys(exists).length > 0 && req['user'].id != exists.id) {
                     console.log("Signup", req['user'], exists)
-                    res.send({error: "Username already taken"})
-                }else{
-                    let new_user = await this.connector.update("TeamMember", {id: req['user'].id}, user)
-                    if(new_user.roles && new_user.roles.id){
+                    res.send({ error: "Username already taken" })
+                } else {
+                    let new_user = await this.connector.update("TeamMember", { id: req['user'].id }, user)
+                    if (new_user.roles && new_user.roles.id) {
                         var { permissions, roles } = await this.userPermissions(new_user.roles.id);
                     }
 
                     console.log("Signup completed", new_user)
-                    
+
                     res.send({
                         token: this.signToken({
                             sub: new_user.id,
+                            type: 'login',
                             name: new_user.name,
                             email: new_user.email,
                             permissions: permissions || [],
@@ -283,19 +335,20 @@ export class Router {
                         })
                     })
                 }
-        })
+            })
 
         this.app.post('/login', async (req, res) => {
             let username = req.body.username.toLowerCase();
             let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
             let user: any = await this.connector.read("TeamMember", { username: username, password: password })
             if (user.id) {
-                if(user.roles && user.roles.id){
-                    var { permissions, roles} = await this.userPermissions(user.roles.id)
-                } 
+                if (user.roles && user.roles.id) {
+                    var { permissions, roles } = await this.userPermissions(user.roles.id)
+                }
                 res.send({
                     token: this.signToken({
                         sub: user.id,
+                        type: 'login',
                         permissions: permissions || [],
                         roles: roles || [],
                         name: user.name,

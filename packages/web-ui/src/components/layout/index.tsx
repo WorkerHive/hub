@@ -128,7 +128,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                     currentValue = currentValue[0]
                                     console.log("CUrrent Valye", currentValue)
                                 } else {
-                                    let result = await client.actions[`get${model.name}`](query.id)
+                                    let result = await client.actions[`get${model.name}`](query.uuid)
                                     currentValue = result
                                     console.log("had to fetch fresh data", currentValue)
                                 }

@@ -9,9 +9,10 @@ const schemaComposer = new SchemaComposer();
         Int: 'int',
         Float: 'real',
         Boolean: 'boolean',
-        ID: 'text',
+        ID: 'integer',
         Date: 'date',
         Hash: 'text',
+        Description: 'text',
         Moniker: 'text',
         JSON: 'json'
     }

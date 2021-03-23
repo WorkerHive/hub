@@ -21,6 +21,7 @@ import styled from 'styled-components'
 export interface SearchTableProps{
   className?: string;
   data?: Array<object>;
+  columns?: Array<string>;
   renderItem?: (args: {item: object}) => any;
   filter?: (args: {item: any, filterText: string}) => boolean;
 }

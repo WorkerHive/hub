@@ -4,7 +4,8 @@
 }
 
 .auth-header{
-        display: flex;
+    cursor: pointer;
+    display: flex;
     align-items: center;
     padding-bottom: 8px;
 }

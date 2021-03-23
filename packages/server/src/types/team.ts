@@ -49,10 +49,6 @@ export const resolvers =  {
       if(user.email){
         const token = context.signToken({
           sub: user.id,
-          name: user.name,
-          email: user.email,
-          phone_number: user.phone_number,
-          username: user.username,
           type: 'signup',
           inviter: context.user.id
         })

@@ -112,6 +112,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                     readonly={readonly}
                     description={_data?.description} 
                     onChange={(description) => {
+                        console.log(_data, description)
                     setData({
                         ..._data,
                         description: description

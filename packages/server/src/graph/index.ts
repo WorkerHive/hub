@@ -10,6 +10,8 @@ import { merge } from "lodash";
 import { directives, directiveTransforms } from './directives';
 import { initialTypes } from "./initialTypes";
 
+import { applyMiddleware } from 'graphql-middleware'
+
 export {
     GraphContext,
     BaseGraph,
@@ -70,7 +72,7 @@ export default class HiveGraph extends BaseGraph{
 
         outputSchema.merge(typeSchema);
         let schema = outputSchema.buildSchema();
-        return schema
+        return applyMiddleware(schema)
     }
 
     schemaUpdate(args){

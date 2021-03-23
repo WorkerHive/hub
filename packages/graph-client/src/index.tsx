@@ -317,36 +317,38 @@ export class WorkhubClient {
             return result.data.updateMutableType
         }
 
-        this.actions['getIntegrationMap'] = async (id : string) => {
+        this.actions['getIntegrationMap'] = async (uuid : string) => {
+            console.log("Integration Map", uuid)
             let result = await this.query(`
-                query GetIntegrationMap($id: String){
-                    integrationMap(id: $id){
+                query GetIntegrationMap($uuid: String){
+                    integrationMap(uuid: $uuid){
+                        uuid
                         id
                         nodes
                         links
                     }
                 }
             `, {
-                id: id
+                uuid: uuid
             }) 
-            dispatch({type: 'GET_IntegrationMap', id: id, data: result.data.integrationMap})
+            dispatch({type: 'GET_IntegrationMap', id: result.data.integrationMap.id, data: result.data.integrationMap})
             return result.data.integrationMap
         }
 
-        this.actions['updateIntegrationMap'] = async (id: string, update: {nodes: any, links: any}) => {
+        this.actions['updateIntegrationMap'] = async (uuid: string, update: {nodes: any, links: any}) => {
             let result = await this.mutation(`
-                mutation UpdateIntegrationMap($id: String, $update: IntegrationMapInput){
-                    updateIntegrationMap(id: $id, integrationMap: $update){
+                mutation UpdateIntegrationMap($uuid: String, $update: IntegrationMapInput){
+                    updateIntegrationMap(uuid: $uuid, integrationMap: $update){
                         id
                         nodes
                         links
                     }
                 }
             `, {
-                id,
+                uuid,
                 update
             })
-            dispatch({type: 'UPDATE_IntegrationMap', id: id, data: result.data.updateIntegrationMap})
+            dispatch({type: 'UPDATE_IntegrationMap', id: result.data.updateIntegrationMap.id, data: result.data.updateIntegrationMap})
             return result.data.updateIntegrationMap;
         }
 

@@ -147,7 +147,7 @@ export class Cell {
         //Add new row to pollinator and join with nectar if needed.
         const idField = this.defintion.fields.find((a) => a.graphType == 'ID')
         if(idField && !object[idField.name]){
-            object[idField.name] = v4();
+        // TODO Remove?    object[idField.name] = v4();
         }
         return await this.updateContents(object, {})
     }
@@ -209,7 +209,7 @@ export class Cell {
 
             const updateFields = insertFields.map((x, ix) => `"${x}"=$${ix+1}::${this.defintion.fields.find((a) => a.name == x)?.type}`).join(', ')
 
-            let conflictStatement = `(id)`
+            let conflictStatement = `(uuid)`
 
             if(where){
                 insertFields = insertFields.concat(Object.keys(where))
@@ -227,7 +227,8 @@ export class Cell {
             console.log("Update query")
 
             const update_result = await this.client.query({text: query, values: insertValues})
-            return update_result.rows[0];
+            return (await this.getContents({id: update_result.rows[0].id}))[0] //TODO replace with a one pass query
+//            return update_result.rows[0];
         }))
     }
 

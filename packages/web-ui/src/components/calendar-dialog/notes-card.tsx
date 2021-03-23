@@ -13,13 +13,10 @@ const NotesCard : React.FC<NotesCardProps> = ({
     onChange = () => {}
 }) => {
 
-    const [selected, setSelected] = React.useState<number>(-1);
-
     const addNote = () => {
         let n = notes.slice()
         n.push('')
         onChange(n)
-        setSelected(n.length - 1 )
     }
 
     const removeNote = (ix: number) => {
@@ -30,12 +27,12 @@ const NotesCard : React.FC<NotesCardProps> = ({
 
     return (
         <div style={{display: 'flex', flexDirection: 'column'}}>
-            {notes.map((note, ix) => {
+            {(notes || []).map((note, ix) => {
                 return (
                 <div key={ix} style={{display: 'flex'}}>
                 <TextField 
                     disabled={readonly}
-                    focused={ix == selected}
+                    autoFocus
                     fullWidth
                     value={note} 
                     onKeyDown={(e) => {

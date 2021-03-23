@@ -3,6 +3,7 @@ import Add from '@material-ui/icons/Add'
 import Edit from "@material-ui/icons/Edit"
 import { MSContactCard } from '@workerhive/parsers';
 import { MutableDialog, Header, SearchTable, MoreMenu, FileDrop } from "@workerhive/react-ui"
+import qs from "qs";
 
 import React from "react"
 
@@ -24,7 +25,17 @@ export const CONTACT_VIEW = {
                 y: 0,
                 w: 12,
                 h: 1,
-                component: (data: any) => (<Header title={data.label} tabs={["People", "Companies"]} />)
+                component: (data: any) => (
+                    <Header 
+                        onTabSelect={({tab}) => {
+                            let query = qs.parse(window.location.search, {ignoreQueryPrefix: true})
+                            query.type = tab.toLowerCase();
+                            window.location.search = qs.stringify(query)
+                            console.log(tab)
+                        }}
+                        title={data.label} 
+                        tabs={["People", "Companies"]} />
+                )
             },
             {
                 i: 'data',
@@ -38,13 +49,18 @@ export const CONTACT_VIEW = {
                     if (type["Contact"]) type["Contact"].def.forEach((_type: any) => {
                         t[_type.name] = _type.type;
                     })
+
+                    let models = [client.models.find((a : any) => a.name == "ContactOrganisation")]
+                    models[0].data = data.organisations
+
                     return ((props) => {
                         const [open, modalOpen] = React.useState<boolean>(false);
                         const [ selected, setSelected ] = React.useState<any>();
 
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-                                <MutableDialog 
+                                <MutableDialog
+                                    models={models} 
                                     title={data.label} 
                                     data={selected}
                                     structure={t} 
@@ -88,7 +104,8 @@ export const CONTACT_VIEW = {
                                 console.log("Contact files", files)
                             }}>
                                 {(isDragActive: boolean) => (
-                                <SearchTable renderItem={({item}: any) => (
+                                <SearchTable 
+                                    renderItem={({item}: any) => (
                                     <div style={{display: 'flex', flex: 1, alignItems: 'center'}}>
                                         <Typography style={{flex: 1}}>{item.name}</Typography>
                                         <MoreMenu menu={[
