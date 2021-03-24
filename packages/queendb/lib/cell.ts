@@ -209,7 +209,7 @@ export class Cell {
 
             const updateFields = insertFields.map((x, ix) => `"${x}"=$${ix+1}::${this.defintion.fields.find((a) => a.name == x)?.type}`).join(', ')
 
-            let conflictStatement = `(uuid)`
+            let conflictStatement = `(id)`
 
             if(where){
                 insertFields = insertFields.concat(Object.keys(where))
@@ -249,7 +249,9 @@ export class Cell {
         selectQuery += ` FROM ${this.pollinator?.tableName}`
 
         if(this.nectar_source!.length > 0){
-            selectQuery += ` RIGHT OUTER JOIN ${this.nectar_source![0].tableName} ON ${this.nectar_source![0].tableName}.id=${this.pollinator!.tableName}.id`
+            let idField = this.defintion.getID();
+            console.log("Creating cell", idField)
+            selectQuery += ` RIGHT OUTER JOIN ${this.nectar_source![0].tableName} ON ${this.nectar_source![0].tableName}.${idField?.name}=${this.pollinator!.tableName}.${idField?.name}`
         }
 
         query += selectQuery

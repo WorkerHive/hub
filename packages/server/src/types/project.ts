@@ -8,8 +8,7 @@ export const typeDef = `
 
   type Project @crud @configurable {
     "A series of work"
-    uuid: String @uuid
-    id: ID
+    id: Int @id
     name: String @input
     description: String @input
     start_date: Date @input

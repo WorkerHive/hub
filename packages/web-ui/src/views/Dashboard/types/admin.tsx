@@ -11,7 +11,7 @@ export const ADMIN_VIEW = {
         map: {
             type: 'IntegrationMap',
             query: (params: any) => ({
-                uuid: 'root-map'  
+                id: 'root-map'  
             })
         }
     },

@@ -317,38 +317,37 @@ export class WorkhubClient {
             return result.data.updateMutableType
         }
 
-        this.actions['getIntegrationMap'] = async (uuid : string) => {
-            console.log("Integration Map", uuid)
+        this.actions['getIntegrationMap'] = async (id : string) => {
+            console.log("Integration Map", id)
             let result = await this.query(`
-                query GetIntegrationMap($uuid: String){
-                    integrationMap(uuid: $uuid){
-                        uuid
+                query GetIntegrationMap($id: String){
+                    integrationMap(id: $id){
                         id
                         nodes
                         links
                     }
                 }
             `, {
-                uuid: uuid
+                id: id
             }) 
-            dispatch({type: 'GET_IntegrationMap', id: result.data.integrationMap.id, data: result.data.integrationMap})
+            dispatch({type: 'GET_IntegrationMap', id: id, data: result.data.integrationMap})
             return result.data.integrationMap
         }
 
-        this.actions['updateIntegrationMap'] = async (uuid: string, update: {nodes: any, links: any}) => {
+        this.actions['updateIntegrationMap'] = async (id: string, update: {nodes: any, links: any}) => {
             let result = await this.mutation(`
-                mutation UpdateIntegrationMap($uuid: String, $update: IntegrationMapInput){
-                    updateIntegrationMap(uuid: $uuid, integrationMap: $update){
+                mutation UpdateIntegrationMap($id: String, $update: IntegrationMapInput){
+                    updateIntegrationMap(id: $id, integrationMap: $update){
                         id
                         nodes
                         links
                     }
                 }
             `, {
-                uuid,
+                id,
                 update
             })
-            dispatch({type: 'UPDATE_IntegrationMap', id: result.data.updateIntegrationMap.id, data: result.data.updateIntegrationMap})
+            dispatch({type: 'UPDATE_IntegrationMap', id: id, data: result.data.updateIntegrationMap})
             return result.data.updateIntegrationMap;
         }
 

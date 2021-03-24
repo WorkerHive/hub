@@ -22,7 +22,7 @@ export const typeDef = `
  
 
   type File @upload @configurable{
-    id: ID
+    id: ID @uuid
     cid: String
     filename: String
     pinned: Boolean

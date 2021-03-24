@@ -8,20 +8,20 @@ export const typeDef = `
   }
 
   type Role @crud @configurable{
-    id: ID
+    id: ID @uuid
     name: String @input
     permissions: JSON @input
   }
 
   type SiteFeedback @crud @configurable {
-      id: ID
+      id: Int @id
       from: String @input
       subject: String @input
       message: Description @input
    }
 
   type TeamHub @crud @configurable {
-    id: ID
+    id: Int @id
     name: String @input
     slug: Moniker @input
     location: String @input
@@ -30,7 +30,7 @@ export const typeDef = `
 
   type TeamMember @crud @configurable {
     "A member of your WorkHub Team"
-    id: ID
+    id: Int @id
     username: String @input
     password: Hash 
     roles: [Role] @input(ref: true)

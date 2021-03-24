@@ -95,7 +95,7 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                     },
                     resolve: applyGenerators(async (parent, args, context : GraphContext) => {
                         console.log(args)
-                        try{ args.id = parseInt(args.id) }catch(e){throw new Error(e)}
+                       // try{ args.id = parseInt(args.id) }catch(e){throw new Error(e)}
                         if(hasPermission(context.user, item.name, 'update')){
                             return await context.connector.update(item.name, {id: args['id']}, args[item.camelName])
                         }else{
@@ -109,7 +109,7 @@ export function transform(composer: SchemaComposer<any>) : GraphQLSchema {
                         id: 'ID'
                     },
                     resolve: async (parent, {id}, context : GraphContext) => {
-                        try{ id = parseInt(id); }catch(e){throw new Error(e)}
+                       // try{ id = parseInt(id); }catch(e){throw new Error(e)}
                         if(hasPermission(context.user, item.name, 'delete')){
                             return await context.connector.delete(item.name, {id})
                         }else{

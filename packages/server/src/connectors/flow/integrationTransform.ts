@@ -51,14 +51,6 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
             schemaComposer.createObjectTC({
                 name: 'IntegrationMap',
                 fields: {
-                    uuid: {
-                        type: 'String',
-                        extensions: {
-                            directives: [
-                                {name: 'uuid', args: {}}
-                            ]
-                        }
-                    },
                     id: 'ID',
                     nodes: 'JSON',
                     links: 'JSON'
@@ -67,7 +59,6 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
 
             db.newCell(`
                 type IntegrationMap{
-                    uuid: String @uuid
                     id: ID
                     nodes: JSON
                     links: JSON
@@ -135,12 +126,12 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
                 updateIntegrationMap: {
                     type: 'IntegrationMap',
                     args: {
-                        uuid: 'String',
+                        id: 'ID',
                         integrationMap: 'IntegrationMapInput'
                     },
                     resolve: async (parent, args, context : GraphContext) => {
                         console.log(args, "update map")
-                        return await context.connector.update('IntegrationMap', {uuid: args.uuid}, args.integrationMap);
+                        return await context.connector.update('IntegrationMap', {id: args.id}, args.integrationMap);
                     }
                 },
                 updateIntegrationStore: {
@@ -226,10 +217,10 @@ export const transform = (schema : SchemaComposer<any>, db: QueenDb) : {types: a
                 integrationMap: {
                     type: 'IntegrationMap',
                     args: {
-                        uuid: 'String'
+                        id: 'ID'
                     },
                     resolve: async (parent, args, context : GraphContext) => {
-                        return await context.connector.read('IntegrationMap', {uuid: args.uuid})
+                        return await context.connector.read('IntegrationMap', {id: args.id})
                     }
                 },
                 integrationMaps: {

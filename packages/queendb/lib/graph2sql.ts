@@ -9,7 +9,7 @@ const schemaComposer = new SchemaComposer();
         Int: 'int',
         Float: 'real',
         Boolean: 'boolean',
-        ID: 'integer',
+        ID: 'text',
         Date: 'date',
         Hash: 'text',
         Description: 'text',
@@ -95,7 +95,13 @@ export {
 export class QType implements QueenType {
 
     name: string;
-    fields: { name: string; graphType: string; type: string; primary: boolean; }[];
+    fields: { 
+        name: string; 
+        graphType: string; 
+        graphDirectives: string[];
+        type: string; 
+        primary: boolean; 
+    }[];
     schemaComposer: SchemaComposer<any> = new SchemaComposer();
 
     constructor(defintion: string){
@@ -111,9 +117,31 @@ export class QType implements QueenType {
         this.fields = Object.keys(fields).map((x: any) => ({
             name: x, 
             graphType: fields[x].type.getTypeName(), 
+            graphDirectives: _graphDef.getFieldDirectiveNames(x),
             type: TypeMap(fields[x].type.getTypeName()),
-            primary: fields[x].type.getTypeName() === 'ID'
+            primary: false
         }))
+
+        //Check for maximum ID
+        let idIx = this.getIDIndex();
+        if(idIx > -1) this.fields[idIx].primary = true;
+
+        //            primary: fields[x].type.getTypeName() === 'ID' || _graphDef.getFieldDirectiveNames(x).indexOf('id') > -1
+
+    }
+
+    //Checks for ID 
+    //Overriden by @id
+    getID(){
+        let idField = this.fields.find((a) => a.graphType == "ID")
+        let idDirective = this.fields.find((a) => a.graphDirectives.indexOf('id') > -1)
+        return idDirective || idField
+    }
+
+    getIDIndex(){
+        let idField = this.getID();
+        if(idField) return this.fields.map((x) => x.name).indexOf(idField?.name)
+        return -1;
     }
 
     

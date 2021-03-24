@@ -1,8 +1,7 @@
 export const typeDef = `
 
     type Contact @crud @configurable{
-        uuid: String @uuid
-        id: ID
+        id: ID @uuid
         name: String @input
         phone_number: String @input
         email: String @input
@@ -11,7 +10,7 @@ export const typeDef = `
     }
 
     type ContactOrganisation @crud @configurable{
-        id: ID
+        id: ID @uuid
         name: String @input
         location: String @input
         contacts: [Contact] @input
