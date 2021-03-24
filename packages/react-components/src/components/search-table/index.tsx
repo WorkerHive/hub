@@ -162,7 +162,7 @@ export const StyledSearchTable = styled(SearchTable)`
   }
 
   .grid-list .grid-list__item:hover{
-    background: #dfdfdf;
+    background: #3a8686;
   }
 
   .options-bar{

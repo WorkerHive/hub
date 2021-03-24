@@ -5,11 +5,9 @@ import MomentUtils from '@date-io/moment';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
-const theme = createMuiTheme({
-  
-})
+import theme from './theme'
 
 ReactDOM.render(
   <React.StrictMode>

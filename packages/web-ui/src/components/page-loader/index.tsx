@@ -16,8 +16,8 @@ export const Loader : React.FC<PageLoaderProps> = ({
 }) => {
     return (
         <div className={className}>
-            <SyncLoader color='#079692' loading size={size} />
-            {text && <Typography variant="h6" style={{marginTop: 12, color: "#079692"}}>{text}</Typography>}
+            <SyncLoader color='#f79339' loading size={size} />
+            {text && <Typography variant="h6" style={{marginTop: 12, color: "#f79339"}}>{text}</Typography>}
         </div>
     )
 }

@@ -198,7 +198,7 @@ export const StyledKanban = styled(GraphKanban)`
         display: flex;
         flex-direction: column;
         width: 272px;
-        background-color: #ebecf0;
+        background-color: #079692;
         border-radius: 3px;
         margin: 0 4px;
         padding: 0 4px;
