@@ -31,8 +31,35 @@
     transition: width 200ms ease-in;
 }
 
+.sidebar .menu-item.selected::before{
+    border-bottom-right-radius: 20px;
+    right: 0px;
+    top: -20px;
+}
+
+.sidebar .menu-item.selected::after{
+    border-top-right-radius: 20px;
+    right: 0px;
+    bottom: -20px;
+}
+
+.sidebar .menu-item.selected::after, .sidebar .menu-item.selected::before{
+    pointer-events: none;
+    right: 0px;
+    width: 40px;
+    height: 20px;
+    background: transparent;
+    box-shadow: 20px 0 0 0 #079692;
+    position: absolute;
+    content: "";
+}
+
+.sidebar .menu-item{
+    cursor: pointer;
+}
+
 .sidebar .menu-item.selected{
-    background: rgba(232, 232, 232, 0.2);
+    background-color: #079692; 
 }
 
 .sidebar .menu-item__icon{

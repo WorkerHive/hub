@@ -5,34 +5,47 @@ import {
 } from "@material-ui/icons"
 import styled from 'styled-components';
 import React from 'react';
+import moment from 'moment';
 
 const ToolbarHeader = (props: any) => {
     console.log(props)
+
+    const _next = () => {
+        let d = moment(props.date).add(1, 'week')
+        return new Date(d.valueOf())
+    }
+    
+    const _prev = () => {
+        let d = moment(props.date).subtract(1, 'week')
+        return new Date(d.valueOf())
+    }
+
     return (
         <div className={props.className}>
             <div className="controls">
                 <IconButton 
                     size="small"
-                    onClick={props.onNavigate.bind(this, 'PREV')}>
+                    onClick={props.onNavigate.bind(null, 'PREV', _prev())}>
                     <ArrowLeft />
                 </IconButton>
-                <div>{props.label}</div>
+                <div className="current">{props.label}</div>
                 <IconButton 
                     size="small"
-                    onClick={props.onNavigate.bind(this, 'NEXT')}>
+                    onClick={props.onNavigate.bind(null, 'NEXT', _next())}>
                     <ArrowRight /> 
                 </IconButton>
             </div>
             <div className="views">
                 <ButtonGroup size="small">
                     {[{
+                        disabled: true,
                         type: 'month',
                         label: "Month View"
                     }, {
                         type: 'work_week',
                         label: 'Week View'
                     }].map((item) => (
-                        <Button className={item.type == props.view ? 'active' : ''} variant="contained">
+                        <Button disabled={item.disabled} className={item.type == props.view ? 'active' : ''} variant="contained">
                             {item.label}
                        </Button>
                     ))}
@@ -53,6 +66,11 @@ export const StyledToolbar = styled(ToolbarHeader)`
         display: flex;
         align-items: center;
         color: #e4bc71;
+    }
+
+    .controls .current {
+        font-size: 17px;
+        font-weight: bold;
     }
 
     .views button {

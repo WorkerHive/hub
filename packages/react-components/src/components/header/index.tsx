@@ -36,7 +36,9 @@ export const Header : React.FC<HeaderProps> = ({
             <Typography variant="h6">{title}</Typography>
           </div>
         <div className="header__tabs">
-            <Tabs value={tabs!.map((x) => x.toLowerCase()).indexOf((selected || '').toLowerCase())} onChange={(_e : any, newVal) => {
+            <Tabs 
+              value={tabs!.map((x) => x.toLowerCase()).indexOf((selected || '').toLowerCase())} 
+              onChange={(_e : any, newVal) => {
                 console.log("Tab Select", tabs![newVal])
                 if(onTabSelect) onTabSelect({tab: tabs![newVal]})
             }}>
@@ -90,12 +92,14 @@ export const StyledHeader = styled(Header)`
   }
 
   .header__tabs .MuiButtonBase-root{
-    font-size: 0.66rem;
+    font-size: 0.70rem;
     min-width: unset;
+    opacity: 1;
+    font-weight: bold;
   }
 
   .actions-col{
-    display: flex;
+    display: none;
   }
 
   .actions-col svg{

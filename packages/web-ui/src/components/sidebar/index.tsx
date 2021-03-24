@@ -116,7 +116,7 @@ export function Sidebar(props : SidebarProps){
               key={ix}
               className={menu.map((x) => x.path).indexOf(window.location.pathname.split(props.match.url)[1]) == ix ? 'selected menu-item': 'menu-item'}
               onClick={() => props.history.push(`${props.match.url}${x.path}`)}
-              button >
+              >
               <div className="menu-item__icon">
                 {x.icon} 
               </div>
