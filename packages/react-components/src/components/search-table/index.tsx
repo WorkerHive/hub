@@ -51,7 +51,7 @@ export const SearchTable : React.FC<SearchTableProps> = ({
     
     const [ search, setSearch ] = React.useState('')
     
-    const changeOrder = (event: any, item : {key: string, label: string, flex: number}) => {
+    const changeOrder = (item : {key: string, label: string, flex: number}) => {
         const isAsc = orderBy === item.key && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc')
         setOrderBy(item.key)
@@ -107,7 +107,7 @@ export const SearchTable : React.FC<SearchTableProps> = ({
                                 <TableSortLabel
                                     active={orderBy == x.key}
                                     direction={(orderBy === x.key ? order : undefined)}
-                                    onClick={(e) => changeOrder(e, x)}
+                                    onClick={() => changeOrder(x)}
                                     >
                                     {x.label}
                                     {orderBy === x.key ? (
@@ -123,7 +123,7 @@ export const SearchTable : React.FC<SearchTableProps> = ({
                 )}
                 <TableBody>
                     {orderSort(data).filter(filtration).map((x, ix) => (
-                    <TableRow onClick={(e) => onClick && onClick({item: x})} className="grid-list__item" key={ix}>
+                    <TableRow onClick={() => onClick && onClick({item: x})} className="grid-list__item" key={ix}>
                         {columns.length > 0 && !renderItem ? columns.map((col) => (
                             <TableCell>{x[col.key]}</TableCell>
                         )) : renderItem && renderItem({item: x})}
