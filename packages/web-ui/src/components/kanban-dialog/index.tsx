@@ -80,8 +80,8 @@ const KanbanDialog: React.FC<KanbanDialogProps> = (props) => {
                         label="Description" />
                 </div>
                 <div style={{flex: 0.2, display: 'flex', flexDirection: 'column'}}>
-                    <Button onClick={showMembers} variant="contained">Members</Button>
-                    <Button style={{marginTop: 8}} onClick={removeCard} variant="contained" color="secondary" >Archive</Button>
+                    <Button onClick={showMembers} variant="outlined">Members</Button>
+                    <Button style={{marginTop: 8}} onClick={removeCard} variant="outlined" color="secondary" >Archive</Button>
                     <Popover
                         onClose={showMembers}
                         open={Boolean(anchorEl)}

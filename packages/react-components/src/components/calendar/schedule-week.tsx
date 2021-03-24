@@ -109,11 +109,11 @@ export const ScheduleEvent = (props: any) => {
 
       </div>
       <div style={{ background: '#dfdfdf', paddingBottom: 4, color: 'black', display: 'flex', textAlign: 'center', flexDirection: 'column' }}>
-        {Array.isArray(props.event.people) && props.event.people.map((x: any) => (
+        {Array.isArray(props.event.people) && props.event.people.filter((a: any) => a).map((x: any) => (
           <div>{x.name}</div>
         ))}
         {Array.isArray(props.event.resources) && props.event.resources.length > 0 && <div style={{ fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 4 }}>Equipment</div>}
-        {Array.isArray(props.event.resources) && props.event.resources.map((x: any) => (
+        {Array.isArray(props.event.resources) && props.event.resources.filter((a: any) => a).map((x: any) => (
           <div>{x.name}</div>
         ))}
         <div style={{ marginLeft: 8 }}>

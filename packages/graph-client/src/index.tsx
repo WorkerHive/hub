@@ -107,6 +107,10 @@ export class WorkhubClient {
         return jwt_decode(this.accessToken!)
     }
 
+    crudAccess(type: string){
+        return ["read", "create", "update", "delete"].filter((a) => this.canAccess(type, a))
+    }
+
     canAccess(type: string, action: string){
         return this.user.permissions.indexOf(`${type}:${action}`) > -1
     }

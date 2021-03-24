@@ -15,7 +15,7 @@ export interface MoreMenuItem {
   icon?: any;
   label?: string;
   color?: string;
-  action?: () => void;
+  action?: (item?: any) => void;
 }
 
 export interface MoreMenuProps {

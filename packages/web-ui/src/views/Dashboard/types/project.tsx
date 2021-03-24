@@ -282,6 +282,30 @@ export const PROJECT_VIEW = {
                                      open={open} />
 
                                 <SearchTable 
+                                    actions={client.crudAccess("Project")}
+                                    options={[
+                                        {
+                                            type: 'update', 
+                                            label: "Edit",
+                                            color: 'white',
+                                            icon: <Edit />,
+                                            action: (item: any) => {
+                                                setSelected(item)
+                                                modalOpen(true)
+                                            
+                                            }
+                                        },
+                                        {
+                                            type: 'delete',
+                                            label: "Delete",
+                                            color: "#f1682f",
+                                            icon: <Delete />,
+                                            action: (item: any) => {
+                                                props.client.actions.deleteProject(item.id)
+                                            }
+                                        }
+                                    ]}
+                                    onCreate={() => modalOpen(true)}
                                     filter={({item, filterText}) => `${item.id}`.indexOf(filterText) > -1 || item.name.indexOf(filterText) > -1}
                                     columns={[
                                         {
@@ -299,9 +323,6 @@ export const PROJECT_VIEW = {
                                     }}
                                 
                                     data={data.projects.filter((a : any) => a.name && a.name.length > 0).filter(filterSelected) || []} />
-                                {client.canAccess("Project", "create") &&  <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
-                                    <Add />
-                                </Fab>}
                             </div>
                         )
                     })({client})

@@ -237,7 +237,7 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
   }
 
   .ipfs-loader{
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(11, 114, 114, 0.6);
       width: 100%;
       z-index: 9;
     position: absolute;
@@ -249,6 +249,14 @@ export const StyledFileBrowser = styled(WorkhubFileBrowser)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  .ipfs-loader svg{
+      font-size: 44px;
+  }
+
+  .ipfs-loader span{
+      font-size: 18px;
   }
 
   .file-drop__inner .chonky-fileListWrapper{

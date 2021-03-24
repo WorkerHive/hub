@@ -1,4 +1,5 @@
 import { Fab, Typography } from "@material-ui/core"
+import { Delete } from "@material-ui/icons";
 import Add from '@material-ui/icons/Add'
 import Edit from "@material-ui/icons/Edit"
 import { MSContactCard } from '@workerhive/parsers';
@@ -105,6 +106,30 @@ export const CONTACT_VIEW = {
                             }}>
                                 {(isDragActive: boolean) => (
                                 <SearchTable
+                                    actions={client.crudAccess("Contact")}
+                                    onCreate={() => modalOpen(true)}
+                                    options={[
+                                        {
+                                            type: 'update', 
+                                            label: "Edit",
+                                            color: 'white',
+                                            icon: <Edit />,
+                                            action: (item: any) => {
+                                                setSelected(item)
+                                                modalOpen(true)
+                                            
+                                            }
+                                        },
+                                        {
+                                            type: 'delete',
+                                            label: "Delete",
+                                            color: "#f1682f",
+                                            icon: <Delete />,
+                                            action: (item: any) => {
+                                                props.client.actions.deleteContact(item.id)
+                                            }
+                                        }
+                                    ]}
                                     columns={[
                                         {
                                             label: "Name",
@@ -115,9 +140,7 @@ export const CONTACT_VIEW = {
                                     data={data.contacts || []} />
                                 )}
                             </FileDrop>
-                              {client.canAccess("Contact", "create") &&   <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
-                                    <Add />
-                                </Fab>}
+                             
                             </div>
                         )
                     })({client})

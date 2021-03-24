@@ -75,6 +75,36 @@ export const TEAM_VIEW = {
                                     open={open} />
 
                                 <SearchTable
+                                    actions={client.crudAccess("TeamMember")}
+                                    onCreate={() => modalOpen(true)}
+                                    options={[
+                                        {
+                                            type: 'update', 
+                                            label: "Edit",
+                                            color: 'white',
+                                            icon: <Edit />,
+                                            action: (item: any) => {
+                                                setSelected(item)
+                                                modalOpen(true)
+                                            
+                                            }
+                                        },
+                                        {
+                                            type: 'update',
+                                            label: "Invite",
+                                            color: 'white',
+                                            icon: <Email />
+                                        },
+                                        {
+                                            type: 'delete',
+                                            label: "Delete",
+                                            color: "#f1682f",
+                                            icon: <Delete />,
+                                            action: (item: any) => {
+                                                props.client.actions.deleteTeamMember(item.id)
+                                            }
+                                        }
+                                    ]}
                                     columns={[
                                         {
                                             label: "ID",
@@ -88,11 +118,7 @@ export const TEAM_VIEW = {
                                         }
                                     ]}
                                     filter={({item, filterText}) => item.name.indexOf(filterText) > -1}
-                                    data={data.team || []} />
-
-                               {client.canAccess("TeamMember", "create") &&  <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
-                                    <Add />
-                                </Fab>}
+                                    data={data.team || []} /> 
                             </div>
                         )
                     })({client})
