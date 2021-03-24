@@ -17,8 +17,7 @@ import {
     TableCell,
     TableRow,
     TableBody,
-    TableSortLabel,
-    SortDirection
+    TableSortLabel
 } from '@material-ui/core';
 
 import { orderBy as _orderBy } from 'lodash'
