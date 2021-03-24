@@ -68,10 +68,19 @@ export const StyledHeader = styled(Header)`
   justify-content:space-between;
   padding-left: 12px;
   padding-right: 12px;
+  background: transparent !important;
+  color: #e4bc71 !important;
+  box-shadow: none !important;
 
   .header__title{
     display: flex;
     align-items: center;
+  }
+
+  .header__title h6{
+    text-transform: uppercase;
+    font-size: 33px;
+    font-weight: bold !important;
   }
 
   .header__tabs{

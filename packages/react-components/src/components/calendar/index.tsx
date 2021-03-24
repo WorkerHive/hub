@@ -117,11 +117,12 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
 export const StyledCalendar = styled(WorkhubCalendar)`
   display: flex;
   flex: 1;
-  padding: 4px;
+  padding: 8px;
   flex-direction: column;
   position: relative;
   height: 100%;
   background-color: #0b7272 !important;
+  border-radius: 12px !important;
 
   .rbc-time-view, .rbc-time-header-content{
     border: none;
@@ -142,6 +143,10 @@ export const StyledCalendar = styled(WorkhubCalendar)`
     margin-right: 1px;
     border-top-right-radius: 30px;
     border-top-left-radius: 7px;
+  }
+
+  .rbc-day-bg.rbc-selected-cell{
+    opacity: 0.6;
   }
 
   .rbc-day-bg{
