@@ -87,32 +87,19 @@ export const EQUIPMENT_VIEW = {
                                         modalOpen(false)}}
                                      open={open} />
                                 <SearchTable 
+                                    columns={[
+                                        {
+                                            label: "ID",
+                                            key: "id",
+                                            flex: 0.15
+                                        },
+                                        {
+                                            label: "Name",
+                                            key: "name",
+                                            flex: 0.85
+                                        }
+                                    ]}
                                     filter={({item, filterText} : any) => item.name.indexOf(filterText) > -1}
-                                    renderItem={({item}: {item: any}) => (
-                                        <>
-                                            <Typography style={{flex: 1}}>{item.name}</Typography>
-                                            <MoreMenu menu={[
-                                                {
-                                                    perm: 'update',
-                                                    label:"Edit", 
-                                                    icon: <Edit />, 
-                                                    action: () => {
-                                                        setSelected(item)
-                                                        modalOpen(true)
-                                                    }
-                                                },
-                                                {
-                                                    perm: 'delete',
-                                                    label: "Delete", 
-                                                    color: 'red', 
-                                                    icon: <Delete />, 
-                                                    action: () => {
-                                                        props.client.actions.deleteEquipment(item.id)
-                                                    }
-                                                }
-                                            ].filter((a) => client.canAccess("Equipment", a.perm))} />
-                                        </>
-                                    )} 
                                     data={(data.equipment || []).filter(filterSelected)} />
                                 {client.canAccess("Equipment", "create") && <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />

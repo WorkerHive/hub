@@ -1,4 +1,4 @@
-import { Fab, Paper, Typography } from "@material-ui/core";
+import { Fab, Paper, TableCell, Typography } from "@material-ui/core";
 import Add from '@material-ui/icons/Add';
 import Delete from '@material-ui/icons/Delete';
 import Edit from "@material-ui/icons/Edit";
@@ -208,14 +208,34 @@ export const PROJECT_VIEW = {
                 })
             }
         },
-        layout: (sizes : any, rowHeight: number) => [
+        layout: (sizes : any, rowHeight: number, store: any) => [
             {
                 i: 'header',
                 x: 0,
                 y: 0,
                 w: 12,
                 h: 1,
-                component: (data: any, params: any, types: any, client: any) => (<Header title={data.label} user={client.user} connected={client.realtimeSync.status} />)
+                component: (data: any, params: any, types: any, client: any) => {
+
+                    return ((props) => {
+                        const selectTab = ({tab}: {tab: string}) => {
+                            if(store.state.selectedTab == tab){
+                                store.dispatch({selectedTab: null})
+                            }else{
+                                store.dispatch({selectedTab: tab})
+                            }
+                        }
+
+                    return (<Header 
+                        tabs={[...new Set(data.projects.filter((a: any) => a.status).map((x: any) => x.status.toLowerCase()))]}
+                        title={data.label} 
+                        user={client.user} 
+                        selected={store.state.selectedTab}
+                        onTabSelect={selectTab}
+                        connected={client.realtimeSync.status} />)
+
+                    })()
+                }
             },
             {
                 i: 'data',
@@ -231,6 +251,15 @@ export const PROJECT_VIEW = {
                     return ((props) => {
                         const [open, modalOpen] = React.useState<boolean>(false);
                         const [ selected, setSelected] = React.useState<any>();
+
+                        
+                        const filterSelected = (item: any) => {
+                            if(store.state.selectedTab){
+                                return item.status.toLowerCase() == store.state.selectedTab;
+                            }
+                            return true;
+                        }
+
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
@@ -253,33 +282,23 @@ export const PROJECT_VIEW = {
                                      open={open} />
 
                                 <SearchTable 
-                                    filter={({item, filterText}) => item.name.indexOf(filterText) > -1}
-                                    columns={["ID", "Name"]}
-                                    renderItem={({item}: {item: any}) => (
-                                       <div style={{cursor: 'pointer', alignItems: 'center', flex: 1, display: 'flex'}} onClick={() => {params.navigate(`/dashboard/projects/${item.id}`)}}>
-
-                                        <Typography style={{flex: 1}}>{item.id} {item.name}</Typography>
-                                        <MoreMenu menu={[
-                                            {
-                                                perm: 'update',
-                                                label: "Edit", 
-                                                icon: <Edit />, 
-                                                action: () => {
-                                                    setSelected(item)
-                                                    modalOpen(true)
-                                                }
-                                            },
-                                            {
-                                                perm: 'delete',
-                                                label: "Delete", 
-                                                icon: <Delete />, 
-                                                color: 'red'
-                                            }
-                                        ].filter((a) => client.canAccess("Project", a.perm))} />
-                                       
-                                       </div> 
-                                    )}
-                                    data={data.projects.filter((a : any) => a.name && a.name.length > 0) || []} />
+                                    filter={({item, filterText}) => `${item.id}`.indexOf(filterText) > -1 || item.name.indexOf(filterText) > -1}
+                                    columns={[
+                                        {
+                                            key: 'id',
+                                            label: "ID", 
+                                            flex: 0.15
+                                        }, 
+                                        {
+                                            key: 'name',
+                                            label: "Name", 
+                                            flex: 0.8
+                                        }]}
+                                    onClick={({item}) => {
+                                        params.navigate(`/dashboard/projects/${item.id}`)
+                                    }}
+                                
+                                    data={data.projects.filter((a : any) => a.name && a.name.length > 0).filter(filterSelected) || []} />
                                 {client.canAccess("Project", "create") &&  <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
                                     <Add />
                                 </Fab>}

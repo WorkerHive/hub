@@ -104,18 +104,15 @@ export const CONTACT_VIEW = {
                                 console.log("Contact files", files)
                             }}>
                                 {(isDragActive: boolean) => (
-                                <SearchTable 
-                                    renderItem={({item}: any) => (
-                                    <div style={{display: 'flex', flex: 1, alignItems: 'center'}}>
-                                        <Typography style={{flex: 1}}>{item.name}</Typography>
-                                        <MoreMenu menu={[
-                                            {label: "Edit", icon: <Edit />, action: () => {
-                                                setSelected(item)
-                                                modalOpen(true)
-                                            }}
-                                        ]}/>
-                                    </div>
-                                )} data={data.contacts || []} />
+                                <SearchTable
+                                    columns={[
+                                        {
+                                            label: "Name",
+                                            key: 'name',
+                                            flex: 1
+                                        }
+                                    ]}
+                                    data={data.contacts || []} />
                                 )}
                             </FileDrop>
                               {client.canAccess("Contact", "create") &&   <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">

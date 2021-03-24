@@ -75,11 +75,36 @@ export const TEAM_VIEW = {
                                     open={open} />
 
                                 <SearchTable
+                                    columns={[
+                                        {
+                                            label: "ID",
+                                            key: "id",
+                                            flex: 0.15
+                                        },
+                                        {
+                                            label: "Name",
+                                            key: "name",
+                                            flex: 0.85
+                                        }
+                                    ]}
                                     filter={({item, filterText}) => item.name.indexOf(filterText) > -1}
-                                    renderItem={({item} : {item: any}) => [
-                                        <>
-                                           <Typography style={{flex: 1}}>{item.name || item.username}</Typography>
-                                           <MoreMenu menu={[
+                                    data={data.team || []} />
+
+                               {client.canAccess("TeamMember", "create") &&  <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
+                                    <Add />
+                                </Fab>}
+                            </div>
+                        )
+                    })({client})
+                }
+            }
+        ]
+    }
+
+
+    /*
+
+     <MoreMenu menu={[
                                                 {
                                                    perm: 'update',
                                                    icon: <Edit />, 
@@ -110,15 +135,4 @@ export const TEAM_VIEW = {
                                         </>
                                        
                                     ]} 
-                                    data={data.team || []} />
-
-                               {client.canAccess("TeamMember", "create") &&  <Fab onClick={() => modalOpen(true)} style={{ position: 'absolute', right: 12, bottom: 12 }} color="primary">
-                                    <Add />
-                                </Fab>}
-                            </div>
-                        )
-                    })({client})
-                }
-            }
-        ]
-    }
+    */

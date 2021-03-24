@@ -2,7 +2,7 @@ import isElectron from "is-tauri";
 import fetch from "node-fetch";
 import { UserInfo } from "../views/Auth/Signup";
     
-let hubUrl: string = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'http://localhost:4002' : window.location.origin)) || ""
+let hubUrl: string = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin)) || ""
 
 if(hubUrl?.indexOf('localhost') < 0) hubUrl += "/api"
 

@@ -184,7 +184,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                             })
                         }}
                         options={projects}
-                        getOptionLabel={(option) => option.name || ''}
+                        getOptionLabel={(option) => `${option.id} - ${option.name}` || ''}
                         renderInput={(params) => <TextField {...params} label="Project"  /> }/>
                         {_data.project && _data.project.id && <IconButton onClick={() => {
                             history.push(`/dashboard/projects/${_data.project?.id}`)
