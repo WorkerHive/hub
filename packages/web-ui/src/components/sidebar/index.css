@@ -25,7 +25,7 @@
 
 .sidebar{
     display: flex;
-    background: #4f45e2 !important;
+    background: #157372 !important;
     color: rgb(222, 222, 222) !important;
     flex-direction: column;
     transition: width 200ms ease-in;
