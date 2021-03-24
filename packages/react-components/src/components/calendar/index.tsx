@@ -7,6 +7,7 @@ import moment, { Moment } from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { ScheduleWeek } from './schedule-week';
 import { Paper } from '@material-ui/core';
+import { Toolbar } from './toolbar';
 
 
 const localizer = momentLocalizer(moment)
@@ -89,6 +90,9 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
           week: true,
           work_week: ScheduleWeek
         }}
+        components={{
+          toolbar: Toolbar 
+        }}
         onSelectEvent={onSelectEvent}
         onDoubleClickEvent={(actions.indexOf("read") > -1 || actions.indexOf("update") > -1) ? onDoubleClickEvent : undefined}
         onSelectSlot={(slotInfo: {start: stringOrDate, end:stringOrDate, slots: Array<Date | string>, action: "select" | "click" | "doubleClick"}) => {
@@ -117,6 +121,34 @@ export const StyledCalendar = styled(WorkhubCalendar)`
   flex-direction: column;
   position: relative;
   height: 100%;
+  background-color: #0b7272 !important;
+
+  .rbc-time-view, .rbc-time-header-content{
+    border: none;
+  }
+
+  .rbc-time-header-gutter{
+    padding: 0;
+  }
+
+  .rbc-calendar .rbc-header{
+    background-color: #e4bc71;
+    color: #0b7272;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 22px;
+    border: none;
+    margin-left: 2px;
+    margin-right: 1px;
+    border-top-right-radius: 30px;
+    border-top-left-radius: 7px;
+  }
+
+  .rbc-day-bg{
+    background-color: #168b88;
+    border-color: #157575 !important;
+    border-width: 3px !important;
+  }
 
   .rbc-calendar, .rbc-time-header{
     height: 100%;
