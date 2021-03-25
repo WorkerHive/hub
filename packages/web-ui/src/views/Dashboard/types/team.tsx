@@ -93,7 +93,10 @@ export const TEAM_VIEW = {
                                             type: 'update',
                                             label: "Invite",
                                             color: 'white',
-                                            icon: <Email />
+                                            icon: <Email />,
+                                            action: (item: any) => {
+                                                props.client.actions.inviteTeamMember(item.id)
+                                            }
                                         },
                                         {
                                             type: 'delete',

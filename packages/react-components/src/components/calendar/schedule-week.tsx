@@ -89,6 +89,7 @@ export const ScheduleEvent = (props: any) => {
           <MoreMenu size="small" horizontal menu={[
             {
               type: 'update',
+              color: 'white',
               icon: <Edit />,
               label: "Edit",
               action: () => {
@@ -99,7 +100,7 @@ export const ScheduleEvent = (props: any) => {
               type: (props.event.managers || []).map((x: any) => x.id).indexOf(user?.sub) > -1 ? 'delete' : '',
               icon: <Delete />,
               label: "Delete",
-              color: 'red',
+              color: '#f1682f',
               action: () => {
                 dispatch({ type: 'DELETE_CARD', id: props.event.id })
               }

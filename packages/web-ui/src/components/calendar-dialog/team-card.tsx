@@ -32,6 +32,7 @@ const TeamCard: React.FC<TeamCardProps> = (props) => {
             {props.team.map((x, ix) => [
                 <ListItem key={ix} dense>
                     <Checkbox
+                        color="primary"
                         disabled={props.readonly}
                         checked={props.selected.indexOf(x.id) > -1}
                         onChange={(e) => onChange(e, x)} />

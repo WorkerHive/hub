@@ -221,10 +221,10 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                             })
                         }}/>
                     
-                    <div className="manager-list" style={{minWidth: 100, maxWidth: 200, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <div className="manager-list" style={{color: 'white', minWidth: 100, maxWidth: 200, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                         <TeamCircles size={30} members={(_data.id ? managers : [{id: client?.user.sub, name: client?.user.name}]) || []} />
                         {client?.canAccess("Schedule", "update") && _data.id && <IconButton size="small" onClick={addSelfManager}>
-                            {amManager() ? <img src={PersonRemove} /> : <PersonAdd />}
+                            {amManager() ? <img src={PersonRemove} style={{filter: 'invert(1)'}} /> : <PersonAdd />}
                         </IconButton>}
                     </div>
                 </div>
@@ -252,7 +252,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
   
             </DialogContent>
             <DialogActions>
-                {_data.id && actions.indexOf('delete') > -1 && amManager() && <Button onClick={onDelete} color="secondary">Delete</Button>}
+                {_data.id && actions.indexOf('delete') > -1 && amManager() && <Button style={{fontWeight: 'bold'}} onClick={onDelete} color="secondary">Delete</Button>}
                 <Button onClick={onClose}>
                     Close
                 </Button>

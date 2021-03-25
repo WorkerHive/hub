@@ -47,7 +47,7 @@ export const MoreMenu : React.FC<MoreMenuProps> = (props) => {
                         if(x.action) x.action()
                     }} style={{color: x.color || 'black'}}>
                         {x.icon}
-                        <Typography style={{marginLeft: 8}}>
+                        <Typography style={{fontWeight: 'bold', marginLeft: 8}}>
                             {x.label}
                         </Typography>
                     </MenuItem>
