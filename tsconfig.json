@@ -14,7 +14,7 @@
             "@workerhive/graph": ["graph-server/src"],
             "@workerhive/flow-provider": ["flow-provider/dist"],
             "@workerhive/react-ui": ["react-components/src"],
-            "@workerhive/client": ["graph-client/dist"],
+            "@workerhive/client": ["graph-client/src"],
             "@workerhive/queendb": ["queendb/dist"],
             "@workerhive/parsers": ["parsers/src"],
             "@workerhive/*": ["*/src"],
