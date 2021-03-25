@@ -6,7 +6,8 @@ import { Enquiry } from '../router';
 export class Mailer {
     private mailer: Mail;
 
-    private fromEmail: string =  process.env.SMTP_FROM || `"Workhive" <noreply@workhub.services>`;
+    private fromName: string = process.env.SMTP_NAME || "WorkHive"
+    private fromEmail: string =  `${this.fromName} <${process.env.SMTP_FROM || 'noreply@workhub.services'}>`;
 
     constructor(smtpOpts: TransportOptions){
         this.mailer = nodemailer.createTransport(smtpOpts);
@@ -16,15 +17,15 @@ export class Mailer {
         return await this.mailer.sendMail({
           from: this.fromEmail,
           to: user.email,
-          subject: "Invite to WorkHive",
+          subject: `Invite to ${this.fromName}`,
           text: `Kia Ora ${user.name},
 
-You've been invited to join a WorkHive organisation, click the link below to set up your account.
+You've been invited to join a ${this.fromName} organisation, click the link below to set up your account.
 
 https://${process.env.WORKHUB_DOMAIN}/signup?token=${token}
 
 Nga Mihi,
-WorkHive`
+${this.fromName}`
         })
     }
 
@@ -57,7 +58,7 @@ WorkHive`
             
             Replies to this message will be sent to the contact with the details above.
             
-            Powered by Workhive
+            Powered by ${this.fromName}
 
             `
         })
@@ -70,13 +71,13 @@ WorkHive`
                     subject: "Password reset",
                     text: `Kia Ora ${user.name},
 
-A password reset request has been made for your WorkHive account, click the link below to reset your password.
+A password reset request has been made for your ${this.fromName} account, click the link below to reset your password.
 If this wasn't you please ignore this email.
 
 https://${process.env.WORKHUB_DOMAIN}/reset?token=${token}
 
 Nga Mihi,
-WorkHive
+${this.fromName}
 `,
                 })
     }

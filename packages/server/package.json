@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/server",
-  "version": "2.1.91",
+  "version": "2.1.92",
   "main": "index.js",
   "files": [
     "dist/*"
