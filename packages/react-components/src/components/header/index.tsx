@@ -99,7 +99,8 @@ export const StyledHeader = styled(Header)`
   }
 
   .actions-col{
-    display: none;
+    opacity:0;
+    display: flex;
   }
 
   .actions-col svg{
