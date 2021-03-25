@@ -1,6 +1,6 @@
 {
   "name": "react-workerhub",
-  "version": "2.1.31",
+  "version": "2.1.32",
   "private": true,
   "author": {
     "email": "professional.balbatross@gmail.com",
@@ -22,7 +22,7 @@
     }
   },
   "main": "build/electron.js",
-  "homepage": "./",
+  "homepage": ".",
   "dependencies": {
     "@date-io/moment": "1.x",
     "@testing-library/jest-dom": "^5.11.4",
