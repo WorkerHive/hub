@@ -71,6 +71,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
 
     console.log(typeName, props.models)
     if(props.models && props.models.length > 0){
+      //Transformations to make if supplied type is another ObjectType
       if(props.models.map((x: any) => x.name).indexOf(typeName) > -1){
         type = {};
         const model = props.models.filter((x: any) => x.name == typeName)[0]
@@ -79,6 +80,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
         typeName = 'Select'
 
       }else if(props.models.map((x: any) => `[${x.name}]`).indexOf(typeName) > -1){
+        //If supplied type is an array
         type = {};
         const model = props.models.filter((x: any) => `[${x.name}]` == typeName)[0]
         type.key = 'id',

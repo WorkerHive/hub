@@ -17,7 +17,7 @@ export const AuthBase = (props: any) => {
             <Paper className="auth-content">
                 <div onClick={() => props.history.push('/')} className="auth-header">
                     <img src={'/assets/teal.png'} className="auth-header__img" alt="Workhub Logo" />
-                    <Typography style={{ color: 'teal' }} variant="h5">{props.title || 'Workhub'}</Typography>
+                    <Typography style={{ color: '#e4bc71' }} variant="h5">{props.title || 'Workhub'}</Typography>
                 </div>
                           
                 <Divider />

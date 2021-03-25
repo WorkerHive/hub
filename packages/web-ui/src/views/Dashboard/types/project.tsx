@@ -260,6 +260,11 @@ export const PROJECT_VIEW = {
                             return true;
                         }
 
+                        const closeModal = () => {
+                            modalOpen(false);
+                            setSelected(null)
+                        }
+
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
@@ -270,9 +275,9 @@ export const PROJECT_VIEW = {
                                         if(item.id){
                                             const id = item.id;
                                           
-                                            props.client.actions.updateProject(id, item).then(() => modalOpen(false))
+                                            props.client.actions.updateProject(id, item).then(() => closeModal())
                                         }else{
-                                            props.client.actions.addProject(item).then(() => modalOpen(false))
+                                            props.client.actions.addProject(item).then(() => closeModal())
                                         }
                                     }}
                                     onClose={() => {

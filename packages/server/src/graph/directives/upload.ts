@@ -5,6 +5,8 @@ import { GraphContext } from "..";
 import { getTypesWithDirective } from "../utils";
 import { CID } from 'ipfs-core';
 import { Type } from "../registry/type";
+import { applyGenerators, createGenerators } from "../generators";
+import { v4 } from "uuid";
 
 export const directiveName = "upload";
 
@@ -45,13 +47,14 @@ export const transform = (composer: SchemaComposer<any>) => {
                     cid: 'String',
                     filename: 'String',
                 },
-                resolve: async (parent, args, context : GraphContext) => {
-                    //TODO add file to fsLayer
+                resolve: applyGenerators(async (parent, args, context : GraphContext) => {
+                    //TODO make generators run/Merge with input declarations
                     let cid = new CID(args.cid);
 
                     let exists = await context.fs.repo.blocks.has(cid)
 
                     let newFile : any = await context.connector.create(type.name, {
+                        id: v4(),
                         pinned: exists,
                         filename: args.filename, 
                         cid: args.cid
@@ -72,7 +75,7 @@ export const transform = (composer: SchemaComposer<any>) => {
                     }
         
                     return newFile
-                }
+                }, createGenerators)
             },
             [deleteKey]: {
                 type: type.name,

@@ -22,11 +22,11 @@ import LocalLibrary from '@material-ui/icons/LocalLibrary';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
-import { withRouter } from 'react-router-dom'
+import { withRouter, matchPath } from 'react-router-dom'
 
 import './index.css';
 import { useHub } from '@workerhive/client';
-import { Feedback } from '@material-ui/icons';
+import { Business, Feedback } from '@material-ui/icons';
 
 export interface SidebarProps {
     history: any;
@@ -85,6 +85,12 @@ export function Sidebar(props : SidebarProps){
           path: "/contacts"
         },
         {
+          mainType: 'ContactOrganisation',
+          icon: <Business />,
+          label: "Companies",
+          path: '/companies'
+        },
+        {
           mainType: 'SiteFeedback',
           icon: <Feedback />,
           label: "Feedback",
@@ -96,6 +102,21 @@ export function Sidebar(props : SidebarProps){
           path: '/workflows'
         }*/
       ]
+
+    const isViewOrSub = (ix: number) => {
+      let urlSlug = window.location.pathname.split(props.match.url)[1];
+      let index = menu.map((x) => x.path).indexOf(urlSlug)
+
+      let paths = menu.map((x) => x.path.length > 0 && matchPath(urlSlug, {path: x.path}))
+      let second_index; 
+      paths.forEach((path, ix) => {
+        if(path){
+          second_index = ix;
+        }
+      })
+
+      return index == ix || second_index == ix
+    }
 
     return (
       <Paper className="sidebar" style={{width: minimized ? 64 : 200}} >
@@ -114,7 +135,7 @@ export function Sidebar(props : SidebarProps){
         {menu.filter((a) => client?.canAccess(a.mainType, "read")).map((x, ix) => (
             <ListItem 
               key={ix}
-              className={menu.map((x) => x.path).indexOf(window.location.pathname.split(props.match.url)[1]) == ix ? 'selected menu-item': 'menu-item'}
+              className={isViewOrSub(ix) ? 'selected menu-item': 'menu-item'}
               onClick={() => props.history.push(`${props.match.url}${x.path}`)}
               >
               <div className="menu-item__icon">

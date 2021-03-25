@@ -6,7 +6,7 @@ import { CALENDAR_VIEW } from './types/calendar'
 import { PROJECT_DRILLDOWN, PROJECT_VIEW } from './types/project';
 import { EQUIPMENT_VIEW } from './types/equipment';
 import { FILE_VIEW } from './types/file';
-import { CONTACT_VIEW } from './types/contacts';
+import { CONTACT_VIEW, CONTACT_COMPANY_VIEW} from './types/contacts';
 import { KNOWLEDGE_VIEW } from './types/knowledgebase';
 import { TEAM_VIEW } from './types/team';
 import { HOME_VIEW } from './types/home';
@@ -21,6 +21,7 @@ const Types = [
     EQUIPMENT_VIEW,
     FILE_VIEW,
     CONTACT_VIEW,
+    CONTACT_COMPANY_VIEW,
     KNOWLEDGE_VIEW,
     TEAM_VIEW,
     SITE_FEEDBACK
