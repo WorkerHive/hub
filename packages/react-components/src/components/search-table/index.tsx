@@ -146,8 +146,9 @@ export const SearchTable: React.FC<SearchTableProps> = ({
                                 className="grid-list__item"
                                 key={ix}>
                                 {columns.length > 0 && !renderItem ? columns.map((col, ix) => (
-                                    <TableCell>
+                                    <TableCell style={{position: 'relative'}}>
                                         {x[col.key]}
+
                                         {ix == columns.length - 1 &&
                                             <div className="grid-list__item-menu">
                                                 <MoreMenu

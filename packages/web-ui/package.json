@@ -1,7 +1,28 @@
 {
   "name": "react-workerhub",
-  "version": "2.1.30",
+  "version": "2.1.31",
   "private": true,
+  "author": {
+    "email": "professional.balbatross@gmail.com",
+    "name": "The Tech Company"
+  },
+  "description": "WorkHive Hub",
+  "build": {
+    "appId": "services.workhub.WorkerHive",
+    "icon": "logo192.png",
+    "files": [
+      "build/**/*",
+      "node_modules/"
+    ],
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Productivity"
+    }
+  },
+  "main": "build/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@date-io/moment": "1.x",
     "@testing-library/jest-dom": "^5.11.4",
@@ -9,16 +30,19 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
-    "@workerhive/client": "file:../graph-client",
+    "@workerhive/client": "^2.1.18",
     "@workerhive/hive-flow": "^1.1.5",
-    "@workerhive/parsers": "file:../parsers",
-    "@workerhive/react-ui": "file:../react-components",
+    "@workerhive/parsers": "^2.1.17",
+    "@workerhive/react-ui": "2.1.18",
+    "cross-env": "^7.0.3",
+    "electron-is-dev": "^2.0.0",
     "file-saver": "^2.0.5",
     "is-tauri": "file:../is-tauri",
     "jszip": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
+    "moniker": "^0.1.2",
     "qs": "^6.9.6",
     "react-grid-layout": "^1.2.0",
     "react-json-view": "^1.20.4",
@@ -35,7 +59,12 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron:build": "electron-builder build --linux deb --arm64 --armv7l --x64",
+    "app:release": "npm run build && electron-builder",
+    "app:build": "npm run electron:build",
+    "electron:start": "electron .",
+    "electron:start-all": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "browserslist": {
     "production": [
@@ -52,7 +81,10 @@
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
     "babel-plugin-transform-imports": "^2.0.0",
+    "concurrently": "^6.0.0",
     "customize-cra": "^1.0.0",
+    "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
     "react-app-rewire-uglifyjs": "^0.1.1",
     "react-app-rewire-webpack-bundle-analyzer": "^1.1.0",
     "react-app-rewired": "^2.1.8"

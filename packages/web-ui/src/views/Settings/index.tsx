@@ -4,6 +4,8 @@ import { AccordionList } from "@workerhive/react-ui"
 import { SettingsMap } from './settings-map'
 import './index.css';
 import { useHub } from '@workerhive/client';
+import { Typography } from '@material-ui/core';
+const pjson = require('../../../package.json');
 
 export interface SettingsProps{
     history: any;
@@ -56,6 +58,7 @@ export default function Settings (props: SettingsProps){
         <div className="settings-view">
             <AccordionList 
               items={SettingsMap(props, stores, storeTypes, converters, roles)} />
+            <Typography variant="subtitle1">Workhive Hub v{pjson.version}</Typography>
         </div>
     )
 }

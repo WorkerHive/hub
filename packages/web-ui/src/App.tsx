@@ -1,11 +1,12 @@
 import React, {Suspense, lazy} from 'react';
-import isElectron from 'is-tauri'
+import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
 import { AuthBase } from './views/Auth'
 import { PageLoader } from './components/page-loader';
 
 import './App.css';
+import { HubSetup } from './views/Auth/Hub';
 
 const Dashboard = lazy(() => import('./views/Dashboard'));
 
@@ -41,7 +42,7 @@ function App() {
                 )
               }
             }} />
-            <Route path={["/", "/login", "/reset", "/signup", "/forgot"]} exact component={AuthBase} />
+            <Route path={["/", "/login", "/reset", "/signup", "/forgot"]} exact render={(props) => isElectron() ? ((localStorage.getItem('token')||"").length > 0) ? <Redirect to="/dashboard" />: <HubSetup {...props} /> : <AuthBase {...props} />} />
           </div>
         </Router>
   );

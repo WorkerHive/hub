@@ -165,7 +165,6 @@ export class WorkhubClient {
             if(ENVIRONMENT == "NODE"){
                 opts.link = createHttpLink({
                     uri: `${this.hubUrl}/graphql`,
-                    fetch: fetch,
                     headers: {
                         Authorization: this.accessToken ? `Bearer ${this.accessToken}` : "",
                     }

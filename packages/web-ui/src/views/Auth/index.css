@@ -1,4 +1,5 @@
 .auth-base{ 
+    background: white;
     display: flex;
     flex: 1;
 }
@@ -29,6 +30,7 @@
 
 .auth-content a{
     display: flex;
+    color: #e4bc71;
     text-decoration: none;
     justify-content: center;
     align-items: center;

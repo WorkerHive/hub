@@ -10,15 +10,7 @@ import {
 } from '@material-ui/core';
 
 import Contacts from '@material-ui/icons/Contacts';
-import AccountTree from '@material-ui/icons/AccountTree';
-import Dashboard from '@material-ui/icons/Dashboard';
-import CalendarToday from '@material-ui/icons/CalendarToday';
-import SupervisorAccount from '@material-ui/icons/SupervisorAccount'
-import BusinessCenter from '@material-ui/icons/BusinessCenter'
-import Description from '@material-ui/icons/Description';
-import EmojiNature from '@material-ui/icons/EmojiNature'
 import Settings from '@material-ui/icons/Settings';
-import LocalLibrary from '@material-ui/icons/LocalLibrary';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
@@ -27,6 +19,14 @@ import { withRouter, matchPath } from 'react-router-dom'
 import './index.css';
 import { useHub } from '@workerhive/client';
 import { Business, Feedback } from '@material-ui/icons';
+
+import CalendarIcon from '../../assets/calendar1.svg'
+import ProjectIcon from '../../assets/project1.svg';
+import TeamIcon from '../../assets/team.svg'; 
+import ResourceIcon from '../../assets/resources1.svg';
+import FileIcon from '../../assets/files1.svg';
+
+import Logo from '../../assets/teal.png';
 
 export interface SidebarProps {
     history: any;
@@ -45,31 +45,31 @@ export function Sidebar(props : SidebarProps){
         },*/
         {
           mainType: 'Schedule',
-          icon: <img src="/assets/calendar1.svg" />, 
+          icon: <img src={CalendarIcon}/>, 
           label: "Calendar",
           path: ""
         },
         {
           mainType: 'Project',
-          icon: <img src="/assets/project1.svg" />,
+          icon: <img src={ProjectIcon} />,
           label: "Projects",
           path: "/projects"
         },
         {
           mainType: 'TeamMember',
-          icon: <img src="/assets/team.svg" />,
+          icon: <img src={TeamIcon} />,
           label: "Team",
           path: "/team"
         },
         {
           mainType: 'Equipment',
-          icon: <img src="/assets/resources1.svg" />,
+          icon: <img src={ResourceIcon} />,
           label: "Equipment",
           path: "/equipment"
         },
         {
           mainType: 'File',
-          icon: <img src="/assets/files1.svg" />, 
+          icon: <img src={FileIcon} />, 
           label: "Files",
           path: "/files"
         },
@@ -122,7 +122,7 @@ export function Sidebar(props : SidebarProps){
       <Paper className="sidebar" style={{width: minimized ? 64 : 200}} >
         <List style={{flex: 1, maxWidth: minimized ? 64 : 200, transition: 'max-width 200ms ease-in'}}> 
         <ListItem style={{position: 'relative', color: 'rgb(34, 151, 147)', padding: 12, fontSize: 20, justifyContent: 'flex-start'}}>
-           <img src={'/assets/teal.png'} alt="Workhub" style={{height: 33, marginRight: minimized ? 0 : 8, marginLeft: minimized ? 0: 0}} /> 
+           <img src={Logo} alt="Workhub" style={{height: 33, marginRight: minimized ? 0 : 8, marginLeft: minimized ? 0: 0}} /> 
 
            {!minimized && <Typography variant="h6" style={{fontWeight: 'bold'}}>Workhub</Typography>}
 

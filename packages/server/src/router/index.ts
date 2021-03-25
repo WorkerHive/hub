@@ -75,14 +75,26 @@ export class Router {
     }
 
     async passportAuth(jwt_payload, done) {
-        let user = await this.connector.read("TeamMember", { id: jwt_payload.sub })
-        if (user) {
+        let user;
+        if(jwt_payload.type != "hub-token"){
+        user = await this.connector.read("TeamMember", { id: jwt_payload.sub })
+        }else{
+            user= await this.connector.read("TeamHub", {id: parseInt(jwt_payload.sub.split('hub-')[1])})
+        }
+         if (user) {
             switch(jwt_payload.type){
                 case 'signup':
                     done(null, {id: user.id})
                     break;
                 case 'forgot':
                     done(null, {id: user.id})
+                    break;
+                case 'hub-token':
+                    done(null,{
+                        ...user,
+                        permissions: jwt_payload.permissions,
+                        roles: jwt_payload.roles
+                    })
                     break;
                 case 'login':
                     let roles = jwt_payload.roles || []
@@ -336,6 +348,34 @@ export class Router {
                     })
                 }
             })
+
+        this.app.post('/provision', async (req, res) => {
+            let { device, hubName } = req.body;
+            let hub = await this.connector.read("TeamHub", {name: hubName})
+
+            if(hub && hub.id){
+                let permissions = [
+                    "Schedule:read",
+                    "Project:read",
+                    "TeamMember:read",
+                    "Equipment:read"
+                ]
+
+                let token = this.signToken({
+                    sub: `hub-${hub.id}`,
+                    type: 'hub-token',
+                    permissions: permissions || [],
+                    roles: [],
+                    name: hub.name,
+                    email: ""
+                })
+
+                res.send({token: token})
+            }else{
+                res.send({error: "Hub not found"})
+            }
+
+        })
 
         this.app.post('/login', async (req, res) => {
             let username = req.body.username.toLowerCase();

@@ -1,10 +1,28 @@
-import isElectron from "is-tauri";
+import isElectron from "is-electron";
 import fetch from "node-fetch";
 import { UserInfo } from "../views/Auth/Signup";
     
 let hubUrl: string = (isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin)) || ""
 
 if(hubUrl?.indexOf('localhost') < 0) hubUrl += "/api"
+
+export const setupHub = (_hubUrl: string, hubName : string) => {
+    if(_hubUrl){
+        hubUrl = _hubUrl + '/api'
+        localStorage.setItem('workhub-api', _hubUrl)
+    }
+
+    return fetch(`${hubUrl}/provision`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            device: "TeamHub",
+            hubName: hubName
+        })
+    }).then((r) => r.json())
+}
 
 export const authenticate = (username : string, password : string) => {
 

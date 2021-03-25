@@ -1,0 +1,37 @@
+.hub-setup{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hub-box{
+    margin-bottom:70px;
+    display: flex;
+    color: #e4bc71;
+    align-items: center;
+    justify-content: center;
+}
+
+.hub-box .MuiTypography-root{
+    font-weight: bold;
+    margin-left: 12px;
+}
+
+.hub-box img{
+    height: 50px;
+}
+
+.hub-form{
+    display: flex;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.hub-form .MuiTextField-root{
+    display: flex;
+    width: 60%;
+    min-width: 300px;
+}

@@ -6,7 +6,7 @@ import SyncLoader from 'react-spinners/SyncLoader'
 import './index.css';
 
 export interface LoginProps {
-    title: string;
+    title?: string;
     history: any;
 }
 
