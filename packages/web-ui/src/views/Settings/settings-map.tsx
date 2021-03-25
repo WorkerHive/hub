@@ -82,6 +82,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
         title: <Typography variant="h6" style={{display: 'flex'}}>Hubs</Typography>,
         body: (
           <CRUDList
+          client={client}
             title={"Hubs"}
             type={{
               name: "String",
@@ -109,6 +110,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
       title: <Typography variant="h6" style={{display: 'flex'}}>Roles</Typography>,
       body: (
         <CRUDList 
+          client={client}
           title={"Roles"} 
           onDelete={({item}: any) => {
             client?.actions.deleteRole(item.id)
@@ -146,6 +148,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
       title: <Typography variant="h6" style={{display: 'flex'}}>Databases</Typography>,
       body: (
         <CRUDList 
+          client={client}
           title={"Databases"} 
           onDelete={({item}: any) => {
             if(item && item.id){
@@ -183,7 +186,9 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
     {
       title: <Typography variant="h6" style={{display: 'flex'}}>Data types</Typography>,
       body: (
-        <CRUDList title={"Types"} type={{name: 'String', def: 'KV'}} data={models} 
+        <CRUDList
+          client={client}  
+        title={"Types"} type={{name: 'String', def: 'KV'}} data={models} 
           onEdit={({item}: any) => {
             props.history.push(`${props.match.url}/type-editor/${item.name}`)
           }}

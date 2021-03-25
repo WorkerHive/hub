@@ -53,6 +53,7 @@ export const SITE_FEEDBACK = {
                     return (
                         <Paper style={{flex: 1, display: 'flex', position: 'relative'}}>
                             <MutableDialog
+                                client={client}
                                 structure={{
                                     from: 'String',
                                     subject: 'String',

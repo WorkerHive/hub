@@ -37,11 +37,12 @@ const ToolbarHeader = (props: any) => {
             </div>
             <div className="views">
                 <ButtonGroup size="small">
-                    {[{
+                    {[/*{
                         disabled: true,
                         type: 'month',
                         label: "Month View"
-                    }, {
+                    }, */ {
+                        disabled: false,
                         type: 'work_week',
                         label: 'Week View'
                     }].map((item) => (
@@ -84,6 +85,7 @@ export const StyledToolbar = styled(ToolbarHeader)`
         background: #e4bc71;
         color: #0b7272;
     }
+
 
     svg{
         fill: #e4bc71;

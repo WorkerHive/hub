@@ -267,7 +267,8 @@ export const PROJECT_VIEW = {
 
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
-                                <MutableDialog 
+                                <MutableDialog
+                                    client={client} 
                                     title={data.label} 
                                     data={selected}
                                     structure={t} 
@@ -311,7 +312,7 @@ export const PROJECT_VIEW = {
                                         }
                                     ]}
                                     onCreate={() => modalOpen(true)}
-                                    filter={({item, filterText}) => `${item.id}`.indexOf(filterText) > -1 || item.name.indexOf(filterText) > -1}
+                                    filter={({item, filterText}) => `${item.id}`.indexOf(filterText) > -1 || item.name.toLowerCase().indexOf(filterText.toLowerCase()) > -1}
                                     columns={[
                                         {
                                             key: 'id',

@@ -48,6 +48,7 @@ export const TEAM_VIEW = {
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
+                                    client={client}
                                     title={data.label} 
                                     data={selected}
                                     models={models}
@@ -120,7 +121,7 @@ export const TEAM_VIEW = {
                                             flex: 0.85
                                         }
                                     ]}
-                                    filter={({item, filterText}) => item.name.indexOf(filterText) > -1}
+                                    filter={({item, filterText}) => item.name.toLowerCase().indexOf(filterText.toLowerCase()) > -1}
                                     data={data.team || []} /> 
                             </div>
                         )

@@ -133,7 +133,7 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                             <ListItem className={selected.map((x: any) => x.id).indexOf(x.id) > -1 ? 'selected': ''} button dense onClick={(e) => {
                                 selectItem(x, ix, e)
                             }}>
-                                <ListItemIcon style={{color: x.pinned ? 'green' : 'blue'}}>
+                                <ListItemIcon style={{color: x.pinned ? '#d3b3a7' : '#f79339'}}>
                                     {x.pinned ? <Description /> : <Sync />}
                                 </ListItemIcon>
                                 <ListItemText>

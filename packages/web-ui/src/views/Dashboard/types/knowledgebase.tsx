@@ -36,7 +36,8 @@ export const KNOWLEDGE_VIEW = {
 
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
-                                <MutableDialog 
+                                <MutableDialog
+                                    client={client} 
                                     title={"Knowledge"} 
                                     structure={t} 
                                     onSave={({item}) => {

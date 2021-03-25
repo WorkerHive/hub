@@ -19,12 +19,13 @@ export const CompanyView: React.FC<CompanyViewProps> = ({
     models
 }) => {
 
-    const [ open, modalOpen ] = React.useState<boolean>(false);
-    const [ selected, setSelected ] = React.useState<string>();
-    
+    const [open, modalOpen] = React.useState<boolean>(false);
+    const [selected, setSelected] = React.useState<string>();
+
     return (
         <>
-                    <MutableDialog
+            <MutableDialog
+                client={client}
                 models={models}
                 title={data.label}
                 data={selected}
@@ -46,6 +47,8 @@ export const CompanyView: React.FC<CompanyViewProps> = ({
                 onClose={() => modalOpen(false)}
                 open={open} />
             <SearchTable
+                filter={({ item, filterText }) => item.name.toLowerCase().indexOf(filterText.toLowerCase()) > -1}
+
                 actions={client.crudAccess("ContactOrganisation")}
                 onCreate={() => modalOpen(true)}
                 options={[
@@ -78,6 +81,6 @@ export const CompanyView: React.FC<CompanyViewProps> = ({
                     }
                 ]}
                 data={data.organisations || []} />
-                </>
+        </>
     )
 }

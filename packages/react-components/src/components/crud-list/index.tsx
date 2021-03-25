@@ -20,6 +20,7 @@ import { MutableDialog } from '../mutable-dialog'
 export interface CRUDListProps {
   className?: string;
   data?: Array<any>
+  client: any;
   onDelete?: (args: {item: object}) => void;
   onEdit?: (args: {item: object}) => void;
   onSave?: (args: {item: object}) => void;
@@ -29,6 +30,7 @@ export interface CRUDListProps {
 }
 
 export const CRUDList: React.FC<CRUDListProps> = ({
+  client,
   data,
   type,
   dialog,
@@ -46,6 +48,7 @@ export const CRUDList: React.FC<CRUDListProps> = ({
     <div className={className}>
       {type && !dialog && (
         <MutableDialog
+          client={client}
           onSave={({item}: any) => {
             if (onSave) onSave({item: item})
             openDialog(false)

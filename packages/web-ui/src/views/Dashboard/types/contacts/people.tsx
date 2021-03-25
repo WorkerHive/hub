@@ -21,11 +21,12 @@ export const PeopleView: React.FC<PeopleProps> = ({
 }) => {
 
     const [open, modalOpen] = React.useState<boolean>(false);
-    const [ selected, setSelected ] = React.useState<any>();
+    const [selected, setSelected] = React.useState<any>();
 
     return (
         <div style={{ flex: 1, display: 'flex', position: 'relative' }}>
             <MutableDialog
+                client={client}
                 models={models}
                 title={data.label}
                 data={selected}
@@ -71,6 +72,8 @@ export const PeopleView: React.FC<PeopleProps> = ({
             }}>
                 {(isDragActive: boolean) => (
                     <SearchTable
+                        filter={({ item, filterText }) => item.name.toLowerCase().indexOf(filterText.toLowerCase()) > -1}
+
                         actions={client.crudAccess("Contact")}
                         onCreate={() => modalOpen(true)}
                         options={[

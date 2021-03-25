@@ -19,7 +19,7 @@ export function MenuView(props: MenuViewProps){
 
     return (
         <div className="menu-view">
-            <MutableDialog title={props.title} structure={props.structure} onSave={props.onSave} onClose={() => openDialog(false)} open={dialogOpen} />
+            {/*<MutableDialog title={props.title} structure={props.structure} onSave={props.onSave} onClose={() => openDialog(false)} open={dialogOpen} />*/}
             <Paper className="menu-view__menu">
                 <List style={{flex: 1}}>
                     {props.items.map((x) => (

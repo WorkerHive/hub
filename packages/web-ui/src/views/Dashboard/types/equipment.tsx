@@ -65,6 +65,7 @@ export const EQUIPMENT_VIEW = {
                         return (
                             <div style={{ flex: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
                                 <MutableDialog 
+                                    client={client}
                                     title={data.label} 
                                     structure={t} 
                                     data={selected}
@@ -123,7 +124,7 @@ export const EQUIPMENT_VIEW = {
                                             flex: 0.85
                                         }
                                     ]}
-                                    filter={({item, filterText} : any) => item.name.indexOf(filterText) > -1}
+                                    filter={({item, filterText} : any) => item.name.toLowerCase().indexOf(filterText.toLowerCase()) > -1}
                                     data={(data.equipment || []).filter(filterSelected)} />
                             </div>
                         )
