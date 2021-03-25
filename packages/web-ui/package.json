@@ -6,6 +6,7 @@
     "email": "professional.balbatross@gmail.com",
     "name": "The Tech Company"
   },
+  "homepage": ".",
   "description": "WorkHive Hub",
   "build": {
     "appId": "services.workhub.WorkerHive",
