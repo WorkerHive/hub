@@ -22,7 +22,6 @@
     }
   },
   "main": "build/electron.js",
-  "homepage": ".",
   "dependencies": {
     "@date-io/moment": "1.x",
     "@testing-library/jest-dom": "^5.11.4",
