@@ -60,7 +60,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "electron:build": "electron-builder build --linux deb --arm64 --armv7l --x64",
+    "electron:build": "electron-builder build --linux deb --armv7l --x64",
     "app:release": "npm run build && electron-builder",
     "app:build": "npm run electron:build",
     "electron:start": "electron .",

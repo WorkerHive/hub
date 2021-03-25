@@ -9,6 +9,8 @@ import {
     Paper
 } from '@material-ui/core';
 
+import isElectron from 'is-electron'
+
 import Contacts from '@material-ui/icons/Contacts';
 import Settings from '@material-ui/icons/Settings';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
@@ -104,7 +106,7 @@ export function Sidebar(props : SidebarProps){
       ]
 
     const isViewOrSub = (ix: number) => {
-      let urlSlug = window.location.pathname.split(props.match.url)[1];
+      let urlSlug = isElectron() ?  window.location.href.split(props.match.url)[1] : window.location.pathname.split(props.match.url)[1];
       let index = menu.map((x) => x.path).indexOf(urlSlug)
 
       let paths = menu.map((x) => x.path.length > 0 && matchPath(urlSlug, {path: x.path}))
