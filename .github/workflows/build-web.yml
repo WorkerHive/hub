@@ -60,7 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: packages/web-ui/dist/react-workerhub_${{ git.ref }}_amd64.deb
+          asset_path: packages/web-ui/dist/react-workerhub_${{ github.ref }}_amd64.deb
           asset_name: workerhub_${{ github.ref }}_amd64.deb
           asset_content_type: application/vnd.debian.binary-package
       - name: Upload armv7l deb - RPI
@@ -69,6 +69,6 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: packages/web-ui/dist/react-workerhub_${{ git.ref }}_armv7l.deb
+          asset_path: packages/web-ui/dist/react-workerhub_${{ github.ref }}_armv7l.deb
           asset_name: workerhub_${{ github.ref }}_armv7l.deb
           asset_content_type: application/vnd.debian.binary-package
