@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+      - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
       - run: npm install
       - run: npx lerna bootstrap --no-ci --scope react-workerhub --include-dependencies
       - run: echo "NODE_ENV=production" >> $GITHUB_ENV
@@ -59,8 +60,8 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: packages/web-ui/dist/react-workerhub_${{ github.ref#refs/tags/v }}_amd64.deb
-          asset_name: workerhub_${{ github.ref#refs/tags/ }}_amd64.deb
+          asset_path: packages/web-ui/dist/react-workerhub_${{ env.RELEASE_VERSION }}_amd64.deb
+          asset_name: workerhub_v${{ env.RELEASE_VERSION }}_amd64.deb
           asset_content_type: application/vnd.debian.binary-package
       - name: Upload armv7l deb - RPI
         uses: actions/upload-release-asset@v1
@@ -68,6 +69,6 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: packages/web-ui/dist/react-workerhub_${{ github.ref#refs/tags/v }}_armv7l.deb
-          asset_name: workerhub_${{ github.ref#refs/tags/ }}_armv7l.deb
+          asset_path: packages/web-ui/dist/react-workerhub_${{ env.RELEASE_VERSION }}_armv7l.deb
+          asset_name: workerhub_v${{ env.RELEASE_VERSION }}_armv7l.deb
           asset_content_type: application/vnd.debian.binary-package
