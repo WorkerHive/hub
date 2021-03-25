@@ -46,7 +46,7 @@ export const CompanyView: React.FC<CompanyViewProps> = ({
                 onClose={() => modalOpen(false)}
                 open={open} />
             <SearchTable
-                actions={client.crudAccess("Contact")}
+                actions={client.crudAccess("ContactOrganisation")}
                 onCreate={() => modalOpen(true)}
                 options={[
                     {
