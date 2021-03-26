@@ -28,7 +28,7 @@ const TeamCard: React.FC<TeamCardProps> = (props) => {
     }
 
     return (
-        <List style={{ overflowY: 'auto' }}>
+        <List style={{ overflowY: 'auto', minHeight: 300}}>
             {props.team.map((x, ix) => [
                 <ListItem key={ix} dense>
                     <Checkbox

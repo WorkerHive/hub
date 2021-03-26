@@ -11,13 +11,20 @@ const ToolbarHeader = (props: any) => {
     console.log(props)
 
     const _next = () => {
-        let d = moment(props.date).add(1, 'week')
+        let d = moment(props.date)
         return new Date(d.valueOf())
     }
     
     const _prev = () => {
-        let d = moment(props.date).subtract(1, 'week')
+        let d = moment(props.date)
         return new Date(d.valueOf())
+    }
+
+    const _label = () => {
+        let startOfWeek = moment(props.date).startOf('isoWeek')
+        let endOfWeek = moment(props.date).endOf('isoWeek')
+
+        return `${startOfWeek.format('DD/MM/YY')} - ${endOfWeek.format('DD/MM/YY')}`
     }
 
     return (
@@ -28,7 +35,7 @@ const ToolbarHeader = (props: any) => {
                     onClick={props.onNavigate.bind(null, 'PREV', _prev())}>
                     <ArrowLeft />
                 </IconButton>
-                <div className="current">{props.label}</div>
+                <div className="current">{_label()}</div>
                 <IconButton 
                     size="small"
                     onClick={props.onNavigate.bind(null, 'NEXT', _next())}>

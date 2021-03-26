@@ -4,7 +4,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { isEqual } from 'lodash';
 import React, {lazy, Suspense} from 'react';
-import { TeamCircles } from '@workerhive/react-ui'
+import { TabView, TeamCircles } from '@workerhive/react-ui'
 import *  as Y from 'yjs';
 
 import NotesCard from './notes-card';
@@ -13,7 +13,11 @@ import EquipmentCard from './equipment-card'
 import TeamCard from './team-card';
 import { ExitToApp, PersonAdd } from '@material-ui/icons';
 import { useHub } from '@workerhive/client';
-import PersonRemove from './person_remove.svg';
+import {ReactComponent as PersonRemove} from './person_remove.svg';
+
+import {ReactComponent as TeamIcon} from '../../assets/team2.svg';
+import {ReactComponent as EquipmentIcon} from '../../assets/resources2.svg';
+import {ReactComponent as NotesIcon} from '../../assets/comments.svg';
 
 export interface CalendarDialogProps extends RouteComponentProps{
     actions?: string[];
@@ -86,16 +90,46 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         return (data?.toJSON().managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
     }
 
-    const tabs = ["Info", "Team", "Equipment", "Notes"]
-    
+    const tabSize = 50;
     const readonly = _data.id ? actions.indexOf('update') < 0 || !amManager() : false;
 
-    const renderTab = () => {
-        let t = tabs[tab] || '';
-        switch(t.toLowerCase()){
-            case 'notes':
-                return (
-                <NotesCard
+    const tabs = [
+        {
+            label: "Team",
+            icon: <TeamIcon fill="#0d7272" height={tabSize}/>,
+            view: (<TeamCard 
+                    team={team} 
+                    readonly={readonly}
+                    selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} 
+                    onChange={(people : any) => {
+                        setData({
+                            ..._data,
+                            people: {id: people}
+                        })  
+                    }}/>)
+        },
+        {
+            label: "Equipment",
+            icon: <EquipmentIcon fill="#0d7272" height={tabSize}/>,
+            view: (
+                 <EquipmentCard 
+                    readonly={readonly}
+                    equipment={equipment} 
+                    selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} 
+                    onChange={(equipment: any) => {
+                        console.log(_data)
+                        setData({
+                            ..._data,
+                            resources: {id: equipment}
+                        })  
+                    }}/>
+            )
+        },
+        {
+            label: "Notes",
+            icon: <NotesIcon fill="#0d7272" height={tabSize}/>,
+            view: (
+                 <NotesCard
                     readonly={readonly}
                     notes={_data?.notes}
                     onChange={(notes) => {
@@ -105,6 +139,16 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                             notes: notes
                         })
                     }}/>
+            )
+        }] 
+    
+
+    const renderTab = () => {
+        let t = tabs[tab] || '';
+        /*switch(t.label.toLowerCase()){
+            case 'notes':
+                return (
+               
                 )
             case 'info':
                 return (
@@ -120,31 +164,12 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                    }}/>)
             case 'equipment':
                 return (
-                <EquipmentCard 
-                    readonly={readonly}
-                    equipment={equipment} 
-                    selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} 
-                    onChange={(equipment: any) => {
-                        console.log(_data)
-                        setData({
-                            ..._data,
-                            resources: {id: equipment}
-                        })  
-                    }}/>)
+               )
             case 'team':
-                return <TeamCard 
-                    team={team} 
-                    readonly={readonly}
-                    selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} 
-                    onChange={(people : any) => {
-                        setData({
-                            ..._data,
-                            people: {id: people}
-                        })  
-                    }}/>
+                return 
             default:
                 return null;
-        }
+        }*/
     }
 
 
@@ -166,7 +191,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     }
 
     return (
-        <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
+        <Dialog fullWidth maxWidth="md" open={open}  onClose={onClose}>
             <DialogTitle style={{
                 paddingBottom: 8,
                 paddingTop: 12,
@@ -189,7 +214,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                         {_data.project && _data.project.id && <IconButton onClick={() => {
                             history.push(`/dashboard/projects/${_data.project?.id}`)
                         }} size="small">
-                            <ExitToApp />
+                            <ExitToApp style={{fill: '#0d7272'}}/>
                         </IconButton>}
                     </div>
       
@@ -224,14 +249,17 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                     <div className="manager-list" style={{color: 'white', minWidth: 100, maxWidth: 200, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                         <TeamCircles size={30} members={(_data.id ? managers : [{id: client?.user.sub, name: client?.user.name}]) || []} />
                         {client?.canAccess("Schedule", "update") && _data.id && <IconButton size="small" onClick={addSelfManager}>
-                            {amManager() ? <img src={PersonRemove} style={{filter: 'invert(1)'}} /> : <PersonAdd />}
+                            {amManager() ? <PersonRemove fill="#0d7272" /> : <PersonAdd style={{fill:"#0d7272"}} />}
                         </IconButton>}
                     </div>
                 </div>
             </DialogTitle>
             <DialogContent style={{paddingLeft: 0, display: 'flex'}}>
-               
-               <Tabs
+               <TabView 
+                    selected={tab}
+                    onClick={(tab, index) => setTab(index)}
+                    tabs={tabs} />
+               {/*<Tabs
                 onChange={(event, newValue) => {
                     console.log(newValue)
                     setTab(newValue)
@@ -241,14 +269,17 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                 style={{borderRight: '1px solid #dfdfdf', display: 'flex', marginRight: 8}}
                 >
                     {tabs.map((x : any, ix) => [
-                        <Tab label={x} value={ix} />,
+                        <Tab 
+                            icon={x.icon}
+                            value={ix}>
+                        </Tab>,
                         <Divider />
                     ])}
         
                </Tabs>
                <div style={{minHeight: '37vh', maxHeight: '50vh', flex: 1, display: 'flex', flexDirection: 'column'}}>
                         {renderTab()}
-               </div>
+                </div>*/}
   
             </DialogContent>
             <DialogActions>

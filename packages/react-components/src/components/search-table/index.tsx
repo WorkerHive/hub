@@ -211,7 +211,7 @@ export const StyledSearchTable = styled(SearchTable)`
   }
 
   .grid-list .grid-list__item:hover{
-    background: #3a8686;
+    background: ${props => props.onClick ? '#3a8686' : 'initial'};
   }
 
   .options-bar{

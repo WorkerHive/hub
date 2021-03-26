@@ -5,7 +5,7 @@ import { CRUDKV } from './components/crud-kv';
 import { CRUDTree } from './components/crud-tree';
 
 import { StyledKanban as GraphKanban } from './components/kanban'
-
+import { TabView } from './components/tab-view'
 //import { PDFCard } from './components/pdf-card'
 import { StyledCircles as TeamCircles } from './components/team-circles';
 
@@ -55,5 +55,6 @@ export {
   Header,
   MoreMenu,
   PermissionForm,
-  SearchTable
+  SearchTable,
+  TabView
 }

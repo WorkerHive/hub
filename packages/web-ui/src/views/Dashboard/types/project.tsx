@@ -170,7 +170,14 @@ export const PROJECT_DRILLDOWN = {
                                 }}
                                 open={modalOpen}
                                  />
-                            <GraphKanban 
+                            <GraphKanban
+                                onColumnAdd={({column}) => {
+                                    setCols(cols.concat([{
+                                        id: column.name.toLowerCase(),
+                                        title: column.name
+                                    }]))
+                                    console.log(column)
+                                }} 
                                 template={cols}
                                 realtime={mgmt}
                                 cards={project.toJSON()}

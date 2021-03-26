@@ -4,20 +4,19 @@ import TimeGrid from './TimeGrid';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 
-import { MoreMenu } from '../more-menu';
 import { Popover } from '@material-ui/core';
 import { useContext } from 'react';
 import { CalendarContext } from '.';
-import { StyledCircles as TeamCircles } from '../team-circles';
 
-import { contrast, textToColor } from '../../utils/color'
+import { textToColor } from '../../utils/color'
+import { ScheduleCard } from './schedule-card';
 
 export const ScheduleEvent = (props: any) => {
 
   const { actions, user, dispatch } = useContext(CalendarContext)
 
 
-  const fullName = props.event.project ? `${props.event.project.id}` : '';
+  const fullName = props.event.project ? `${props.event.project.name}` : '';
   const color = textToColor(fullName)
 
   const [popper, setPopper] = React.useState<any>(null)
@@ -35,7 +34,8 @@ export const ScheduleEvent = (props: any) => {
         showPopper(null)
       }}
       style={{
-        borderRadius: 3,
+        border: '3px solid #e4bc71',
+        borderRadius: 12,
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column'
@@ -64,29 +64,11 @@ export const ScheduleEvent = (props: any) => {
             ))}
           </div>
         </Popover>)}
-      <div style={{
-        display: 'flex',
-        textAlign: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        fontSize: 18,
-        backgroundColor: `#${color}`,
-        color: contrast(`#${color}`),
-        fontWeight: 'bold',
-        paddingTop: 4,
-        paddingBottom: 4,
-        marginBottom: 4,
-        position: 'relative'
-      }}>
-        <div style={{ position: 'absolute', left: 8 }}>{props.event.project && props.event.project.id}</div>
 
-        <div>
-          {props.event.project && props.event.project.name}
-
-        </div>
-
-        <div style={{ position: 'absolute', right: 0, top: 0 }}>
-          <MoreMenu size="small" horizontal menu={[
+        <ScheduleCard 
+          color={'#' + color} 
+          event={props.event} 
+          actions={[
             {
               type: 'update',
               color: 'white',
@@ -105,24 +87,8 @@ export const ScheduleEvent = (props: any) => {
                 dispatch({ type: 'DELETE_CARD', id: props.event.id })
               }
             },
-          ].filter((a) => actions.indexOf(a.type) > -1)} />
-        </div>
+          ].filter((a) => actions.indexOf(a.type) > -1)}/>
 
-      </div>
-      <div style={{ background: '#dfdfdf', paddingBottom: 4, color: 'black', display: 'flex', textAlign: 'center', flexDirection: 'column' }}>
-        {Array.isArray(props.event.people) && props.event.people.filter((a: any) => a).map((x: any) => (
-          <div>{x.name}</div>
-        ))}
-        {Array.isArray(props.event.resources) && props.event.resources.length > 0 && <div style={{ fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 4 }}>Equipment</div>}
-        {Array.isArray(props.event.resources) && props.event.resources.filter((a: any) => a).map((x: any) => (
-          <div>{x.name}</div>
-        ))}
-        <div style={{ marginLeft: 8 }}>
-          <TeamCircles
-            members={props.event.managers || []}
-            size={25} />
-        </div>
-      </div>
     </div>
   )
 }
@@ -142,7 +108,7 @@ class ScheduleWeek extends React.Component<ScheduleWeekProps, {}> {
   static title: (date: any) => string;
 
   range(date: any): Date[] {
-    let start = moment(date).startOf('week');
+    let start = moment(date).startOf('isoWeek');
     let end = moment(start).add(1, 'week')
 
     let current = start;

@@ -19,6 +19,43 @@ export default createMuiTheme({
         }
     },
     overrides: {
+        MuiDialog: {
+            
+            paper: {
+                border: '5px solid #e4bc71',
+                borderRadius: 12,
+                backgroundColor: '#e5ddda',
+                color: '#0d7272',
+                '& .MuiSvgIcon-root': {
+                    color: '#0d7272'
+                },  
+                '& .MuiCheckbox-colorPrimary': {
+                    color: '#0d7272 !important'
+                },
+                '& .MuiButton-root': {
+                    color: '#000'
+                },
+                '& .MuiButton-textSecondary': {
+                    color: '#f1682f'
+                },
+                '& .MuiDivider-root': {
+                    color: '#0d7272'
+                },
+                '& .MuiFormLabel-root':{
+                    color: '#0d7272'
+                },
+                '& .MuiInput-underline:before': {
+                    borderBottomColor: '#000'
+                },
+                '& .MuiInput-underline:after': {
+                    borderBottomColor: '#0d7272 !important'
+                },
+                '& .MuiInputBase-input': {
+                    color: '#0d7272'
+                }
+        
+            }
+        },
         MuiFormLabel: {
             root: {
                 '&.Mui-focused': {
@@ -40,6 +77,10 @@ export default createMuiTheme({
             root: {
                 '&.Mui-focused .MuiInput-underline:after': {
                     borderBottomColor: '#e4bc71'
+                },
+
+                '&.MuiInput-underline:after': {
+                    borderColor: 'green'
                 },
                 '&.Mui-focused fieldset': {
                     borderColor: '#e4bc71 !important'

@@ -146,13 +146,17 @@ export const StyledCalendar = styled(WorkhubCalendar)`
   }
 
   .rbc-day-bg.rbc-selected-cell{
-    opacity: 0.6;
+    opacity: 0.6 !important;
   }
 
   .rbc-day-bg{
     background-color: #168b88;
     border-color: #157575 !important;
     border-width: 3px !important;
+  }
+
+  .rbc-header.rbc-today, .rbc-day-bg.rbc-today{
+    opacity: 0.8;
   }
 
   .rbc-calendar, .rbc-time-header{
@@ -167,9 +171,11 @@ export const StyledCalendar = styled(WorkhubCalendar)`
     flex: 1;
   }
 
+
   .rbc-time-schedule .rbc-event {
     margin-top: 4px;
     padding: 0;
+    border-radius: 12px;
   }
 
 `

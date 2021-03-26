@@ -26,7 +26,7 @@ const NotesCard : React.FC<NotesCardProps> = ({
     }
 
     return (
-        <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div style={{display: 'flex', minHeight: 300, color: '#0d7272', padding: 8, marginBottom: 8, flexDirection: 'column'}}>
             {(notes || []).map((note, ix) => {
                 return (
                 <div key={ix} style={{display: 'flex'}}>
@@ -46,11 +46,11 @@ const NotesCard : React.FC<NotesCardProps> = ({
                         onChange(n)  
                     }}/>
                 <IconButton onClick={() => removeNote(ix)}>
-                    <Clear />
+                    <Clear style={{color: '#f1682f'}} />
                 </IconButton>
                 </div>)
             })}
-            <Button onClick={addNote}>Add note</Button>
+            <Button variant="contained" color="primary" onClick={addNote}>Add note</Button>
         </div>
     );
 }

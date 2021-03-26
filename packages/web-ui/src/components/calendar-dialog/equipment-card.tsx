@@ -11,7 +11,7 @@ export interface EquipmentCardProps {
 const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
     console.log("equipment", props.equipment, props.selected)
     return (
-        <List style={{overflowY: 'auto'}}>
+        <List style={{overflowY: 'auto', minHeight: 300}}>
             {props.equipment.map((x, ix) => [
                 <ListItem key={ix} dense>
                     <Checkbox 
