@@ -1,9 +1,8 @@
 import React, { useReducer } from 'react';
 
 import styled from 'styled-components'
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
-import { AddCard } from './add-card';
-import { Button, IconButton, Paper, TextField, Typography } from '@material-ui/core';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { Button, IconButton, Paper, TextField } from '@material-ui/core';
 import { isEqual } from 'lodash';
 import { Column } from './column';
 import { Clear } from '@material-ui/icons';

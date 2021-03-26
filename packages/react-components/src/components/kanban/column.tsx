@@ -1,6 +1,6 @@
 import { TextField, Typography } from '@material-ui/core';
 import React from 'react';
-import { Notes, ViewHeadline } from '@material-ui/icons'
+import { Notes } from '@material-ui/icons'
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { MoreMenu } from '../more-menu';
 import { AddCard } from './add-card';
