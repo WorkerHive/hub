@@ -11,7 +11,6 @@ import {
 
 import isElectron from 'is-electron'
 
-import Contacts from '@material-ui/icons/Contacts';
 import Settings from '@material-ui/icons/Settings';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
@@ -28,7 +27,9 @@ import TeamIcon from '../../assets/team.svg';
 import ResourceIcon from '../../assets/resources1.svg';
 import FileIcon from '../../assets/files1.svg';
 
-import Logo from '../../assets/teal.png';
+import { ReactComponent as Contacts} from '../../assets/contacts.svg';
+
+import {ReactComponent as Logo} from '../../assets/logo.svg';
 
 export interface SidebarProps {
     history: any;
@@ -122,15 +123,12 @@ export function Sidebar(props : SidebarProps){
 
     return (
       <Paper className="sidebar" style={{width: minimized ? 64 : 200}} >
-        <List style={{flex: 1, maxWidth: minimized ? 64 : 200, transition: 'max-width 200ms ease-in'}}> 
-        <ListItem style={{position: 'relative', color: 'rgb(34, 151, 147)', padding: 12, fontSize: 20, justifyContent: 'flex-start'}}>
-           <img src={Logo} alt="Workhub" style={{height: 33, marginRight: minimized ? 0 : 8, marginLeft: minimized ? 0: 0}} /> 
+        <List className={`sidebar-list ${minimized ? 'minimized': ''}`} style={{flex: 1, maxWidth: minimized ? 64 : 200, transition: 'max-width 200ms ease-in'}}> 
+        <ListItem className="sidebar-header" style={{position: 'relative', color: 'rgb(34, 151, 147)', padding: 12, fontSize: 20, justifyContent: 'flex-start'}}>
+           <Logo color="#079692" style={{fill: '#079692', cursor: 'pointer', height: 33, marginLeft: minimized ? 0: 0}} onClick={() => setMinimized(!minimized)} /> 
 
-           {!minimized && <Typography variant="h6" style={{fontWeight: 'bold'}}>Workhub</Typography>}
+           <Typography variant="h6" style={{fontWeight: 'bold', color: "#e4bc71", maxWidth: minimized ? 0: 200, overflow: 'hidden'}}>Workhub</Typography>
 
-           <IconButton size="small" style={{backgroundColor: 'green', zIndex: 9, position: 'absolute', right: -12, bottom: -12}} onClick={() => setMinimized(!minimized)}>
-              {minimized ? <ChevronRight style={{color: 'rgb(222,222,222)'}}/> : <ChevronLeft style={{color: 'rgb(222,222,222)'}} />}  
-           </IconButton>
           
         </ListItem>
         <Divider />

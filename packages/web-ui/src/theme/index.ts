@@ -29,6 +29,9 @@ export default createMuiTheme({
                 '& .MuiSvgIcon-root': {
                     color: '#0d7272'
                 },  
+                '& .MuiChip-root .MuiSvgIcon-root': {
+                    color: 'unset'
+                },
                 '& .MuiCheckbox-colorPrimary': {
                     color: '#0d7272 !important'
                 },
@@ -45,13 +48,13 @@ export default createMuiTheme({
                     color: '#0d7272'
                 },
                 '& .MuiInput-underline:before': {
-                    borderBottomColor: '#000'
+                    borderBottomColor: '#000 !important'
                 },
                 '& .MuiInput-underline:after': {
                     borderBottomColor: '#0d7272 !important'
                 },
                 '& .MuiInputBase-input': {
-                    color: '#0d7272'
+                    color: '#000' //'#0d7272'
                 }
         
             }
@@ -65,6 +68,9 @@ export default createMuiTheme({
         },
         MuiInput: {
             underline: {
+                '&:hover :before':{
+                    borderBottomColor: '#e4bc71'
+                },
                 '&:after': {
                     borderBottomColor: '#e4bc71 !important'
                 },

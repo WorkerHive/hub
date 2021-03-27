@@ -4,6 +4,9 @@ import { contrast } from "react-components/src/utils/color"
 import styled from "styled-components"
 import { MoreMenu, MoreMenuItem } from "../more-menu"
 import { StyledCircles as TeamCircles } from '../team-circles'
+
+import { ReactComponent as CommentsIcon} from './comments-hex.svg';
+
 export interface ScheduleCardProps {
     event: {
         project: {
@@ -65,7 +68,11 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
                         members={event.managers || []}
                         size={25} />
                 </div>
-                <Typography style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{event.notes && event.notes.length > 0 && `Notes: ${event.notes.length}`}</Typography>
+                <div>
+                            {event.notes && event.notes.length > 0 && (
+                                <CommentsIcon style={{height: 26, fill: '#079692'}} />
+                            )}
+                </div>
             </div>
         </div>
     )
@@ -75,8 +82,10 @@ export const ScheduleCard = styled(BaseScheduleCard)`
     .schedule-card__extras{
         display: flex;
         align-items: center;
-        background-color: ${props => props.event.notes && props.event.notes.length > 0 ? '#f1682f' : '#e5ddda'};
+        justify-content: space-between;
+        background-color: #e5ddda;
         padding-top: 4px;
+        padding-right: 4px;
         padding-bottom: 4px;
     }
 

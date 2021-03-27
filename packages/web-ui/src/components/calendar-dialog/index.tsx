@@ -17,7 +17,7 @@ import {ReactComponent as PersonRemove} from './person_remove.svg';
 
 import {ReactComponent as TeamIcon} from '../../assets/team2.svg';
 import {ReactComponent as EquipmentIcon} from '../../assets/resources2.svg';
-import {ReactComponent as NotesIcon} from '../../assets/comments.svg';
+import {ReactComponent as NotesIcon} from '../../assets/comments-hex.svg';
 
 export interface CalendarDialogProps extends RouteComponentProps{
     actions?: string[];

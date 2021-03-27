@@ -132,6 +132,14 @@ export const StyledCalendar = styled(WorkhubCalendar)`
     padding: 0;
   }
 
+  .rbc-calendar .rbc-header:not(:first-child){
+    margin-left: 2px;
+  }
+
+  .rbc-calendar .rbc-header:not(:last-child){
+    margin-right: 2px;
+  }
+
   .rbc-calendar .rbc-header{
     background-color: #e4bc71;
     color: #0b7272;
@@ -139,8 +147,7 @@ export const StyledCalendar = styled(WorkhubCalendar)`
     padding-bottom: 4px;
     font-size: 22px;
     border: none;
-    margin-left: 2px;
-    margin-right: 1px;
+
     border-top-right-radius: 30px;
     border-top-left-radius: 7px;
   }
@@ -152,12 +159,16 @@ export const StyledCalendar = styled(WorkhubCalendar)`
   .rbc-day-bg{
     background-color: #168b88;
     border-color: #157575 !important;
-    border-width: 3px !important;
+    border-width: 4px !important;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
   }
 
-  .rbc-header.rbc-today, .rbc-day-bg.rbc-today{
-    opacity: 0.8;
+  .rbc-day-bg.rbc-today, .rbc-day-bg.rbc-today{
+    filter: brightness(111%);
+
   }
+
 
   .rbc-calendar, .rbc-time-header{
     height: 100%;

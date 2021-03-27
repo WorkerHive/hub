@@ -23,6 +23,23 @@
     }
   }
 
+.sidebar .sidebar-list.minimized .sidebar-header .MuiTypography-root{
+    transition: max-width 150ms ease-in 0s;
+}
+
+.sidebar .sidebar-list.minimized .sidebar-header svg {
+    margin-right: 0px;
+    transition: margin-right 200ms ease-in;
+}
+
+.sidebar .sidebar-list .sidebar-header svg{
+    margin-right: 8px;
+}
+
+.sidebar .sidebar-list .sidebar-header .MuiTypography-root{
+    transition:max-width 300ms ease-in 200ms;
+}
+
 .sidebar{
     display: flex;
     background: #157372 !important;
@@ -31,19 +48,25 @@
     transition: width 200ms ease-in;
 }
 
-.sidebar .menu-item.selected::before{
+.sidebar .menu-item::before{
     border-bottom-right-radius: 20px;
     right: 0px;
     top: -20px;
 }
 
-.sidebar .menu-item.selected::after{
+.sidebar .menu-item::after{
     border-top-right-radius: 20px;
     right: 0px;
     bottom: -20px;
 }
 
 .sidebar .menu-item.selected::after, .sidebar .menu-item.selected::before{
+    opacity: 1;
+}
+
+.sidebar .menu-item::after, .sidebar .menu-item::before{
+    opacity: 0;
+    transition: opacity 333ms ease-in;
     pointer-events: none;
     right: 0px;
     width: 40px;
@@ -55,6 +78,7 @@
 }
 
 .sidebar .menu-item{
+    transition: background-color 333ms ease-in;
     cursor: pointer;
 }
 

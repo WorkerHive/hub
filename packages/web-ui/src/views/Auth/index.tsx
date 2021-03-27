@@ -7,7 +7,7 @@ import { Reset } from './Reset';
 import { Signup } from './Signup';
 import { Forgot } from './Forgot';
 
-import Logo from '../../assets/teal.png';
+import {ReactComponent as Logo} from '../../assets/logo.svg';
 
 import './index.css';
 export const AuthBase = (props: any) => {
@@ -18,7 +18,7 @@ export const AuthBase = (props: any) => {
             </div>
             <Paper className="auth-content">
                 <div onClick={() => props.history.push('/')} className="auth-header">
-                    <img src={Logo} className="auth-header__img" alt="Workhub Logo" />
+                    <Logo className="auth-header__img" />
                     <Typography style={{ color: '#e4bc71' }} variant="h5">{props.title || 'Workhub'}</Typography>
                 </div>
                           

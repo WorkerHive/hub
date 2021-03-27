@@ -15,7 +15,8 @@
     margin-bottom: -4px;
 }
 
-.auth-header img{
+.auth-header__img{
+    fill: #079692;
     height: 44px;
     margin-right: 12px;
 
