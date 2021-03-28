@@ -38,6 +38,7 @@ export interface CalendarProps{
   events?: Array<CalendarEvent>
   viewDate?: Date
   defaultView?: "month" | "week" | "work_week" | "day" | "agenda" | undefined
+  icons?: any;
   onSelectSlot?: (slotInfo: {
     start: stringOrDate,
     end: stringOrDate,
@@ -50,13 +51,19 @@ export interface CalendarProps{
   onDoubleClickEvent?: (event: object, syntheticEvent?: any) => void
 }
 
-export const CalendarContext = React.createContext<{user: CalendarUser | undefined, actions: string[], dispatch: any | null}>({dispatch: null, user: undefined, actions: []});
+export const CalendarContext = React.createContext<{
+  user: CalendarUser | undefined, 
+  icons: any,
+  actions: string[], 
+  dispatch: any | null
+}>({dispatch: null, user: undefined, icons: {}, actions: []});
 
 
 export const WorkhubCalendar : React.FC<CalendarProps> = ({
   className,
   events = [],
   user,
+  icons = {},
   actions = ["create", "read", "update", "delete"],
   defaultView = CALENDAR_VIEWS.SCHEDULE,
   viewDate = new Date(),
@@ -82,7 +89,7 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
   }
 
   return (
-    <CalendarContext.Provider value={{user, actions, dispatch}}>
+    <CalendarContext.Provider value={{icons, user, actions, dispatch}}>
     <Paper className={className}>
       <BigCalendar
         views={{

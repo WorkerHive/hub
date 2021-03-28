@@ -3,7 +3,7 @@ import { IconButton, List,ListItem,ListItemIcon, ListItemText, Paper, Typography
 import styled from 'styled-components'
 import { Sync, ChevronLeft, Description, ChevronRight, CreateNewFolder, Delete, Edit, GetApp, Publish, CloudUpload, ArrowDownward, OfflinePin } from '@material-ui/icons';
 import { StyledFileDrop as FileDrop } from '../file-drop';
-
+import { FileDialog } from './file-dialog'
 
 export interface FileBrowserProps {
     files?: Array<WorkhubFile>;
@@ -48,6 +48,7 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
 
     const [ lastSelect, setLastSelect ] = React.useState<number>(-1)
 
+    const [ dialogOpen, openDialog ] = React.useState<boolean>(false);
 
     //TODO rethink
     const selectItem = (item: any, item_ix: number, event: React.MouseEvent) => {
@@ -107,6 +108,7 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
 
     return (
         <Paper className={className} onKeyDown={containerKey}>
+            <FileDialog open={dialogOpen} onClose={() => openDialog(false)} />
             <div className={"file-browser__header"}>
                 <div className="header-info">
                     <ChevronLeft />
@@ -114,7 +116,7 @@ export const WorkhubFileBrowser : React.FC<FileBrowserProps> = ({
                 </div>
                 <div className="header-actions">
                     <CreateNewFolder />
-                    <Publish />
+                    <Publish onClick={() => openDialog(true)}/>
                     <div className="vert-divider" />
                     <Edit className={selected.length == 1 ? '': 'disabled'} />
                     <GetApp onClick={downloadSelected} className={selected.length > 0 ? '':'disabled'} />

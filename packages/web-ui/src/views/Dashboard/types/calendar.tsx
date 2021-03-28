@@ -5,7 +5,7 @@ import { useRealtime, WorkhubClient, useHub } from "@workerhive/client";
 import { Calendar, Header, MutableDialog } from "@workerhive/react-ui";
 import CalendarDialog from '../../../components/calendar-dialog';
 import React from "react";
-
+import { ReactComponent as CommentsIcon } from '../../../assets/comments-hex.svg';
 export const CALENDAR_VIEW = {
     path: '/dashboard',
     label: "Calendar",
@@ -140,7 +140,6 @@ export const CALENDAR_VIEW = {
                         <CalendarDialog
                             actions={actions}
                             slots={selectedSlots}
-                            
                             data={userData}
                             projects={data.projects}
                             team={data.people}
@@ -164,6 +163,7 @@ export const CALENDAR_VIEW = {
                         />
 
                         <Calendar
+                            icons={{notes:  <CommentsIcon style={{height: 26, fill: '#079692'}} />}}
                             actions={actions}
                             user={client?.user}
                             events={calendar.toJSON().map(calendarParse)}

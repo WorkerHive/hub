@@ -13,7 +13,7 @@ import { ScheduleCard } from './schedule-card';
 
 export const ScheduleEvent = (props: any) => {
 
-  const { actions, user, dispatch } = useContext(CalendarContext)
+  const { icons, actions, user, dispatch } = useContext(CalendarContext)
 
 
   const fullName = props.event.project ? `${props.event.project.name}` : '';
@@ -66,6 +66,7 @@ export const ScheduleEvent = (props: any) => {
         </Popover>)}
 
         <ScheduleCard 
+          icons={icons}
           color={'#' + color} 
           event={props.event} 
           actions={[

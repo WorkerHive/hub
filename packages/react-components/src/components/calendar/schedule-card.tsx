@@ -5,8 +5,6 @@ import styled from "styled-components"
 import { MoreMenu, MoreMenuItem } from "../more-menu"
 import { StyledCircles as TeamCircles } from '../team-circles'
 
-import { ReactComponent as CommentsIcon} from './comments-hex.svg';
-
 export interface ScheduleCardProps {
     event: {
         project: {
@@ -20,6 +18,7 @@ export interface ScheduleCardProps {
     }
     className?: string;
     color?: string;
+    icons?: any;
     actions?: Array<MoreMenuItem>;
 }
 
@@ -27,8 +26,12 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
     className,
     event,
     color,
+    icons = {},
     actions = []
 }) => {
+   
+    console.log(icons)
+    
     return (
         <div className={className}>
             <div className="schedule-card__header">
@@ -69,9 +72,7 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
                         size={25} />
                 </div>
                 <div>
-                            {event.notes && event.notes.length > 0 && (
-                                <CommentsIcon style={{height: 26, fill: '#079692'}} />
-                            )}
+                            {event.notes && event.notes.length > 0 && icons['notes']}
                 </div>
             </div>
         </div>
