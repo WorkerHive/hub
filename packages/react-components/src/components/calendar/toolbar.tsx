@@ -8,7 +8,7 @@ import React from 'react';
 import moment from 'moment';
 
 const ToolbarHeader = (props: any) => {
-    console.log(props)
+    
 
     const _next = () => {
         let d = moment(props.date)

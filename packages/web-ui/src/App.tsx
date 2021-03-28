@@ -1,4 +1,4 @@
-import React, {Suspense, lazy} from 'react';
+import React, { Suspense, lazy } from 'react';
 import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
 import { WorkhubProvider } from '@workerhive/client'
@@ -10,41 +10,52 @@ import { HubSetup } from './views/Auth/Hub';
 
 const Dashboard = lazy(() => import('./views/Dashboard'));
 
-let Router : any;
+let Router: any;
 
-if(isElectron()){
+if (isElectron()) {
   Router = HashRouter
-}else{
+} else {
   Router = BrowserRouter
 }
 
 function App() {
 
-  const [ hubUrl, setHubUrl ] = React.useState<string | null>(isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin));
+  const [hubUrl, setHubUrl] = React.useState<string | null>(isElectron() ? localStorage.getItem('workhub-api') : (process.env.NODE_ENV == "development" ? 'https://rainbow.workhub.services' || 'http://localhost:4002' : window.location.origin));
+  const token = localStorage.getItem('token')
+
   return (
-        <Router>
-          <div className="App">
+    <Router>
+      <div className="App">
+        {hubUrl ? (
+          <WorkhubProvider token={token || ''} url={hubUrl || ''}>
             <Route path="/dashboard" render={(props) => {
-              const token = localStorage.getItem('token')
-              if(token && token.length > 0){
+              if (token && token.length > 0) {
                 return (
-                <Suspense fallback={
-                  (<PageLoader size={42} text={"Loading the hub..."} />)
+                  <Suspense fallback={
+                    (<PageLoader size={42} text={"Loading the hub..."} />)
                   }>
-                      <WorkhubProvider token={token} url={hubUrl || ''}>
-                        <Dashboard {...props} />
-                      </WorkhubProvider>
-                </Suspense>
+                  
+                      <Dashboard {...props} />
+                  
+                  </Suspense>
                 )
-              }else{
+              } else {
                 return (
                   <Redirect to="/login" />
                 )
               }
             }} />
-            <Route path={["/", "/login", "/reset", "/signup", "/forgot"]} exact render={(props) => isElectron() ? ((localStorage.getItem('token')||"").length > 0) ? <Redirect to="/dashboard" />: <HubSetup {...props} /> : <AuthBase {...props} />} />
-          </div>
-        </Router>
+            <Route
+              path={["/", "/login", "/reset", "/signup", "/forgot"]}
+              exact
+              render={(props) => isElectron() ? ((localStorage.getItem('token') || "").length > 0) ? <Redirect to="/dashboard" /> : <HubSetup {...props} /> : <AuthBase {...props} />} />
+          </WorkhubProvider>
+        ) : (
+          <Route path="/" exact component={HubSetup} />
+        )}
+
+      </div>
+    </Router>
   );
 }
 

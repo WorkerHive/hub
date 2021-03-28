@@ -82,7 +82,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                         }
 
                         //Fetch the full Model Description
-                        let model = client.models?.concat(client.uploadModels).filter((a : any) => a.name === name)[0]
+                        let model = client.models?.types?.crud.concat(client.models?.types?.upload).filter((a : any) => a.name === name)[0]
 
                         if (model) {
                             //Key the model to types state
@@ -104,10 +104,10 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                         if(!window.layout_polls) window.layout_polls = [];
                                         window.layout_polls.push(setInterval(async () => {
                                             console.log("Fetch", model.name)
-                                            await client.actions[`get${model.name}s`](false);
+                                            await client.actions(`get${model.name}s`)(false);
                                         }, pollLength))
                                     }
-                                    let result = await client.actions[`get${model.name}s`]()
+                                    let result = await client.actions(`get${model.name}s`)()
 
                                     currentValue = result //store[model.name]
 
@@ -128,7 +128,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                                     currentValue = currentValue[0]
                                     console.log("CUrrent Valye", currentValue)
                                 } else {
-                                    let result = await client.actions[`get${model.name}`](query.id)
+                                    let result = await client.actions(`get${model.name}`)(query.id)
                                     currentValue = result
                                     console.log("had to fetch fresh data", currentValue)
                                 }
@@ -169,7 +169,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             let arr = (name.match(/\[(.*?)\]/) != null)
             if(arr) name = name.match(/\[(.*?)\]/)[1]
 
-            let model = client?.models?.concat(client?.uploadModels).filter((a : any) => a.name === name)[0]
+            let model = client?.models?.types?.crud.concat(client?.models?.types?.upload).filter((a : any) => a.name === name)[0]
 
             let query = typeof(props.schema.data[k].query) === 'function' ? props.schema.data[k].query(props.match.params) : {}
             

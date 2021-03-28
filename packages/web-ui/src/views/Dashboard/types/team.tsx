@@ -39,7 +39,7 @@ export const TEAM_VIEW = {
                         if(_type.directives.map((x: {name: string}) => x.name).indexOf('input') > -1) t[_type.name] = _type.type;
                     })
 
-                    let models = [client.models.find((a : any) => a.name == "Role")]
+                    let models = [client.models.getByName("Role")]
                     models[0].data = data.roles;
 
                     return ((props) => {

@@ -4,27 +4,21 @@ import decode from 'jwt-decode';
 import qs from 'qs';
 import { isEqual } from 'lodash';
 import './index.css';
-import { trySignup, signupInfo } from 'web-ui/src/actions/auth';
 import { Link, withRouter } from 'react-router-dom';
 import SyncLoader from 'react-spinners/SyncLoader';
+import { useHub, UserInfo } from '@workerhive/client';
 
 export interface SignupProps {
     history?: any;
 }
 
-export interface UserInfo {
-    username?: string;
-    password?: string;
-    confirm_password?: string;
-    name?: string;
-    email?: string;
-    phone_number?: string;
-}
 
 const testToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicGVybWlzc2lvbnMiOlsiV29ya2Zsb3c6Y3JlYXRlIiwiV29ya2Zsb3c6cmVhZCIsIldvcmtmbG93OnVwZGF0ZSIsIldvcmtmbG93OmRlbGV0ZSIsIkNvbnRhY3RPcmdhbmlzYXRpb246Y3JlYXRlIiwiQ29udGFjdE9yZ2FuaXNhdGlvbjpyZWFkIiwiQ29udGFjdE9yZ2FuaXNhdGlvbjp1cGRhdGUiLCJDb250YWN0T3JnYW5pc2F0aW9uOmRlbGV0ZSIsIktub3dsZWRnZTpjcmVhdGUiLCJLbm93bGVkZ2U6cmVhZCIsIktub3dsZWRnZTp1cGRhdGUiLCJLbm93bGVkZ2U6ZGVsZXRlIiwiUHJvamVjdDpjcmVhdGUiLCJQcm9qZWN0OnJlYWQiLCJQcm9qZWN0OnVwZGF0ZSIsIlByb2plY3Q6ZGVsZXRlIiwiUm9sZTpjcmVhdGUiLCJSb2xlOnJlYWQiLCJSb2xlOnVwZGF0ZSIsIlJvbGU6ZGVsZXRlIiwiVGVhbU1lbWJlcjpjcmVhdGUiLCJUZWFtTWVtYmVyOnJlYWQiLCJUZWFtTWVtYmVyOnVwZGF0ZSIsIlRlYW1NZW1iZXI6ZGVsZXRlIiwiRXF1aXBtZW50OmNyZWF0ZSIsIkVxdWlwbWVudDpyZWFkIiwiRXF1aXBtZW50OnVwZGF0ZSIsIkVxdWlwbWVudDpkZWxldGUiLCJTY2hlZHVsZTpjcmVhdGUiLCJTY2hlZHVsZTpyZWFkIiwiU2NoZWR1bGU6dXBkYXRlIiwiU2NoZWR1bGU6ZGVsZXRlIl0sInJvbGVzIjpbeyJuYW1lIjoiQWRtaW4iLCJpZCI6IjU3YmM1ZTFjLTUwNTktNDU2Yy05ZmE1LTU3YTZkODlmYzAyMiJ9XSwibmFtZSI6IlJvc3MgTGVpdGNoIiwiZW1haWwiOiJwcm9mZXNzaW9uYWwuYmFsYmF0cm9zc0BnbWFpbC5jb20iLCJpYXQiOjE2MTU5MzgwODF9.cOILdsksY4G5q1Uwux0-1-Xw7NhvMBhCw39Zaqh2l44`
 
 
 const SignupView: FC<SignupProps> = (props) => {
+
+    const [ client ] = useHub();
 
     let [token, setToken] = React.useState<string>('');
     let [user, setUser] = React.useState<UserInfo | null>()
@@ -42,7 +36,7 @@ const SignupView: FC<SignupProps> = (props) => {
         if (query_string.token && typeof (query_string.token) == 'string') {
             if (token != query_string.token) {
                 setToken(query_string.token);
-                signupInfo(query_string.token).then((info) => {
+                client?.auth.signupInfo(query_string.token).then((info) => {
                     setLoading(false)
                     if (info.error) {
                         setUserErr(info.error)
@@ -67,7 +61,7 @@ const SignupView: FC<SignupProps> = (props) => {
             return setErr("No passwords")
         }  
         if (user && token) {
-            trySignup(user, token).then((r) => {
+            client?.auth.trySignup(user, token).then((r) => {
                 if (r.token) {
                     localStorage.setItem('token', r.token)
                     props.history.push('/dashboard')

@@ -1,5 +1,4 @@
-import postman from './postman'
-
+/*
 const addFile = (files: File[]) => {
     let fd = new FormData();
     fd.append("file", files[0])
@@ -12,3 +11,4 @@ const addFile = (files: File[]) => {
         }
     })
 }
+*/

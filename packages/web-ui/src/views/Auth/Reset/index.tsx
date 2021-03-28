@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import qs from 'qs';
 import decode from 'jwt-decode'
-import { UserInfo } from "../Signup";
 import { Button, TextField } from "@material-ui/core";
-import { resetPassword } from "web-ui/src/actions/auth";
+import { useHub, UserInfo } from "@workerhive/client";
 
 export const Reset = (props : any) => {
+    const [ client ] = useHub();
 
     const [ password, setPassword ] = useState<string>('');
     const [ confirm, setConfirm ] = useState<string>('');
@@ -22,7 +22,7 @@ export const Reset = (props : any) => {
     const updateUser = () => {
         let query_string = qs.parse(window.location.search, {ignoreQueryPrefix: true})
         if(password === confirm && query_string.token && typeof(query_string.token) === 'string'){
-            resetPassword(password, query_string.token).then((r) => {
+            client?.auth.resetPassword(password, query_string.token).then((r) => {
                 if(r.error){
                     setError(Boolean(r.error))
                 }else{

@@ -1,9 +1,9 @@
 import { Divider, Button, Paper, TextField, Typography } from '@material-ui/core';
 import React from 'react';
-import { authenticate, forgotPassword } from '../../../actions/auth'
 import { Link } from 'react-router-dom';
 import SyncLoader from 'react-spinners/SyncLoader'
 import './index.css';
+import { useHub } from '@workerhive/client';
 
 export interface LoginProps {
     title?: string;
@@ -11,6 +11,8 @@ export interface LoginProps {
 }
 
 export const Login = (props: LoginProps) => {
+
+    const [ client ] = useHub();
 
     const [loginError, setLoginError] = React.useState<boolean>(false)
     const [loading, setLoading] = React.useState<boolean>(false)
@@ -21,10 +23,10 @@ export const Login = (props: LoginProps) => {
     const login = () => {
         setLoading(true)
         setLoginError(false);
-        authenticate(username, password).then((data: any) => {
+        
+        client?.auth.authenticate(username, password).then((data: any) => {
             setLoading(false)
-            if (data.token) {
-                localStorage.setItem('token', data.token) //Change this to reducer
+            if (data == true) {
                 props.history.push(`/dashboard`)
             } else {
                 setLoginError(Boolean(data.error))

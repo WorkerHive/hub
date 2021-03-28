@@ -1,34 +1,29 @@
-import { setContext } from 'apollo-link-context'
-import { createHttpLink } from 'apollo-link-http'
-import fetch from 'cross-fetch'
-import {InMemoryCache} from 'apollo-cache-inmemory'
-import { createUploadLink } from 'apollo-upload-client'
+declare global {
+    interface Window {
+        workhubFS: WorkhubFS
+    }
+}
 
-import CRUD from './crud';
-import UPLOAD from './upload';
-import {WorkhubFS} from '@workerhive/ipfs'
-import {useRealtime, RealtimeSync } from './yjs';
+import { setContext } from 'apollo-link-context'
+
+import { WorkhubFS } from '@workerhive/ipfs'
+import { useRealtime, RealtimeSync } from './yjs';
 import jwt_decode from 'jwt-decode'
 
 import { WorkhubProvider, useHub } from './react'
+import { Postman } from './postman'
+import { ActionFactory } from './actions'
+import { ModelStorage } from './models'
+import { Auth } from './auth'
+import { Graph } from './graph';
 
 const ENVIRONMENT = (typeof process !== 'undefined') && (process.release && process.release.name === 'node') ? 'NODE' : 'BROWSER'
-let Apollo, gql : any;
-let BoostClient : any;
-let ReactClient : any;
+let Apollo, gql: any;
+let BoostClient: any;
+let ReactClient: any;
 
 
-const getClient = async () => {
-    if(ENVIRONMENT == "NODE"){
-        Apollo = await import('apollo-boost');
-        BoostClient = Apollo.ApolloClient
-        gql = Apollo.gql
-    }else{
-        Apollo = await import('@apollo/client')
-        ReactClient = Apollo.ApolloClient
-        gql = Apollo.gql
-    }
-}
+
 
 
 /*
@@ -40,12 +35,22 @@ if(ENVIRONMENT == "NODE"){
 }
 */
 
+const FALLBACK_URL = "rainbow.workhub.services"
+
+export interface UserInfo {
+    username?: string;
+    password?: string;
+    confirm_password?: string;
+    name?: string;
+    email?: string;
+    phone_number?: string;
+}
 
 
 
 export {
     WorkhubProvider,
-    useHub, 
+    useHub,
     RealtimeSync,
     useRealtime
 }
@@ -54,409 +59,359 @@ export {
 export class WorkhubClient {
     public lastUpdate: Date | null = null;
 
-    private hubUrl: string;
-    private hostURL: URL;
-    private hostName: string;
+    public hubUrl?: string;
+    private hostURL?: URL;
+    private hostName?: string;
 
-    private client?: any;
+    private client?: Graph;
 
-    public models?: Array<any> = [];
+    //public models?: Array<any> = [];
     public uploadModels?: Array<any> = [];
 
     private platform: string = ENVIRONMENT
-    
+
     public realtimeSync?: RealtimeSync;
 
     public fsLayer?: WorkhubFS;
 
-    private accessToken?: string;
+    public accessToken?: string;
     private swarmKey?: string;
 
-    public actions : any = {};
+    public models?: ModelStorage
+
+    private postman: Postman;
+
+    public actionFactory?: ActionFactory;
+
+    public auth: Auth;
+
+    public query: (query: string, variables?: object) => any = () => { };
+    public mutation: (query: string, variables?: object) => any = () => { };
+
     constructor(url?: string, setup_fn?: Function, dispatch?: any) {
-        this.hubUrl = url || 'http://localhost:4002';      
-        this.hostURL = new URL(this.hubUrl)
-        this.hostName = this.hostURL.hostname;
-      //  this.initClient()
+        this.updateBaseURL(url)
+        //  this.initClient()
 
-        if(ENVIRONMENT != "NODE"){
-            console.info("Turning realtime on")
-            this.realtimeSync = new RealtimeSync(this.hostName == 'localhost' ? 'thetechcompany.workhub.services' : this.hostName);
+        console.log("Starting hub client with ", this.hubUrl + '/api')
+        this.postman = new Postman(`${this.hubUrl}/api`)
+
+        let token = localStorage.getItem('token')
+        if (token && token.length > 0 && typeof (token) === 'string') {
+            this.accessToken = token;
         }
+
+        this.auth = new Auth(this, this.postman)
+
+        if (ENVIRONMENT != "NODE") {
+            console.info("Turning realtime on")
+            this.realtimeSync = new RealtimeSync(this.hostName!);
+        }
+
+        if (setup_fn) {
+
+            this.setupGraph().then(() => {
         
-        /*this.fsLayer = new WorkhubFS({
-            Swarm: [
-                `/dns4/${(this.hostName.hostname == "localhost" ? 'thetechcompany.workhub.services' : this.hostName.hostname)}/tcp/443/wss/p2p-webrtc-star`
-            ]
-        }, 'L2tleS9zd2FybS9wc2svMS4wLjAvCi9iYXNlMTYvCjVmYmNhYzhjMzliZDhlZTFlMmQzNzU4OGEwZjgyMTk1ZGQxMjU4MDI1Yzk3N2JiNWRkYzdlNjgyNjdjNjVjYjM=')
-        */
+                this.models = new ModelStorage(this);
 
-        if(setup_fn){
-            this.getModels().then(({crud, upload}) => {
-                this.models = crud;
-                this.uploadModels = upload;
-                this.setupBasicReads(dispatch);
-                this.setupFileActions(dispatch);
-
-                setup_fn();
+                this.models.getTypes().then((types) => {
+                    this.actionFactory = new ActionFactory(this, this.models!, dispatch)
+                    setup_fn();
+                })
             })
+
+
         }
     }
 
-    get user(): any{
+    updateBaseURL(url?: string) {
+        this.hubUrl = url || 'http://localhost:4002';
+        this.hostURL = new URL(this.hubUrl)
+        this.hostName = this.hostURL.hostname;
+
+        if (!this.hostName || this.hostName == 'localhost') {
+            this.hostName = FALLBACK_URL;
+        }
+
+        if (this.postman) this.postman.updateBaseURL(url)
+    }
+
+    get user(): any {
         return jwt_decode(this.accessToken!)
     }
 
-    crudAccess(type: string){
+    crudAccess(type: string) {
         return ["read", "create", "update", "delete"].filter((a) => this.canAccess(type, a))
     }
 
-    canAccess(type: string, action: string){
+    canAccess(type: string, action: string) {
         return this.user.permissions.indexOf(`${type}:${action}`) > -1
     }
 
-    setAccessToken(token: string){
+    setAccessToken(token: string) {
         this.accessToken = token
     }
 
-    async setSwarmKey(key: string){
-        this.swarmKey = key;
-        if(this.fsLayer) await this.fsLayer.stop();
-        this.fsLayer = new WorkhubFS({
+    actions(func_name: string) {
+        return this.actionFactory?.getFunction(func_name);
+    }
+
+    async initIPFS(swarmKey: string) {
+        console.log("INIT IPFS")
+        this.swarmKey = swarmKey;
+        console.log(globalThis)
+        let globalIPFS: WorkhubFS = window.workhubFS;
+        if (globalIPFS){
+            console.log("Existing IPFS found, stopping...")
+            await globalIPFS.stop();
+        } 
+        window.workhubFS = new WorkhubFS({
             Bootstrap: [],
             Swarm: [
-                `/dns4/${(this.hostName == "localhost" ? 'thetechcompany.workhub.services' : this.hostName)}/tcp/443/wss/p2p-webrtc-star`
+                `/dns4/${this.hostName}/tcp/443/wss/p2p-webrtc-star`
             ]
         }, this.swarmKey)
+
     }
 
-    async setup(dispatch: any){
-        await this.initClient()
+
+    async setupGraph(){
+        this.client = await Graph.from(this);
+
+        this.query = this.client.query.bind(this.client);
+        this.mutation = this.client.mutation.bind(this.client);
+    }
+
+    async setup(dispatch: any) {
+        await this.setupGraph();        
+
         const swarmKey = await this.getSwarmKey();
-        await this.setSwarmKey(swarmKey)
-        let {crud, upload} = await this.getModels();
-        this.models = crud;
-        this.uploadModels = upload;
-        this.setupBasicReads(dispatch);
-        this.setupFileActions(dispatch);
-    }
+        await this.initIPFS(swarmKey)
 
-    private authLink = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
-        const token = localStorage.getItem('token');
-    // return the headers to the context so httpLink can read them
-        return {
-        headers: {
-        ...headers,
-        Authorization: token ? `Bearer ${token}` : "",
-        }
-       }
-    });
-
-    async initClient(){
-        
-        await getClient()
-            let opts : any= {};
-            console.debug('=> Setup client', this.hubUrl)
-            opts.cache = new InMemoryCache({
-                addTypename: false
-            })
-
-            if(ENVIRONMENT == "NODE"){
-                opts.link = createHttpLink({
-                    uri: `${this.hubUrl}/graphql`,
-                    headers: {
-                        Authorization: this.accessToken ? `Bearer ${this.accessToken}` : "",
-                    }
-                })
-                this.client = new BoostClient(opts)
-            }else{
-                opts.link = createUploadLink({
-                    uri: `${this.hubUrl}/graphql`,
-                    headers: {
-                        Authorization: this.accessToken ? `Bearer ${this.accessToken}` : "",
-                    }
-                })
-                this.client = new ReactClient(opts)
-            }
-        
+        this.models = new ModelStorage(this);
+        await this.models.getTypes();
+        this.actionFactory = new ActionFactory(this, this.models, dispatch)
 
     }
 
-    authenticate(username: string, password: string){
-        return fetch(`${this.hubUrl}/login`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                strategy: 'jwt',
-                username: username,
-                password: password
-            })
-        }).then((r :any) => r.json())
-    }
 
-    async query(query : string, variables : object = {}){
-        let result = await this.client!.query({
-            query: gql`${query}`,
-            variables: variables
-        })
-        return result;
-    }
-    
-    async mutation(query: string, variables: object = {}){
-        let result = await this.client!.mutate({
-            mutation: gql`${query}`,
-            variables: variables
-        })
-        return result;
-    }
-
-    async getSwarmKey(){
-        let result = await this.client!.query({
-            query: gql`
+    async getSwarmKey() {
+        let result = await this.client?.query(`
                 query GetSwarmKey{
                     swarmKey 
                 }
-            `
-        })
+            `)
         return result.data.swarmKey;
     }
 
-    async getModels(){
-        this.lastUpdate = new Date();
-        let result = await this.query(
-            `
-                query GetTypes ($directives: [String]){
-                    types(hasDirective: $directives)
-                }
-            `,
-            {
-                directives: ["crud", "upload", "configurable"]
-            }
-        )
+
+    setupBasicReads(dispatch: any) {
+        /*
+                
+                this.models!.push({
+                    name: 'IntegrationStore',
+                    directives: [],
+                    def: [
+                        {name: 'id', type: 'ID'},
+                        {name: 'name', type: 'String'},
+                        {name: 'host', type: 'String'},
+                        {name: 'user', type: 'String'},
+                        {name: 'pass', type: 'Password'},
+                        {name: 'dbName', type: 'String'},
+                        {name: 'type', type: 'StoreType'}
+                    ]
+                })
         
-    
-        return {crud: result.data.types[0], upload: result.data.types[1], configurable: result.data.types[2]}
-    }
-
-    setupFileActions(dispatch: any){
-        this.actions = {
-            ...this.actions,
-            ...UPLOAD(this.uploadModels, this.client, dispatch)
-        }
-    }
-
-    setupBasicReads(dispatch: any){
-        this.actions = CRUD(this.models, this.client, dispatch)
-
+                this.models!.push({
+                    name: 'IntegrationMap', 
+                    directives: [],
+                    def: [
+                        {name: 'id', type: 'ID'},
+                        {name: 'nodes', type: 'JSON'},
+                        {name: 'links', type: 'JSON'},
+                    ]
+                })
         
-        this.models!.push({
-            name: 'IntegrationStore',
-            directives: [],
-            def: [
-                {name: 'id', type: 'ID'},
-                {name: 'name', type: 'String'},
-                {name: 'host', type: 'String'},
-                {name: 'user', type: 'String'},
-                {name: 'pass', type: 'Password'},
-                {name: 'dbName', type: 'String'},
-                {name: 'type', type: 'StoreType'}
-            ]
-        })
-
-        this.models!.push({
-            name: 'IntegrationMap', 
-            directives: [],
-            def: [
-                {name: 'id', type: 'ID'},
-                {name: 'nodes', type: 'JSON'},
-                {name: 'links', type: 'JSON'},
-            ]
-        })
-
-        this.actions['inviteTeamMember'] = async (id: string) => {
-            let result = await this.mutation(`
-                mutation InviteMember($id: ID){
-                    inviteMember(id: $id)
-                }
-            `, {
-                id
-            })
-            return result.data.inviteMember
-        }
-
-        this.actions['changePassword'] = async (current: string, next: string) => {
-            let result = await this.mutation(`
-                mutation ChangePassword($current: Hash, $next: Hash){
-                    changePassword(current: $current, next: $next)
-                }
-            `, {
-                current,
-                next
-            })
-            return result.data.changePassword
-        }
-
-
-        this.actions['updateType'] = async (name : string, fields : any) => {
-            let result = await this.mutation(`
-                mutation UpdateType($name: String, $fields: JSON){
-                    updateMutableType(name: $name, fields: $fields){
-                        name
-                        directives
-                        def
-                    }
-                }
-            `, {
-                name,
-                fields
-            })
-            let model_ix = this.models!.map((x) => x.name).indexOf(name)
-            if(model_ix > -1){
-                this.models![model_ix] = result.data.updateMutableType;
-            }
-            return result.data.updateMutableType
-        }
-
-        this.actions['getIntegrationMap'] = async (id : string) => {
-            console.log("Integration Map", id)
-            let result = await this.query(`
-                query GetIntegrationMap($id: String){
-                    integrationMap(id: $id){
+                this.actions['inviteTeamMember'] = async (id: string) => {
+                    let result = await this.mutation(`
+                        mutation InviteMember($id: ID){
+                            inviteMember(id: $id)
+                        }
+                    `, {
                         id
-                        nodes
-                        links
+                    })
+                    return result.data.inviteMember
+                }
+        
+                this.actions['changePassword'] = async (current: string, next: string) => {
+                    let result = await this.mutation(`
+                        mutation ChangePassword($current: Hash, $next: Hash){
+                            changePassword(current: $current, next: $next)
+                        }
+                    `, {
+                        current,
+                        next
+                    })
+                    return result.data.changePassword
+                }
+        
+        
+                this.actions['updateType'] = async (name : string, fields : any) => {
+                    let result = await this.mutation(`
+                        mutation UpdateType($name: String, $fields: JSON){
+                            updateMutableType(name: $name, fields: $fields){
+                                name
+                                directives
+                                def
+                            }
+                        }
+                    `, {
+                        name,
+                        fields
+                    })
+                    let model_ix = this.models!.map((x) => x.name).indexOf(name)
+                    if(model_ix > -1){
+                        this.models![model_ix] = result.data.updateMutableType;
                     }
+                    return result.data.updateMutableType
                 }
-            `, {
-                id: id
-            }) 
-            dispatch({type: 'GET_IntegrationMap', id: id, data: result.data.integrationMap})
-            return result.data.integrationMap
-        }
-
-        this.actions['updateIntegrationMap'] = async (id: string, update: {nodes: any, links: any}) => {
-            let result = await this.mutation(`
-                mutation UpdateIntegrationMap($id: String, $update: IntegrationMapInput){
-                    updateIntegrationMap(id: $id, integrationMap: $update){
-                        id
-                        nodes
-                        links
-                    }
+        
+                this.actions['getIntegrationMap'] = async (id : string) => {
+                    console.log("Integration Map", id)
+                    let result = await this.query(`
+                        query GetIntegrationMap($id: String){
+                            integrationMap(id: $id){
+                                id
+                                nodes
+                                links
+                            }
+                        }
+                    `, {
+                        id: id
+                    }) 
+                    dispatch({type: 'GET_IntegrationMap', id: id, data: result.data.integrationMap})
+                    return result.data.integrationMap
                 }
-            `, {
-                id,
-                update
-            })
-            dispatch({type: 'UPDATE_IntegrationMap', id: id, data: result.data.updateIntegrationMap})
-            return result.data.updateIntegrationMap;
-        }
-
-        this.actions['getStoreTypes'] = async () => {
-            let result = await this.query(`
-                query GetStoreTypes{
-                    storeTypes {
-                        id
-                        name
-                        description
-                    }
+        
+                this.actions['updateIntegrationMap'] = async (id: string, update: {nodes: any, links: any}) => {
+                    let result = await this.mutation(`
+                        mutation UpdateIntegrationMap($id: String, $update: IntegrationMapInput){
+                            updateIntegrationMap(id: $id, integrationMap: $update){
+                                id
+                                nodes
+                                links
+                            }
+                        }
+                    `, {
+                        id,
+                        update
+                    })
+                    dispatch({type: 'UPDATE_IntegrationMap', id: id, data: result.data.updateIntegrationMap})
+                    return result.data.updateIntegrationMap;
                 }
-            `)
-            dispatch({type: `GETS_StoreType`, data: result.data.storeTypes})
-            return result.data.storeTypes;
-        }
-
-        this.actions['getStoreLayout'] = async (storeName: string) => {
-            let result = await this.query(`
-                query GetStoreLayout ($name: String){
-                    storeLayout(storeName: $name)
+        
+                this.actions['getStoreTypes'] = async () => {
+                    let result = await this.query(`
+                        query GetStoreTypes{
+                            storeTypes {
+                                id
+                                name
+                                description
+                            }
+                        }
+                    `)
+                    dispatch({type: `GETS_StoreType`, data: result.data.storeTypes})
+                    return result.data.storeTypes;
                 }
-            `, {
-                name: storeName
-            })
-            return result.data.storeLayout;
-        }
-
-        this.actions['getBucketLayout'] = async (storeName: string, bucketName: string) => {
-            let result = await this.query(`
-                query GetBucketLayout($storeName: String, $bucketName: String){
-                    bucketLayout(storeName: $storeName, bucketName: $bucketName)
+        
+                this.actions['getStoreLayout'] = async (storeName: string) => {
+                    let result = await this.query(`
+                        query GetStoreLayout ($name: String){
+                            storeLayout(storeName: $name)
+                        }
+                    `, {
+                        name: storeName
+                    })
+                    return result.data.storeLayout;
                 }
-            `, {
-                storeName,
-                bucketName
-            })
-            return result.data.bucketLayout;
-        }
-
-        this.actions['getIntegrationStores'] = async () => {
-            let result = await this.query(`
-                query GetStores {
-                    integrationStores{
-                        id
-                        name
-                        host
-                        user
-                        pass
-                        dbName
-                        type
-                    }
+        
+                this.actions['getBucketLayout'] = async (storeName: string, bucketName: string) => {
+                    let result = await this.query(`
+                        query GetBucketLayout($storeName: String, $bucketName: String){
+                            bucketLayout(storeName: $storeName, bucketName: $bucketName)
+                        }
+                    `, {
+                        storeName,
+                        bucketName
+                    })
+                    return result.data.bucketLayout;
                 }
-            `)
-            dispatch({type: `GETS_IntegrationStore`, data: result.data.integrationStores})
-            return result.data.integrationStores;
-        }
-        this.actions['addStore'] = async (store: any) => {
-            let result = await this.mutation(`
-                mutation AddStore($store: IntegrationStoreInput){
-                    addIntegrationStore(integrationStore: $store){
-                        id
-                        name
-                        host
-                        user
-                        pass
-                        dbName
-                        type
-                    }
+        
+                this.actions['getIntegrationStores'] = async () => {
+                    let result = await this.query(`
+                        query GetStores {
+                            integrationStores{
+                                id
+                                name
+                                host
+                                user
+                                pass
+                                dbName
+                                type
+                            }
+                        }
+                    `)
+                    dispatch({type: `GETS_IntegrationStore`, data: result.data.integrationStores})
+                    return result.data.integrationStores;
                 }
-            `, {
-                store: store
-            })
-            dispatch({type: `ADD_IntegrationStore`, data: result.data.addIntegrationStore})
-            return result.data.addIntegrationStore;
-        }
-        this.actions['updateStore'] = async (id: string, store: any) => {
-            let result = await this.mutation(`
-                mutation UpdateStore($id: String, $store: IntegrationStoreInput) {
-                    updateIntegrationStore(id: $id, integrationStore: $store){
-                        id
-                        name
-                        host
-                        user
-                        pass
-                        dbName
-                        type
-                    }
+                this.actions['addStore'] = async (store: any) => {
+                    let result = await this.mutation(`
+                        mutation AddStore($store: IntegrationStoreInput){
+                            addIntegrationStore(integrationStore: $store){
+                                id
+                                name
+                                host
+                                user
+                                pass
+                                dbName
+                                type
+                            }
+                        }
+                    `, {
+                        store: store
+                    })
+                    dispatch({type: `ADD_IntegrationStore`, data: result.data.addIntegrationStore})
+                    return result.data.addIntegrationStore;
                 }
-            `, {
-                store: store,
-                id: id
-            })
-            dispatch({type: `UPDATE_IntegrationStore`, data: result.data.updateIntegrationStore, id: id})
-            return result.data.updateIntegrationStore
-        }
-        this.actions['deleteStore'] = async (id: string) => {
-            let result = await this.mutation(`
-                mutation DeleteStore($id: String){
-                    deleteIntegrationStore(id: $id)
+                this.actions['updateStore'] = async (id: string, store: any) => {
+                    let result = await this.mutation(`
+                        mutation UpdateStore($id: String, $store: IntegrationStoreInput) {
+                            updateIntegrationStore(id: $id, integrationStore: $store){
+                                id
+                                name
+                                host
+                                user
+                                pass
+                                dbName
+                                type
+                            }
+                        }
+                    `, {
+                        store: store,
+                        id: id
+                    })
+                    dispatch({type: `UPDATE_IntegrationStore`, data: result.data.updateIntegrationStore, id: id})
+                    return result.data.updateIntegrationStore
                 }
-            `, {
-                id: id
-            })
-            dispatch({type: `DELETE_IntegrationStore`, id: id})
-            return result.data.deleteIntegrationStore;
-        }
+                this.actions['deleteStore'] = async (id: string) => {
+                    let result = await this.mutation(`
+                        mutation DeleteStore($id: String){
+                            deleteIntegrationStore(id: $id)
+                        }
+                    `, {
+                        id: id
+                    })
+                    dispatch({type: `DELETE_IntegrationStore`, id: id})
+                    return result.data.deleteIntegrationStore;
+                }*/
     }
 }

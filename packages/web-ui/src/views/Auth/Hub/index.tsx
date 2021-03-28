@@ -1,21 +1,23 @@
 import { Button, TextField, Typography } from '@material-ui/core';
 import React from 'react';
 import Logo from '../../../assets/teal.png'
-import { setupHub } from '../../../actions/auth'
 import './index.css';
+import { useHub } from '@workerhive/client';
 
 export interface HubSetupProps {
     history?: any
 }
 
 export const HubSetup: React.FC<HubSetupProps> = (props) => {
+    const [ client ] = useHub();
+
     const [hubUrl, setHubURL] = React.useState('')
     const [moniker, setMoniker] = React.useState('office-screen')
 
     const [ err, setErr ] = React.useState(false)
 
     const trySetup = () => {
-        setupHub(hubUrl, moniker).then((r) => {
+        client?.auth.setupHub(hubUrl, moniker).then((r) => {
             if(r.error){
                 setErr(true)
             }else{

@@ -100,12 +100,7 @@ export class  WorkhubFS {
     
         this.libp2p?.on('peer:discovery', (info) => {
             console.log("Peer found", info._idB58String)
-        });
-
-        setInterval(async () => {
-            console.log(await this.node?.swarm.peers())
-        }, 10* 1000);
-
+        }); 
     }
 
     async getFile(cid: string, tmpPath?: string) : Promise<Buffer>{

@@ -41,7 +41,7 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
     console.log(client?.models)
     
 
-    const displayNodes = client?.models ? client?.models.filter((a) => a.directives.indexOf('configurable') > -1).map((x: any, ix :number) => ({
+    const displayNodes = client?.models ? client?.models.getByDirective('configurable').map((x: any, ix :number) => ({
                     id: `type-${x.name}`,
                     type: 'typeDef',
                     position: {
@@ -88,20 +88,20 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
                     warning: 'orange',
                 },
                 exploreNode: (id: string) => {
-                    let node : any = Object.assign({}, displayNodes.filter((a) => a.id == id)[0])
+                    let node : any = Object.assign({}, displayNodes.filter((a : any) => a.id == id)[0])
                     const type = types.filter((a) => a.type == node.type)[0]
                     node.type = type;
                     setNode(node)
                 },
                 onNodeAdd: (node: any) => {
-                    client?.actions.updateIntegrationMap(rootMap, {nodes: nodes.concat(node), links: links})
+                    client?.actions('updateIntegrationMap')(rootMap, {nodes: nodes.concat(node), links: links})
                     setNodes(nodes.concat([node]))
                 },
                 onNodeUpdate: (id: string, updated: any) => {
-                    client?.actions.updateIntegrationMap(rootMap, {nodes: nodes, links: links})
+                    client?.actions('updateIntegrationMap')(rootMap, {nodes: nodes, links: links})
                 },  
                 onLinkAdd: (link : any) => {
-                    client?.actions.updateIntegrationMap(rootMap, {nodes: nodes, links: links.concat([link])})
+                    client?.actions('updateIntegrationMap')(rootMap, {nodes: nodes, links: links.concat([link])})
                     console.log("Addd link", link)
                    setLinks(links.concat([link])) 
                 },

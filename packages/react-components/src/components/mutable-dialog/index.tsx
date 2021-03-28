@@ -76,7 +76,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
 
     let uiType = type.type ? type.type : type;
 
-    console.log(typeName, props.models)
+  
     if (props.models && props.models.length > 0) {
       //Transformations to make if supplied type is another ObjectType
       if (props.models.map((x: any) => x.name).indexOf(typeName) > -1) {
@@ -174,7 +174,7 @@ export const MutableDialog: React.FC<MutableDialogProps> = (props) => {
               multiple={type.multi}
               value={data[key] ? data[key][type.key] : (type.multi) ? [] : ''}
               onChange={(event: any) => {
-                console.log(key, type.key , event.target.value)
+             
                 onChange(key, { [type.key]: event.target.value })
               }}
               label={uppercase(key)}

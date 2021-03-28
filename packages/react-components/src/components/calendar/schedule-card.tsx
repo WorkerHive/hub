@@ -30,7 +30,6 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
     actions = []
 }) => {
    
-    console.log(icons)
     
     return (
         <div className={className}>

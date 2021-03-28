@@ -1,16 +1,19 @@
 import { TextField, Button, Divider } from '@material-ui/core';
 import React from 'react';
-import { forgotPassword } from '../../../actions/auth'
 import SyncLoader from 'react-spinners/SyncLoader'
 import { Link } from 'react-router-dom';
+import { useHub } from '@workerhive/client';
 
 export const Forgot = (props: any) => {
+    const [ client ] = useHub();
+
+
     const [forgotError, setForgotError] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>('');
     const [loading, setLoading] = React.useState<boolean>(false)
 
     const forgot = () => {
-        forgotPassword(email).then((r: any) => {
+        client?.auth.forgotPassword(email).then((r: any) => {
             if (r.error) {
                 setForgotError(true)
             } else {

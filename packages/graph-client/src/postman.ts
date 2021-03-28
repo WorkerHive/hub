@@ -1,7 +1,27 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-const axiosInstance = axios.create({
-    baseURL: 'https://rainbow.workhub.services/'
-})
+export class Postman {
+    private axiosInst : AxiosInstance;
 
-export default axiosInstance
+    constructor(url: string){
+        this.axiosInst = axios.create({
+            baseURL: url,
+            headers: {}
+        })
+    }
+    
+    updateBaseURL(url?: string){
+        this.axiosInst = axios.create({
+            baseURL: url,
+            headers: {}
+        })
+    }
+
+    get(slug : string, headers: any){
+        return this.axiosInst.get(slug, headers)
+    }
+
+    post(slug : string, body: any, headers: any){
+        return this.axiosInst.post(slug, body, headers)
+    }
+}

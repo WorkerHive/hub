@@ -1,6 +1,6 @@
 import { camelCase } from 'camel-case';
 import gql from 'graphql-tag';
-import { isNativeType, rawType } from "./utils";
+import { isNativeType, rawType } from "../utils";
 
 export default (models: any, client?: any, dispatch?: any) => {
     let actions: any = {};
@@ -33,50 +33,43 @@ export default (models: any, client?: any, dispatch?: any) => {
         const fields = getFields(model)
 
         actions[`get${model.name}s`] = async () => {
-            let result = await client.query({
-                query: gql`
+            let result = await client.query(`
                     query Get${model.name}s {
                         ${camelCase(model.name)}s{
                             ${fields}
                         }
                     }
-                `,
-            })
+                `)
             dispatch({type: `GETS_${model.name}`, data: result.data[`${camelCase(model.name)}s`]})
             return result.data[`${camelCase(model.name)}s`]
         }
 
         actions[`add${model.name}`] = async (filename: string, cid: string) => {
-            let result = await client.mutate({
-                mutation: gql`
+            let result = await client.mutation(`
                     mutation Add${model.name}($filename: String, $cid: String){
                         add${model.name}(filename: $filename, cid: $cid){
                             ${fields}
                         }
                     }
-                `,
-                variables: {
+                `,{
                     filename,
                     cid
-                }
-            })
+                })
             dispatch({type: `ADD_${model.name}`, data: result.data[`add${model.name}`]})
             return result.data[`add${model.name}`]
         }
 
         actions[`delete${model.name}`] = async (id: any) => {
-            let result = await client.mutate({
-                mutation: gql`
+            let result = await client.mutation(`
                     mutation Delete${model.name}($id: ID){
                         delete${model.name}(id: $id){
                             ${fields}
                         }
                     }
-                `,
-                variables: {
+                `, {
                     id: id
                 }
-            })
+            )
             return result.data[`delete${model.name}`]
         }
     }
