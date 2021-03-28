@@ -2,6 +2,7 @@ import { Fab, Typography } from "@material-ui/core"
 import { Delete } from "@material-ui/icons";
 import Add from '@material-ui/icons/Add'
 import Edit from "@material-ui/icons/Edit"
+import { WorkhubClient } from "@workerhive/client";
 import { MSContactCard } from '@workerhive/parsers';
 import { MutableDialog, Header, SearchTable, MoreMenu, FileDrop } from "@workerhive/react-ui"
 import qs from "qs";
@@ -43,7 +44,7 @@ export const CONTACT_COMPANY_VIEW = {
                     t[_type.name] = _type.type;
                 })
 
-                let models = [client.models.find((a: any) => a.name == "ContactOrganisation")]
+                let models = [client.models.getByName("ContactOrganisation")]
                 models[0].data = data.organisations
 
                 let extras = {
@@ -95,14 +96,14 @@ export const CONTACT_VIEW = {
             y: 1,
             w: 12,
             h: (sizes.height / rowHeight) - (sizes.width < 600 ? 2 : 1),
-            component: (data: any, params: any, type: any, client: any) => {
+            component: (data: any, params: any, type: any, client?: WorkhubClient) => {
                 const t: any = {};
                 console.log(type)
                 if (type["Contact"]) type["Contact"].def.forEach((_type: any) => {
                     t[_type.name] = _type.type;
                 })
 
-                let models = [client.models.find((a: any) => a.name == "ContactOrganisation")]
+                let models = [client?.models?.getByName("ContactOrganisation")] 
                 models[0].data = data.organisations
 
                 let extras = {

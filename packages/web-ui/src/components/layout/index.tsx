@@ -17,7 +17,7 @@ export interface LayoutItem {
     i: string;
     maxW?: number;
     maxH?: number;
-    component: (store: any, params?: any, type?: object, client?: WorkhubClient | null) => any;
+    component: (store: any, params?: any, type?: object, client?: WorkhubClient) => any;
 }
 
 export interface LayoutProps {

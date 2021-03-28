@@ -2,12 +2,10 @@ import React from 'react';
 import { Delete, Edit } from "@material-ui/icons";
 import { MSContactCard } from "@workerhive/parsers";
 import { FileDrop, MutableDialog, SearchTable } from "@workerhive/react-ui";
+import { WorkhubClient } from '@workerhive/client';
 
 export interface PeopleProps {
-    client: {
-        actions: any;
-        crudAccess: (type: string) => string[];
-    },
+    client?: WorkhubClient;
     models: any;
     data: any;
     type: any;
@@ -34,11 +32,11 @@ export const PeopleView: React.FC<PeopleProps> = ({
                 onSave={({ item }: any) => {
                     if (item.id) {
                         const id = item.id;
-                        client.actions.updateContact(id, item).then(() => {
+                        client?.actions('updateContact')(id, item).then(() => {
                             modalOpen(false);
                         })
                     } else {
-                        client.actions.addContact(item).then(() => {
+                        client?.actions('addContact')(item).then(() => {
                             modalOpen(false);
                         })
                     }
@@ -74,7 +72,7 @@ export const PeopleView: React.FC<PeopleProps> = ({
                     <SearchTable
                         filter={({ item, filterText }) => item.name.toLowerCase().indexOf(filterText.toLowerCase()) > -1}
 
-                        actions={client.crudAccess("Contact")}
+                        actions={client?.crudAccess("Contact")}
                         onCreate={() => modalOpen(true)}
                         options={[
                             {
@@ -94,7 +92,7 @@ export const PeopleView: React.FC<PeopleProps> = ({
                                 color: "#f1682f",
                                 icon: <Delete />,
                                 action: (item: any) => {
-                                    client.actions.deleteContact(item.id)
+                                    client?.actions('deleteContact')(item.id)
                                 }
                             }
                         ]}

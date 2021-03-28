@@ -8,7 +8,7 @@ declare global {
     }
 }
 
-const HubContext = React.createContext<[WorkhubClient | null, any, Boolean, Error | null]>([null, {}, false, null])
+const HubContext = React.createContext<[WorkhubClient | undefined, any, Boolean, Error | null]>([undefined, {}, false, null])
 
 
 export const WorkhubProvider = ({children, token, url} : ProviderProps) => {
@@ -21,9 +21,9 @@ export const WorkhubProvider = ({children, token, url} : ProviderProps) => {
     )
 }
 
-export const useHubHook = (url : string, token: string) : [WorkhubClient | null, any, Boolean, Error | null] => {
+export const useHubHook = (url : string, token: string) : [WorkhubClient | undefined, any, Boolean, Error | null] => {
     const [ hubUrl, setUrl ] = React.useState<string>('') 
-    const [ client, setClient ] = React.useState<any>(null);
+    const [ client, setClient ] = React.useState<WorkhubClient>();
     const [ isReady, setReady ] = React.useState<boolean>(false);
     const [ error, setError ] = React.useState<Error | null>(null);
 
@@ -61,14 +61,14 @@ export const useHubHook = (url : string, token: string) : [WorkhubClient | null,
                 setError(null);
             }catch(e){
                 console.error("Error setting up client", e)
-                setClient(null);
+                setClient(undefined);
                 setReady(false)
                 setError(e)
             }
         }
         async function stopClient(){
             console.log("Stop client")
-            setClient(null);
+            setClient(undefined);
             setReady(false)
             setError(null);
         }
