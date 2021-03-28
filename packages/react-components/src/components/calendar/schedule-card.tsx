@@ -66,10 +66,10 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
                 
             </div>
             <div className="schedule-card__extras">
-                <div style={{ marginLeft: 8 }}>
+                <div style={{ paddingLeft: 8 }}>
                     <TeamCircles
                         members={event.managers || []}
-                        size={25} />
+                        size={30} />
                 </div>
                 <div>
                             {event.notes && event.notes.length > 0 && icons['notes']}
@@ -86,6 +86,7 @@ export const ScheduleCard = styled(BaseScheduleCard)`
         justify-content: space-between;
         background-color: #e5ddda;
         padding-top: 4px;
+        padding-left: 4px;
         padding-right: 4px;
         padding-bottom: 4px;
     }

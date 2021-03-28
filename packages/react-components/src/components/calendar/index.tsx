@@ -163,6 +163,18 @@ export const StyledCalendar = styled(WorkhubCalendar)`
     opacity: 0.6 !important;
   }
 
+  .rbc-row-bg{
+    position: sticky;
+    min-height: 100%;
+  }
+
+  .rbc-row-content{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+  }
+
   .rbc-day-bg{
     background-color: #168b88;
     border-color: #157575 !important;
@@ -182,7 +194,11 @@ export const StyledCalendar = styled(WorkhubCalendar)`
   }
 
   .rbc-allday-cell{
-    overflow-y: auto;
+    overflow-y: scroll;
+  }
+
+  .rbc-time-header-cell{
+    overflow-y: scroll;
   }
 
   .rbc-time-schedule .rbc-time-header{
