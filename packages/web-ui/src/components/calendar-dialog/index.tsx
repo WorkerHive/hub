@@ -257,7 +257,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
             <DialogContent style={{paddingLeft: 0, display: 'flex'}}>
                <TabView 
                     selected={tab}
-                    onClick={(tab, index) => setTab(index)}
+                    onClick={(tab: any, index: number) => setTab(index)}
                     tabs={tabs} />
                {/*<Tabs
                 onChange={(event, newValue) => {
