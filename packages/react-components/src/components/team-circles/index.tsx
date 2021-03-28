@@ -4,6 +4,8 @@ import Done from '@material-ui/icons/Done';
 import Add from '@material-ui/icons/Add';
 
 import styled from 'styled-components'
+import { Hexagon } from './hexagon';
+import { textToColor } from '../../utils/color';
 
 function hashCode(str: string) { // java String#hashCode
     var hash = 0;
@@ -27,13 +29,16 @@ export interface TeamCirclesProps{
   members: Array<{id: string, name: string}>;
   options?: Array<{id: string, name: string}>
   onChange?: Function;
+  hex?: boolean
 }
 
 export const TeamCircles : React.FC<TeamCirclesProps> = ({
   members = [],
   options,
   onChange = () => {},
-  className
+  className,
+  hex = true,
+  size = 30
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<any>(null);
 
@@ -41,7 +46,8 @@ export const TeamCircles : React.FC<TeamCirclesProps> = ({
         <div className={className}>
             {members.map((mbr) => {
                 const member = mbr
-                if(member) return <Avatar style={{backgroundColor: '#'+ intToRGB(hashCode(member.name))}}>{member.name.split(' ').map((x: string) => x.substring(0, 1))}</Avatar>
+                const name = member.name.split(' ').map((x: string) => x.substring(0, 1))
+                if(member) return hex ? <Hexagon size={size} color={`#${textToColor(member.name)}`}>{name}</Hexagon> : <Avatar style={{backgroundColor: '#'+ intToRGB(hashCode(member.name))}}>{name}</Avatar>
             })}
             {options && [
               <IconButton style={{width: 40, height: 40}} onClick={(e) => {
@@ -88,8 +94,12 @@ export const TeamCircles : React.FC<TeamCirclesProps> = ({
 export const StyledCircles = styled(TeamCircles)`
   display: flex;
 
-  .MuiAvatar-root:not(:first-child){
+   .MuiAvatar-root:not(:first-child){
     margin-left: ${props => (props.size || 40) / 40 * -18}px;
+  }
+
+  .hex:not(:first-child){
+    margin-left: ${props => (props.size || 30) / -7.5}px;
   }
 
   .MuiAvatar-root{
