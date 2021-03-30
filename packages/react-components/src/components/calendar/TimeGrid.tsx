@@ -171,6 +171,17 @@ export default class TimeGrid extends Component<TimeGridProps, {gutterWidth: any
     })
   }
 
+  sortFn(a: any, b: any){
+    console.log(a, b)
+    if(a.project.id > b.project.id){
+      return 1;
+    }
+    if(b.project.id > a.project.id){
+      return -1;
+    }
+    return 0;
+  }
+
   renderEvents(range : any, events : any, now : any) {
     let {
       min,

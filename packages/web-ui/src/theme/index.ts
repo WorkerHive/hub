@@ -38,6 +38,15 @@ export default createMuiTheme({
                 '& .MuiTableCell-head .MuiCheckbox-root .MuiSvgIcon-root': {
                     color: '#fff !important'
                 },
+                '& .MuiTableCell-head .MuiInputBase-input': {
+                    color: 'white'
+                },
+                '& .MuiTableCell-head .MuiInput-underline:after': {
+                    borderBottomColor: '#e4bc71 !important'
+                },
+                '& .MuiTableCell-head .MuiInput-underline:before': {
+                    borderBottomColor: '#fff !important'
+                },
                 '& .MuiSvgIcon-root': {
                     color: '#0d7272'
                 },  
