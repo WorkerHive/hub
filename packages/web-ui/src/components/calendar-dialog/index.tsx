@@ -4,7 +4,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { isEqual } from 'lodash';
 import React, {lazy, Suspense} from 'react';
-import { TabView, TeamCircles } from '@workerhive/react-ui'
+import { SelectTable, TabView, TeamCircles } from '@workerhive/react-ui'
 import *  as Y from 'yjs';
 
 import NotesCard from './notes-card';
@@ -62,7 +62,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
 }) => {
 
     const [ client ] = useHub();
-    const [tab, setTab] = React.useState<number>(1)
+    const [tab, setTab] = React.useState<number>(0)
 
     const [ dateRange, setDateRange ] = React.useState<{start: Date, end: Date} | undefined>(slots)
 
@@ -90,6 +90,13 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         return (data?.toJSON().managers || []).map((x: any) => x.id).indexOf(client?.user.sub) > -1;
     }
 
+
+    const _onClose = () => {
+        setTab(0)
+
+        onClose()
+    }
+
     const tabSize = 50;
     const readonly = _data.id ? actions.indexOf('update') < 0 || !amManager() : false;
 
@@ -97,24 +104,25 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
         {
             label: "Team",
             icon: <TeamIcon fill="#0d7272" height={tabSize}/>,
-            view: (<TeamCard 
-                    team={team} 
+            view: (
+                <SelectTable
+                    data={team}
                     readonly={readonly}
-                    selected={_data?.people?.id || _data?.people?.map((x : any) => x.id) || []} 
-                    onChange={(people : any) => {
+                    selected={_data?.people?.id || _data?.people?.map((x: any) => x.id) || []}
+                    onChange={(people: any) => {
                         setData({
                             ..._data,
                             people: {id: people}
-                        })  
-                    }}/>)
+                        })
+                    }} />)
         },
         {
             label: "Equipment",
             icon: <EquipmentIcon fill="#0d7272" height={tabSize}/>,
             view: (
-                 <EquipmentCard 
+                 <SelectTable 
                     readonly={readonly}
-                    equipment={equipment} 
+                    data={equipment} 
                     selected={_data?.resources?.id || _data?.resources?.map((x : any) => x.id) || []} 
                     onChange={(equipment: any) => {
                         console.log(_data)
@@ -191,7 +199,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
     }
 
     return (
-        <Dialog fullWidth maxWidth="md" open={open}  onClose={onClose}>
+        <Dialog fullWidth maxWidth="md" open={open}  onClose={_onClose}>
             <DialogTitle style={{
                 paddingBottom: 8,
                 paddingTop: 12,
@@ -254,7 +262,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
                     </div>
                 </div>
             </DialogTitle>
-            <DialogContent style={{paddingLeft: 0, display: 'flex'}}>
+            <DialogContent style={{paddingLeft: 0, display: 'flex', minHeight: 300}}>
                <TabView 
                     selected={tab}
                     onClick={(tab: any, index: number) => setTab(index)}
@@ -284,7 +292,7 @@ export const CalendarDialog : React.FC<CalendarDialogProps> = ({
             </DialogContent>
             <DialogActions>
                 {_data.id && actions.indexOf('delete') > -1 && amManager() && <Button style={{fontWeight: 'bold'}} onClick={onDelete} color="secondary">Delete</Button>}
-                <Button onClick={onClose}>
+                <Button onClick={_onClose}>
                     Close
                 </Button>
                 {(actions.indexOf('update') > -1 || actions.indexOf('create') > -1) && (!_data.id || (_data.id && amManager())) && <Button onClick={() => onSave(_data)} color="primary" variant="contained">

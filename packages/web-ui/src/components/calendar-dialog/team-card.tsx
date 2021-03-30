@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, Checkbox, Divider } from '@material-ui/core';
+import { List, ListItem, Checkbox, Divider, Table, TableHead, TableCell, TableRow, TableBody } from '@material-ui/core';
 
 export interface TeamMember {
     id: string;
@@ -27,20 +27,43 @@ const TeamCard: React.FC<TeamCardProps> = (props) => {
         props.onChange(s)
     }
 
+    const sortFn = (a : TeamMember, b: TeamMember) => {
+        if(a.name > b.name) return 1;
+        if(b.name > a.name) return -1;
+        return 0;
+    }
+
     return (
-        <List style={{ overflowY: 'auto', minHeight: 300}}>
-            {props.team.map((x, ix) => [
-                <ListItem key={ix} dense>
-                    <Checkbox
+        <Table>
+            <TableHead style={{height: 30, backgroundColor: '#0d7272'}}>
+                <TableRow style={{height: 30}}>
+                    <TableCell padding="checkbox">
+                        <Checkbox style={{color: '#fff'}} color="secondary"></Checkbox>
+                    </TableCell>
+                    <TableCell padding='none'>
+                        Name
+                    </TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+            {props.team.sort(sortFn).map((x, ix) => [
+                <TableRow key={ix} style={{borderBottom: '2px solid #dfd', height: 30}}>
+                    <TableCell padding="checkbox">
+<Checkbox
                         color="primary"
                         disabled={props.readonly}
                         checked={props.selected.indexOf(x.id) > -1}
                         onChange={(e) => onChange(e, x)} />
+                    </TableCell>
+                    <TableCell style={{color: '#000'}} padding="none">
                     {x.name}
-                </ListItem>,
-                <Divider />
+
+                    </TableCell>
+                </TableRow>
             ])}
-        </List>
+            </TableBody>
+
+        </Table>
     )
 }
 

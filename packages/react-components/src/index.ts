@@ -15,7 +15,7 @@ import { MoreMenu } from './components/more-menu';
 
 import { StyledSearchTable as SearchTable } from './components/search-table';
 import { StyledPermissionForm as PermissionForm } from './components/permission-form'
-
+import { SelectTable } from './components/select-table'
 
 import { StyledShortcutLinks as ShortcutLinks } from './components/shortcut-links'
 import { StyledAccordionList as AccordionList } from './components/accordion-list'
@@ -56,5 +56,6 @@ export {
   MoreMenu,
   PermissionForm,
   SearchTable,
+  SelectTable,
   TabView
 }

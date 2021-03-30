@@ -9,10 +9,16 @@ export interface EquipmentCardProps {
 }
 
 const EquipmentCard : React.FC<EquipmentCardProps> = (props) => {
-    console.log("equipment", props.equipment, props.selected)
+
+    const sortFn = (a: {id: string, name: string}, b: {id: string, name: string}) => {
+        if(a.name > b.name) return 1;
+        if(b.name > a.name) return -1;
+        return 0;
+    }
+
     return (
         <List style={{overflowY: 'auto', minHeight: 300}}>
-            {props.equipment.map((x, ix) => [
+            {props.equipment.sort(sortFn).map((x, ix) => [
                 <ListItem key={ix} dense>
                     <Checkbox 
                         color="primary"

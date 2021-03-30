@@ -88,6 +88,10 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
     }
   }
 
+  const canOpen = () => {
+    return (actions.indexOf("read") > -1 || actions.indexOf("update") > -1) 
+  }
+
   return (
     <CalendarContext.Provider value={{icons, user, actions, dispatch}}>
     <Paper className={className}>
@@ -100,8 +104,8 @@ export const WorkhubCalendar : React.FC<CalendarProps> = ({
         components={{
           toolbar: Toolbar 
         }}
-        onSelectEvent={onSelectEvent}
-        onDoubleClickEvent={(actions.indexOf("read") > -1 || actions.indexOf("update") > -1) ? onDoubleClickEvent : undefined}
+        onSelectEvent={canOpen() ? onDoubleClickEvent: undefined}
+        onDoubleClickEvent={canOpen() ? onDoubleClickEvent : undefined}
         onSelectSlot={(slotInfo: {start: stringOrDate, end:stringOrDate, slots: Array<Date | string>, action: "select" | "click" | "doubleClick"}) => {
           slotInfo.start = moment(slotInfo.start).add(12, 'hours').toDate()
           slotInfo.end = moment(slotInfo.end).add(1, 'day').toDate();

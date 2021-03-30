@@ -31,6 +31,12 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
 }) => {
    
     console.log(icons)
+   
+    const sortFn = (a: any, b: any) => {
+        if(a.name > b.name) return 1;
+        if(b.name > a.name) return -1;
+        return 0;
+    }
     
     return (
         <div className={className}>
@@ -46,13 +52,13 @@ const BaseScheduleCard: React.FC<ScheduleCardProps> = ({
                 <div className="schedule-card__info">
                     <div>
                         {Array.isArray(event.people) && event.people.length > 0 && <div className="info-header">People</div>}
-                        {Array.isArray(event.people) && event.people.filter((a: any) => a).map((x: any) => (
+                        {Array.isArray(event.people) && event.people.filter((a: any) => a).sort(sortFn).map((x: any) => (
                             <div>{x.name}</div>
                         ))}
                     </div>
                     <div>
                         {Array.isArray(event.resources) && event.resources.length > 0 && <div className="info-header">Equipment</div>}
-                        {Array.isArray(event.resources) && event.resources.filter((a: any) => a).map((x: any) => (
+                        {Array.isArray(event.resources) && event.resources.filter((a: any) => a).sort(sortFn).map((x: any) => (
                             <div>{x.name}</div>
                         ))}
                     </div>

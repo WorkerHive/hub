@@ -22,10 +22,22 @@ export default createMuiTheme({
         MuiDialog: {
             
             paper: {
+                '& .MuiPickersCalendarHeader-iconButton': {
+                    backgroundColor: 'unset'
+                },
+                '& .MuiPickersCalendar-transitionContainer .MuiTypography-root': {
+                    color: '#000'
+                },
+                '& .MuiPickersCalendarHeader-dayLabel': {
+                    color: '#0d7272'
+                },
                 border: '5px solid #e4bc71',
                 borderRadius: 12,
                 backgroundColor: '#e5ddda',
                 color: '#0d7272',
+                '& .MuiTableCell-head .MuiCheckbox-root .MuiSvgIcon-root': {
+                    color: '#fff !important'
+                },
                 '& .MuiSvgIcon-root': {
                     color: '#0d7272'
                 },  
