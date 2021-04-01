@@ -1,8 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors';
-import { FlowConnector } from '../connectors/flow';
-import HiveGraph from '../graph';
+import HiveGraph from '@workerhive/graph';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken'
 import passport from 'passport';
@@ -12,6 +11,8 @@ import { WorkhubFS } from '@workerhive/ipfs';
 import MQ from '@workerhive/mq';
 import { Mailer } from '../mailer';
 import fetch from 'node-fetch';
+import QueenDB from '@workerhive/queendb';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 const upload = multer()
 
@@ -20,7 +21,7 @@ export interface RouterOpts {
 }
 
 export interface RouterConnectors {
-    connector: FlowConnector;
+    connector: QueenDB;
     graph: HiveGraph;
     mq: MQ;
     fs: WorkhubFS;
@@ -46,7 +47,7 @@ export class Router {
 
     private fs: WorkhubFS;
     private mq: MQ;
-    private connector: FlowConnector;
+    private connector: QueenDB;
     private graph: HiveGraph;
     private mailer: Mailer;
 
@@ -76,21 +77,21 @@ export class Router {
 
     async passportAuth(jwt_payload, done) {
         let user;
-        if(jwt_payload.type != "hub-token"){
-        user = await this.connector.read("TeamMember", { id: jwt_payload.sub })
-        }else{
-            user= await this.connector.read("TeamHub", {id: parseInt(jwt_payload.sub.split('hub-')[1])})
+        if (jwt_payload.type != "hub-token") {
+            user = await this.connector.readCell("TeamMember", { id: jwt_payload.sub })
+        } else {
+            user = await this.connector.readCell("TeamHub", { id: parseInt(jwt_payload.sub.split('hub-')[1]) })
         }
-         if (user) {
-            switch(jwt_payload.type){
+        if (user) {
+            switch (jwt_payload.type) {
                 case 'signup':
-                    done(null, {id: user.id})
+                    done(null, { id: user.id })
                     break;
                 case 'forgot':
-                    done(null, {id: user.id})
+                    done(null, { id: user.id })
                     break;
                 case 'hub-token':
-                    done(null,{
+                    done(null, {
                         ...user,
                         permissions: jwt_payload.permissions,
                         roles: jwt_payload.roles
@@ -114,7 +115,7 @@ export class Router {
                     done(null, signed_user)
                     break;
                 default:
-                   // console.log("Passing passport auth with no type", jwt_payload)
+                    // console.log("Passing passport auth with no type", jwt_payload)
                     done(null, user);
                     break;
             }
@@ -146,7 +147,7 @@ export class Router {
     }
 
     async userPermissions(role_ids: string[]) {
-        let roles = await this.connector.readAll("Role", { id: { $in: role_ids } })
+        let roles = await this.connector.readAllCell("Role", { id: { $in: role_ids } })
         let perms = {};
 
         roles.forEach((role) => {
@@ -163,29 +164,28 @@ export class Router {
     }
 
     initGraph() {
-        this.graph.addTransport((conf: any) => {
-            this.app.post('/graphql',
-                passport.authenticate('jwt', { session: false }),
-                multer().single('file'),
-                (req: any, res) => {
-                    let query = req.body.query;
-                    let variables = req.body.variables || {};
-                    if (variables && typeof (variables) !== 'object') variables = JSON.parse(variables)
-                    if (req.file) variables.file = req.file;
-                    this.graph.executeRequest(
-                        query,
-                        variables,
-                        req.body.operationName,
-                        {
-                            user: req['user'],
-                            fs: this.fs,
-                            mq: this.mq,
-                            mail: this.mailer,
-                            signToken: this.signToken.bind(this)
-                        }
-                    ).then((r) => res.send(r))
-                })
-        })
+        this.app.post('/graphql',
+            passport.authenticate('jwt', { session: false }),
+            graphqlUploadExpress({ maxFileSize: 10 * 1024 * 1024, maxFiles: 10 }),
+            (req: any, res) => {
+                let query = req.body.query;
+                let variables = req.body.variables || {};
+                if (variables && typeof (variables) !== 'object') variables = JSON.parse(variables)
+
+                this.graph.executeRequest(
+                    query,
+                    variables,
+                    req.body.operationName,
+                    {
+                        user: req['user'],
+                        fs: this.fs,
+                        mq: this.mq,
+                        mail: this.mailer,
+                        signToken: this.signToken.bind(this)
+                    }
+                ).then((r) => res.send(r))
+            })
+
     }
 
     initExternalRoutes() {
@@ -254,7 +254,7 @@ export class Router {
 
     initAuthRoutes() {
         this.app.post('/forgot', async (req, res) => {
-            const user: any = await this.connector.read('TeamMember', { email: req.body.email })
+            const user: any = await this.connector.readCell('TeamMember', { email: req.body.email })
             if (user && user.id) {
                 const token = this.signToken({ sub: user.id, type: 'forgot' })
                 let mailResult = await this.mailer.forgotPassword(user, token)
@@ -269,9 +269,9 @@ export class Router {
             async (req, res) => {
                 let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
 
-                let updated_user = await this.connector.update('TeamMember', { id: req['user'].id }, { password })
+                let updated_user = await this.connector.updateCell('TeamMember', { id: req['user'].id }, { password })
                 if (updated_user && Object.keys(updated_user).length > 0) {
-                    if(updated_user.roles && updated_user.roles.id){
+                    if (updated_user.roles && updated_user.roles.id) {
                         var { permissions, roles } = await this.userPermissions(updated_user.roles.id);
                     }
 
@@ -293,7 +293,7 @@ export class Router {
         this.app.get('/signup',
             passport.authenticate('jwt', { session: false }),
             async (req, res) => {
-                let user = await this.connector.read("TeamMember", { id: req['user'].id })
+                let user = await this.connector.readCell("TeamMember", { id: req['user'].id })
                 if (user && Object.keys(user).length > 0) {
                     if (user.status != "active") {
                         res.send({
@@ -324,12 +324,12 @@ export class Router {
                     status: 'active',
                     phone_number: req.body.phone_number
                 }
-                let exists = await this.connector.read("TeamMember", { username: user.username })
+                let exists = await this.connector.readCell("TeamMember", { username: user.username })
                 if (exists && Object.keys(exists).length > 0 && req['user'].id != exists.id) {
                     console.log("Signup", req['user'], exists)
                     res.send({ error: "Username already taken" })
                 } else {
-                    let new_user = await this.connector.update("TeamMember", { id: req['user'].id }, user)
+                    let new_user = await this.connector.updateCell("TeamMember", { id: req['user'].id }, user)
                     if (new_user.roles && new_user.roles.id) {
                         var { permissions, roles } = await this.userPermissions(new_user.roles.id);
                     }
@@ -351,9 +351,9 @@ export class Router {
 
         this.app.post('/provision', async (req, res) => {
             let { device, hubName } = req.body;
-            let hub = await this.connector.read("TeamHub", {name: hubName})
+            let hub = await this.connector.readCell("TeamHub", { name: hubName })
 
-            if(hub && hub.id){
+            if (hub && hub.id) {
                 let permissions = [
                     "Schedule:read",
                     "Project:read",
@@ -370,9 +370,9 @@ export class Router {
                     email: ""
                 })
 
-                res.send({token: token})
-            }else{
-                res.send({error: "Hub not found"})
+                res.send({ token: token })
+            } else {
+                res.send({ error: "Hub not found" })
             }
 
         })
@@ -380,7 +380,7 @@ export class Router {
         this.app.post('/login', async (req, res) => {
             let username = req.body.username.toLowerCase();
             let password = crypto.createHash('sha256').update(req.body.password).digest('hex');
-            let user: any = await this.connector.read("TeamMember", { username: username, password: password })
+            let user: any = await this.connector.readCell("TeamMember", { username: username, password: password })
             if (user.id) {
                 if (user.roles && user.roles.id) {
                     var { permissions, roles } = await this.userPermissions(user.roles.id)

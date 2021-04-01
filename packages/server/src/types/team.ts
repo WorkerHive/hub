@@ -1,4 +1,4 @@
-import { GraphContext } from "../graph";
+import { GraphContext } from "@workerhive/graph";
 import jwt from 'jsonwebtoken'
 
 export const typeDef = `
@@ -23,7 +23,7 @@ export const typeDef = `
   type TeamHub @crud @configurable {
     id: Int @id
     name: String @input
-    slug: Moniker @input
+    slug: String @moniker
     location: String @input
     active: Boolean @input
   }
@@ -42,6 +42,7 @@ export const typeDef = `
 
 `
 
+//TODO these will be broken
 export const resolvers =  {
   Mutation: {
     inviteMember: async (parent, {id}, context: GraphContext) => {

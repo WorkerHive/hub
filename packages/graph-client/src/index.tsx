@@ -158,19 +158,21 @@ export class WorkhubClient {
     async initIPFS(swarmKey: string) {
         console.log("INIT IPFS")
         this.swarmKey = swarmKey;
-        console.log(globalThis)
-        let globalIPFS: WorkhubFS = window.workhubFS;
-        if (globalIPFS){
-            console.log("Existing IPFS found, stopping...")
-            await globalIPFS.stop();
-        } 
-        window.workhubFS = new WorkhubFS({
-            Bootstrap: [],
-            Swarm: [
-                `/dns4/${this.hostName}/tcp/443/wss/p2p-webrtc-star`
-            ]
-        }, this.swarmKey)
+        if(swarmKey){
+            console.log(globalThis)
+            let globalIPFS: WorkhubFS = window.workhubFS;
+            if (globalIPFS){
+                console.log("Existing IPFS found, stopping...")
+                await globalIPFS.stop();
+            } 
+            window.workhubFS = new WorkhubFS({
+                Bootstrap: [],
+                Swarm: [
+                    `/dns4/${this.hostName}/tcp/443/wss/p2p-webrtc-star`
+                ]
+            }, this.swarmKey)
 
+        }
     }
 
 

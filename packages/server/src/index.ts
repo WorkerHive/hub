@@ -6,13 +6,17 @@ import nodemailer from "nodemailer"
 
 import { Router } from './router'
 import MQ from '@workerhive/mq';
+
 import { WorkhubFS } from "@workerhive/ipfs"
 
-import { FlowConnector } from './connectors/flow'
-import HiveGraph from './graph';
+import HiveGraph from '@workerhive/graph';
+
+import { IPFS, CRUD } from '@workerhive/plugins'
+
 import Mail from 'nodemailer/lib/mailer';
 import { Mailer } from './mailer';
 import { Realtime } from './realtime';
+import QueenDB from '@workerhive/queendb';
 
 
 
@@ -27,10 +31,10 @@ export interface WorkhiveServerOpts {
 
 export class WorkhiveServer {
     private fsLayer: WorkhubFS;
+    private db: QueenDB
     private mqLayer: MQ;
 
     //private realtimeSync: Realtim
-    private connector: FlowConnector;
     private graph: HiveGraph;
     private mailer: Mailer;
     private router: Router;
@@ -73,7 +77,7 @@ export class WorkhiveServer {
             fs: this.fsLayer,
             mailer: this.mailer,
             graph: this.graph,
-            connector: this.connector
+            connector: this.db
         });
 
         this.router.listen(4002);
@@ -111,6 +115,25 @@ export class WorkhiveServer {
     }
 
     initFlow() {
+        this.db = new QueenDB({
+            host: process.env.QUEENDB_HOST || 'localhost',
+            port: 5432,
+            database: 'postgres',
+            user: 'postgres',
+            password: process.env.QUEENDB_PASS || 'password'
+        })
+
+        const workhubResolvers = merge({
+            Query: {
+                swarmKey: (parent) => {
+                    return this.fsLayer.swarmKey
+                }
+            }
+        }, typeResolvers)
+
+        this.initGraph(workhubResolvers)
+        /*
+
         this.connector = new FlowConnector({}, {})
         let { types, resolvers } = this.connector.getConfig();
         const workhubResolvers = merge({
@@ -121,12 +144,13 @@ export class WorkhiveServer {
             }
         }, merge(resolvers, typeResolvers))
 
-        this.initGraph(types, workhubResolvers);
+        this.initGraph(types, workhubResolvers);*/
 
     }
 
-    initGraph(types, resolvers) {
-        this.graph = new HiveGraph(`
+    initGraph(resolvers) {
+        this.graph = new HiveGraph({
+            types: `
 
             extend type Query {
                 swarmKey: String
@@ -144,9 +168,15 @@ export class WorkhiveServer {
                 links: [JSON] @input
             }
 
-            ${types}
             ${typeDefs}
-        `, resolvers, this.connector, true)
+        `,
+         resolvers,
+         directives: {
+             crud: [CRUD(this.db)],
+             upload: [IPFS(this.fsLayer)]
+         }
+        });
+        //, this.connector, true)
     }
 
     initFS() {
@@ -190,7 +220,7 @@ export class WorkhiveServer {
             
             filePins.set(cid, {date: new Date().getTime()})
 
-            let res = await this.connector.update('File', { id: id }, { pinned: true })
+            let res = await this.db.updateCell('File', { id: id }, { pinned: true })
             return res;
         } else {
             console.log(`FS-Pin: Couldnt pin in ${timeout}mins, trying again soon`)
