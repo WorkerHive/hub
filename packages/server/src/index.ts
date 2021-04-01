@@ -11,7 +11,7 @@ import { WorkhubFS } from "@workerhive/ipfs"
 
 import HiveGraph from '@workerhive/graph';
 
-import { IPFS, CRUD } from '@workerhive/plugins'
+import { IPFS, CRUD, QueenDBPlugin } from '@workerhive/plugins'
 
 import Mail from 'nodemailer/lib/mailer';
 import { Mailer } from './mailer';
@@ -174,7 +174,10 @@ export class WorkhiveServer {
          directives: {
              crud: [CRUD(this.db)],
              upload: [IPFS(this.fsLayer)]
-         }
+         },
+         plugins: [
+             QueenDBPlugin(this.db)
+         ]
         });
         //, this.connector, true)
     }
