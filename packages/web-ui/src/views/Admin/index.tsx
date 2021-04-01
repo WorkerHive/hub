@@ -41,7 +41,7 @@ export const AdminView: React.FC<AdminViewProps> = (props) => {
     console.log(client?.models)
     
 
-    const displayNodes = client?.models ? client?.models.getByDirective('configurable').map((x: any, ix :number) => ({
+    const displayNodes = client?.models ? (client?.models?.getByDirective('configurable') || []).map((x: any, ix :number) => ({
                     id: `type-${x.name}`,
                     type: 'typeDef',
                     position: {

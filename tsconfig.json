@@ -11,10 +11,7 @@
             "graphql-compose": ["../node_modules/graphql-compose"],
             "@workerhive/ipfs": ["fs-layer/dist"],
             "@workerhive/mq": ["message-queue/dist"],
-            "@workerhive/flow-provider": ["flow-provider/dist"],
             "@workerhive/react-ui": ["react-components/src"],
-            "@workerhive/client": ["graph-client/src"],
-            "@workerhive/queendb": ["queendb/dist"],
             "@workerhive/parsers": ["parsers/src"],
             "@workerhive/*": ["*/src"],
         }

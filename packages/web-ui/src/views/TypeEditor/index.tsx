@@ -36,7 +36,7 @@ export const TypeEditor : React.FC<TypeEditorProps> = (props) => {
                     </div>*/}
                     
                     <Paper className="type-editor__types">
-                        <CRUDKV types={client?.models?.types?.crud || []} value={type.def} onChange={({value} : any) => {
+                        <CRUDKV types={client?.models?.getByDirective('crud') || []} value={type.def} onChange={({value} : any) => {
 
                           let fields = value.filter((a : {type: string, name: string}) => a.type.length > 0)
                           let newFields = fields.filter((a: any) => {

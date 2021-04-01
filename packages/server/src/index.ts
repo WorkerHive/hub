@@ -8,6 +8,7 @@ import { Router } from './router'
 import MQ from '@workerhive/mq';
 
 import { WorkhubFS } from "@workerhive/ipfs"
+import P2PStack from '@workerhive/ipfs/dist/node-stack'
 
 import HiveGraph from '@workerhive/graph';
 
@@ -187,6 +188,7 @@ export class WorkhiveServer {
         console.log("IPFS: Swarm Domain", swarmDomain)
         
         this.fsLayer = new WorkhubFS({
+            p2p: P2PStack,
             Swarm: [
                 swarmDomain
             ]

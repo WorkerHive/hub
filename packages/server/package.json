@@ -1,6 +1,6 @@
 {
   "name": "@workerhive/server",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "main": "index.js",
   "files": [
     "dist/*"
@@ -15,10 +15,10 @@
     "workhub": "dist/cmd.js"
   },
   "dependencies": {
-    "@workerhive/graph": "^2.2.7",
-    "@workerhive/ipfs": "^2.2.6",
+    "@workerhive/graph": "^2.2.8",
+    "@workerhive/ipfs": "^2.2.11",
     "@workerhive/mq": "^2.1.16",
-    "@workerhive/plugins": "^2.2.7",
+    "@workerhive/plugins": "^2.2.11",
     "@workerhive/queendb": "^2.2.6",
     "body-parser": "^1.19.0",
     "camel-case": "^4.1.2",

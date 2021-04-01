@@ -82,7 +82,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
                         }
 
                         //Fetch the full Model Description
-                        let model = client.models?.types?.crud.concat(client.models?.types?.upload).filter((a : any) => a.name === name)[0]
+                        let model = client.models?.getByName(name)
 
                         if (model) {
                             //Key the model to types state
@@ -169,7 +169,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             let arr = (name.match(/\[(.*?)\]/) != null)
             if(arr) name = name.match(/\[(.*?)\]/)[1]
 
-            let model = client?.models?.types?.crud.concat(client?.models?.types?.upload).filter((a : any) => a.name === name)[0]
+            let model = client?.models?.getByName(name)
 
             let query = typeof(props.schema.data[k].query) === 'function' ? props.schema.data[k].query(props.match.params) : {}
             

@@ -1,10 +1,10 @@
 import React, { Suspense, lazy } from 'react';
 import isElectron from 'is-electron'
 import { HashRouter, BrowserRouter, Route, Redirect } from 'react-router-dom'
-import { WorkhubProvider } from '@workerhive/client'
+import { WorkhubProvider } from '@workerhive/client/dist'
 import { AuthBase } from './views/Auth'
 import { PageLoader } from './components/page-loader';
-
+import { CRUD } from '@workerhive/plugins/dist/react'
 import './App.css';
 import { HubSetup } from './views/Auth/Hub';
 
@@ -27,7 +27,7 @@ function App() {
     <Router>
       <div className="App">
         {hubUrl ? (
-          <WorkhubProvider token={token || ''} url={hubUrl || ''}>
+          <WorkhubProvider plugins={{crud: [CRUD]}} token={token || ''} url={hubUrl || ''}>
             <Route path="/dashboard" render={(props) => {
               if (token && token.length > 0) {
                 return (

@@ -1,5 +1,4 @@
 import { useRealtime, WorkhubClient } from "@workerhive/client";
-import { WorkhubFS } from "@workerhive/ipfs";
 import { CID } from 'ipfs-core';
 import { FileDrop, FileBrowser, Header } from "@workerhive/react-ui";
 import React from "react";

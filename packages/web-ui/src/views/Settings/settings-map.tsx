@@ -13,7 +13,7 @@ export const SettingsMap = (props: any, stores: any, storeTypes : any, converter
     confirm: ''
   });
 
-  const [ models, setModels ] = React.useState<any>(client?.models?.types?.configurable);
+  const [ models, setModels ] = React.useState<any>(client?.models?.getByDirective('configurable'));
   const [ roles, setRoles ] = React.useState<any>([])
 
   React.useEffect(() => {
